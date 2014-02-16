@@ -1,0 +1,105 @@
+<?php
+//COMMON
+//gets
+DB function getDB();
+Logger function getLogger();
+Session function getSession();
+Params function getParams();
+
+//templates
+string function processTemplate($label, $replace, $target);
+string function processTemplates($labels, $target);
+string function fixPath($html);
+
+//string format converters
+string function camelToSeparator($str, $separator);
+string function camelToUnderscore($str);
+string function camelToUrl($str);
+string function urlToCamelCase($url, $firstLetterUppercase = true);
+string function strToUrlConverter($str);
+
+//other
+function redirect($target);
+function goHome();
+string function convertTimestampToAgo($tm);
+string function getGravatarUrl($email);
+function getJsonLastErrorString(); //prints to output
+
+//string
+bool function startsWith($haystack, $needle);
+
+//DB
+class DB
+{
+    const FETCH_ASSOC = 1;
+    
+    function query($query, $params = null, $fetch = null, $limit = -1);
+    function getConstantByType($value);
+    function execute($query, $params);
+    DbModel function filter($model, $conditions);
+    function lastId();
+}
+
+class DbModel extends ModelEntity
+{
+    function __construct($descriptor);
+    function getTableName();
+    function getId();
+    function dbLoad($id);
+    function dbSave();
+    function dbUpdate();
+    function dbDelete();
+}
+
+//AUTH
+User function getCurrentUser();
+class User extends ControllerEntity
+{
+    bool function isLoggedIn();
+    function __construct($mUser = null);
+    function keep(); // Put user in session
+    function drop(); // Remove user in session
+    bool function isAdmin();
+    MUser function getRecord();
+    string function getIPofCurrentUser();
+}
+
+//RESOURCES
+class Params extends Singleton 
+{
+    const ALL      = 0;
+    const GET      = 1;
+    const POST     = 2;
+
+    $secured = true;
+    function __construct();
+    function getMethod();
+    function setMethod($method);
+    bool function exists($name);
+    mixed function __get($name);
+    string function getRequestedPage();
+    string function getRequestedFunction();
+    int function getNumberOfArgs();
+    mixed function getValuesAsForm($tClass);
+    array function getArgs($numberOfArgs = -1);
+}
+
+//TOOLS
+//email
+class Email
+{
+    static function send($from, $to, $cc, $subject, $message);
+    static function sendWithAttachments($from, $to, $cc, $subject, $content, $files, $fromName=null, $replyTo=null);
+}
+
+//localization
+class Localization extends ControllerEntity
+{
+    function __construct();    
+    string function getCurrent();
+    function nextLanguage();
+    function changeToNextLanguage();
+    string function load();
+    string function translate($string);
+}
+?>
