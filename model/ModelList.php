@@ -16,25 +16,8 @@ class ModelList extends SmartArrayObject implements IModelEntity {
         $this->type = $type;
     }
     
-    /**
-     * @param type $index
-     * @param Model $newval
-     * @return Model
-     */
-    public function __set($index, Model $newval) {
-        return $this->array[$index] = $newval;
-    }
-    
-    /**
-     * @param type $index
-     * @return Model
-     */
-    public function __get($index) {
-        return $this->array[$index];
-    }
-    
     public function add(Model $model) {
-        $this->array[] = $model;
+        $this[] = $model;
     }
     
     public function append(ModelList $value) {

@@ -121,7 +121,7 @@ class ModelDbController extends ModelListablePersistentController
         } catch(Exception $e) {
             throw new ModelException('Database update failed: ' . $e->getMessage());
         }
-        return $this->model;
+        return $this->model->getId();
     }
     
     public function remove()
@@ -133,6 +133,24 @@ class ModelDbController extends ModelListablePersistentController
         } catch (Exception $e) {
             throw new ModelException("Database delete failed: table: " . $this->getTableName()
                     . " id: " . $this->Id . ";  " . $e->getMessage());
+        }
+    }
+    
+    public function getDataOrCreateTable($query) {
+        $tableName = $this->model->persistanceData->getNameOfPersistanceObject();
+        try {
+            return $this->db->search($this->model);
+        } catch (q\DbException $e) {
+            $checker = new ModelDbChecker($this->db);
+
+            $checker->check($this->model);
+            if ($checker->isTableMissing()) {
+                $this->db->execute($query);
+            } else if ($checker->isFieldMissing()) {
+                throw new ModelException("Table ($tableName) corrupted. Please remove it manually.");
+            }
+            
+            return $this->db->search($this->model);
         }
     }
 }

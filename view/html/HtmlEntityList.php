@@ -21,14 +21,6 @@ class HtmlEntityList extends SmartArrayObject implements IHtmlEntity {
     }
     
     /**
-     * @param mixed $index
-     * @return IHtmlEntity
-     */
-    public function offsetGet($index) {
-        return parent::offsetGet($index);
-    }
-    
-    /**
      * @param type $index
      * @param IHtmlEntity $newval
      * @return IHtmlEntity
@@ -38,14 +30,6 @@ class HtmlEntityList extends SmartArrayObject implements IHtmlEntity {
             throw new TypeException('Parameter $newval', 'IHtmlEntity');
         }
         return parent::__set($index, $newval);
-    }
-    
-    /**
-     * @param type $index
-     * @return IHtmlEntity
-     */
-    public function __get($index) {
-        return parent::__get($index);
     }
     
     public function __toString() {

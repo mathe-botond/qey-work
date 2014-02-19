@@ -91,7 +91,7 @@ class DB
                             $field->setValue($row[$field->getName()]);
                         }
                     }
-                    $data[] = $model;
+                    $data[ $row['id'] ] = $model;
                 }
             }
             
@@ -254,7 +254,7 @@ class DB
         if ($result->count() == 0) {
             return null;
         } else {
-            return $result[0];
+            return $result->first();
         }
     }
     

@@ -82,4 +82,9 @@ class TypeException extends \Exception {
         parent::__construct($message, $code);
     }
 }
+
+/**
+ * Bad return type
+ */
+class ReturnValueException extends TypeException { }
 ?>

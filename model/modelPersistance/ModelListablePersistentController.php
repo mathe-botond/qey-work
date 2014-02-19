@@ -11,9 +11,9 @@ abstract class ModelListablePersistentController implements IModelPersistanceCon
     
     public function save() {
         if ($this->id === null) {
-            $this->insert();
+            return $this->insert();
         } else {
-            $this->update();
+            return $this->update();
         }
     }
     

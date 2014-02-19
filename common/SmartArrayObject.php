@@ -33,13 +33,7 @@ class SmartArrayObject extends \ArrayObject {
     
     public function getArray($recursion = false)
     {
-        // just in case the object might be multidimensional
-        if ( $recursion === false) {
-            return $this->getArrayCopy();
-        } else {
-            return array_map(array($this, '_getArrayItemCallback'),
-                $this->getArrayCopy());
-        }
+        return $this->getArrayCopy();
     }
     
     public function keys() {
@@ -48,6 +42,11 @@ class SmartArrayObject extends \ArrayObject {
     
     public function exists($key) {
         return isset($this[$key]);
+    }
+    
+    public function first() {
+        $firstItem = reset($this->getArrayCopy());
+        return $firstItem;
     }
 }
 
