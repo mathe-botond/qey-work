@@ -5,7 +5,7 @@ namespace qeywork;
  * @author Dexx
  */
 interface IActionFactory {
-    public function getAction($name);
+    public function getAction($token);
 }
 
 ?>

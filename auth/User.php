@@ -21,7 +21,7 @@ class User extends SessionCacheble
     /**
      * Consrtuctor of this class
      */
-    public function login(UserModel $user)
+    public function login(IUserModel $user)
     {
         $this->user = $user;
     }
@@ -32,7 +32,7 @@ class User extends SessionCacheble
      */
     public function isAdmin()
     {
-        return ($this->isLoggedIn() && $this->user->type === "0");
+        return ($this->isLoggedIn() && $this->user->isAdmin());
     }
 
     public function getRecord()

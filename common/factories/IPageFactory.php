@@ -7,7 +7,7 @@ namespace qeywork;
  * @author Dexx
  */
 interface IPageFactory {
-    public function getPage($name);
+    public function getPage($token);
 }
 
 ?>

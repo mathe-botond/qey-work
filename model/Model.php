@@ -9,11 +9,7 @@ class Model implements IModelEntity {
     /** @var SmartArrayObject */
     protected $fields;
     
-    public function __construct() {
-        $this->fields = $this->addClassPropertiesAsFields;
-    }
-    
-    public function addClassPropertiesAsFields() {
+    protected function addClassPropertiesAsFields() {
         if ($this->fields == null) {
             $this->fields = new SmartArrayObject();
         }
@@ -23,6 +19,10 @@ class Model implements IModelEntity {
                 $this->fields[$key] = $field;
             }
         }
+    }
+    
+    public function __construct() {
+        $this->addClassPropertiesAsFields();
     }
     
     public function add(Field $field) {

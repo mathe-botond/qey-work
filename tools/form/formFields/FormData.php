@@ -13,9 +13,22 @@ class FormData {
     /** @var array */
     protected $errors;
     
+    protected function addClassPropertiesAsFields() {
+        if ($this->fields == null) {
+            $this->fields = new SmartArrayObject();
+        }
+        
+        foreach ($this as $key => $field) {
+            if ($field instanceof FormField) {
+                $this->fields[$key] = $field;
+            }
+        }
+    }
+    
     public function __construct(Model $model, $submitLabel) {
         $this->submit = new SubmitButton($submitLabel);
         $this->model = $model;
+        $this->addClassPropertiesAsFields();
     }
     
     public function add(FormField $field) {
