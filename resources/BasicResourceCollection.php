@@ -62,7 +62,7 @@ class BasicResourceCollection extends ResourceCollection {
     protected function initializeHistory(Cache $cache) {
         $history = $cache->retrieve(self::HISTORY);
         if ($history == null) {
-            $history = new History();
+            $history = new History($this->locations->homePage);
         }
         return $history;
     }

@@ -45,6 +45,12 @@ abstract class FormAction implements IAction {
         $this->locations = $resources->getLocations();
     }
     
+    protected function succesfulRedirect() {
+        $prg = $this->form->getPrg();
+        $this->locations->redirect($prg->getRedirect());
+    }
+
+
     /**
      * Form gateway, entry point of form handling
      * @return string ajax response, or error list
@@ -69,8 +75,7 @@ abstract class FormAction implements IAction {
             if ($this->params->exists('qey-form-ajax') && $this->params->qeyFormAjax === 'true') { 
                 return $result;
             } else {
-                $prg = $this->form->getPrg();
-                $this->locations->redirect($prg->getRedirect());
+                $this->succesfulRedirect();
             }
         } else { //there were some errors
             //$this->form->setErrors($result);

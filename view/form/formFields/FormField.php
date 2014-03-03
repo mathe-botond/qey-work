@@ -15,16 +15,24 @@ class FormField {
     public $inputControl;
     public $dataSourceControl;
     public $readOnly;
-    /** @var Validator */
+    /** @var array */
     public $validators;
+    /** @var array */
+    public $filters;
     public $class;
     public $comment;
     public $errors;
     
+    protected function addDefaultFilters() {
+        $this->addFilter(new XssFilter());
+    }
+    
     public function __construct(Field $field) {
         $this->field = $field;
         
-        $this->validators = array();
+        $this->validators = new SmartArrayObject();
+        $this->filters = new SmartArrayObject();
+        
         $this->errors = null;
     }
     
@@ -43,15 +51,21 @@ class FormField {
         return $this;
     }
     
+    public function addFilter(ValueFilter $filter) {
+        $this->filters[$filter->getName()] = $filter;
+        return $this;
+    }
+    
     public function setClass($class) {
         $this->class = $class;
         return $this;
     }
     
     public function setValue($value) {
-        foreach ($this->validators as $validator) {
-            $validator->validate($value);
+        foreach ($this->filters as $filter) {
+            $value = $filter->execute($value);
         }
+        
         $this->field->setValue($value);
         if ($this->inputControl != null) {
             $this->inputControl->setValue($value);

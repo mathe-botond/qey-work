@@ -4,6 +4,7 @@ namespace qeywork;
 class ModelListView {
     protected $modelList;
     protected $visual;
+    protected $display;
     
     /**
      * Constructor of this class
@@ -11,13 +12,21 @@ class ModelListView {
      * @param ModelEntity $model 
      * @param CModelManager $modelManager
      */
-    public function __construct(ModelList $modelList, IModelListViewVisual $visual = null) {
+    public function __construct(ModelList $modelList, ModelDisplay $display, IModelListViewVisual $visual = null) {
         if ($visual == null) {
             $visual = new ModelListViewVisual();
         }
         
         $this->modelList = $modelList;
         $this->visual = $visual;
+        $this->display = $display;
+        
+        $type = $this->modelList->getModelType();
+        try {
+            $display->injectModel($type);
+        } catch(q\TypeException $e) {
+            throw new ArgumentException('ModelList type incompatible with modelDisplay type: ' . $e->getMessage());
+        }
     }
     
     /**
@@ -25,10 +34,10 @@ class ModelListView {
      */
     public function render()
     {
-        $type = $this->modelList->getType();
+        $fields = $this->display->getFields();
         
         $headerCells = new HtmlEntityList();
-        foreach ($type as $field) {
+        foreach ($fields as $field) {
             if ($field instanceof Field) {
                 if ($field->displayControl !== null && $field->displayControl->isVisible()) {
                     $headerCells[] = $this->visual->headerCell($field->label);
@@ -40,17 +49,15 @@ class ModelListView {
         
         $rows = new HtmlEntityList();
         foreach ($this->modelList as $model) {
+            $this->display->injectModel($model);
             /* @var $model Model */
             $cells = new HtmlEntityList();
-            foreach ($model as $field) {
-                if ($field instanceof Field) {
-                    $value = $field->displayControl->render();
-                    $cells[] = $this->visual->cell($value);
-                }
+            foreach ($this->display->getFields() as $field) {
+                $value = $field->render();
+                $cells[] = $this->visual->cell($value);
             }
             $rows[] = $this->visual->entry($model->getId(), $cells);
         }
-        
         return $this->visual->base($header, $rows);
     }
 }

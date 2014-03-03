@@ -28,13 +28,13 @@ function createInputs()
         });
     });
     
-    $("form").submit(function () {
+    /*$("form").submit(function () {
         $("input[type=text], textarea").each(function()
         {
             if ($(this).val() == $(this).data("value"))
                 $(this).val('');
         });
-    });
+    });*/
     
     $('input[data-editable=false]').click(function()
     {

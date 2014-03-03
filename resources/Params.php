@@ -75,9 +75,6 @@ class Params
             if ($this->trimmed && is_string($retVal)) {
                 $retVal = trim($retVal);
             }
-            if ($this->secured) {
-                $retVal = Security::xssSenitize($retVal);
-            }
             return $retVal;
         } else {
             throw new ClientDataException("Parameter '$name' does not exist");

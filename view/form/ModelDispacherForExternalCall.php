@@ -15,13 +15,9 @@ class ModelDispacherForExternalCall implements IAction {
     protected $dispatcher;
     
     public function __construct(Params $params, Session $session) {
-        $this->id = $params()->formId;
+        $this->id = $params->formId;
         
-        if ($session->exists('formCollection')) {
-            $this->formCollection = $session->formCollection;
-        } else {
-            $this->formCollection = new FormCollection($session);
-        }
+        $this->formCollection = new FormCollection($session);
         
         $this->dispatcher = new ClientModelDispatcher();
     }
@@ -29,10 +25,9 @@ class ModelDispacherForExternalCall implements IAction {
     public function execute() {
         /* @var $form PostForm */
         $form = $this->formCollection->get($this->id);
-        $model = $form->getModel();
         
         $dispatcher = new ClientModelDispatcher();
-        $dispatcher->addModel($model);
+        $dispatcher->addForm($form);
         echo $dispatcher->output();
     }
 }

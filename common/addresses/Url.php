@@ -7,14 +7,15 @@ namespace qeywork;
  * @author Dexx
  * @method dirs(array $dirList) Set directory (or parameter) list 
  * @method params(array $paramList) Set parameter (or directory) list
- * @method Url dir(string $directory) Append a single directory (parameter) 
- * @method Url addDir(string $directory) Same as dir($directory)
- * @method Url param(string $param) Append a single parameter (directory)
- * @method Url addParam(string $param) Same as param($param)
+ * @method Url dir($directory) Append a single directory (parameter) 
+ * @method Url addDir($directory) Same as dir($directory)
+ * @method Url param($param) Append a single parameter (directory)
+ * @method Url addParam($param) Same as param($param)
  * @method Url addDirs(array $dirList) Append directory (or parameter) list 
  * @method Url addParams(array $paramList) Append parameter (or directory) list
- * @method Url page(string $page) Specify page (or file)
-   @method Url file(string $file) Specify file (or page)
+ * @method Url page($page) Specify page (or file)
+ * @method Url file($file) Specify file (or page)
+ * @method Url field($field,  $value = null) Specify file (or page)
  * TODO: continue, also do it for Path
  */
 class Url

@@ -17,7 +17,10 @@ class QeyActionFactory implements IActionFactory {
                 return new ModelDispacherForExternalCall(
                     $this->resources->getParams(), 
                     $this->resources->getSession());
-                break;
+            case LocationsForClients::NAME:
+                return new LocationsForClients(
+                    $this->resources->getLocations()
+                );
             default:
                 return null;
         }

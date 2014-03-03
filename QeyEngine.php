@@ -21,6 +21,10 @@ class QeyEngine {
         $target = $this->resources->getParams()->getRequestedTarget();
         $page = $pages->getCurrentPage($target);
         $layout->setContent($page);
+        
+        $history = $this->resources->getHistory();
+        $history->addCurrent();
+        
         return $layout->render();
     }
     

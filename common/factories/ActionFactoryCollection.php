@@ -28,7 +28,7 @@ class ActionFactoryCollection {
             }
         }
         if ($action == null) {
-            throw new ClientDataException('No action found');
+            throw new ClientDataException("No action found named '$name'");
         }
     }
 }

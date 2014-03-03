@@ -59,16 +59,6 @@ class Model implements IModelEntity {
         }
         return $this->fields;
     }
-    
-    public function toClientModel() {
-        $descriptor = array();
-        foreach ($this as $field) {
-            if ($field instanceof Field) {
-                $descriptor[$field->getName()] = $field->toClientModel();
-            }
-        }
-        return $descriptor;
-    }
 }
 
 ?>

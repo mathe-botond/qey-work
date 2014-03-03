@@ -35,11 +35,5 @@ interface IModelListViewVisual extends IVisual {
      * @param string $value cell value
      */
     public function cell($value);
-    
-    /**
-     * Add an action cell at the end of every row
-     * TODO: make it more generic
-     */
-    public function actions();
 }
 ?>

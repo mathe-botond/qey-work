@@ -18,7 +18,7 @@ class ModelListDbController {
     }
     
     protected function getTableName() {
-        return $this->list->getType()->persistanceData->getNameOfPersistanceObject();
+        return $this->list->getModelType()->persistanceData->getNameOfPersistanceObject();
     }
     
     public function insertAll() {
@@ -26,7 +26,7 @@ class ModelListDbController {
             return ;
         }
         
-        $type = $this->list->getType();
+        $type = $this->list->getModelType();
         
         foreach ($type->getFields() as $field) {               
             $key = $field->getName();

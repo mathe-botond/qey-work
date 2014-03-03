@@ -5,11 +5,11 @@ namespace qeywork;
  * @author Dexx
  */
 abstract class FieldDisplay implements IRenderable {
-    protected $value;
+    protected $field;
     protected $visible = true;
     
-    public function setValue($value) {
-        $this->value = $value;
+    public function __construct(Field $field) {
+        $this->field = $field;
     }
     
     public function hide() {

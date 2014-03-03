@@ -16,6 +16,7 @@ class ModelDbController extends ModelListablePersistentController
     public function __construct(Model $model, DB $db) {
         $this->db = $db;
         $this->model = $model;
+        $this->id = $model->getId();
         if ($model->persistanceData !== null) {
             $this->tableName = $model->persistanceData->getNameOfPersistanceObject();
         } else {
@@ -67,7 +68,18 @@ class ModelDbController extends ModelListablePersistentController
             throw new ModelException('Database load failed: '.$e->getMessage());
         }
         
+        $this->id = $id;
+        
         return $this->model;
+    }
+    
+    public function loadReferences() {
+        foreach ($this->model->getFields() as $field) {
+            if ($field instanceof ReferenceField && intval($field->value()) != 0) {
+                $controller = new static($field->getModelType(), $this->db);
+                $controller->load($field->value());
+            }
+        }
     }
     
     public function insert()
@@ -95,9 +107,9 @@ class ModelDbController extends ModelListablePersistentController
         try {
             $this->db->execute("insert into " . $this->getTableName() 
                     . " ($fields) values ($values)", $params);
-            $id = $this->db->lastId();
+            $this->id = $this->db->lastId();
             $this->model->setId($id);
-            return $id;
+            return $this->id;
         } catch(Exception $e) {
             throw new ModelException('Database insert failed: '.$e->getMessage());
         }
@@ -121,7 +133,7 @@ class ModelDbController extends ModelListablePersistentController
         } catch(Exception $e) {
             throw new ModelException('Database update failed: ' . $e->getMessage());
         }
-        return $this->model->getId();
+        return $this->id;
     }
     
     public function remove()
@@ -129,7 +141,8 @@ class ModelDbController extends ModelListablePersistentController
         try {
             $params = array("id" => $this->model->getId());
             $this->db->execute("delete from ". $this->getTableName(). " where id = :id", $params);
-            $this->model->setId(NULL);
+            $this->model->setId(null);
+            $this->id = null;
         } catch (Exception $e) {
             throw new ModelException("Database delete failed: table: " . $this->getTableName()
                     . " id: " . $this->Id . ";  " . $e->getMessage());
@@ -152,6 +165,10 @@ class ModelDbController extends ModelListablePersistentController
             
             return $this->db->search($this->model);
         }
+    }
+    
+    public function getModel() {
+        return $this->model;
     }
 }
 

@@ -5,9 +5,11 @@ class History
 {
     private $history;
     private $pointer;
+    private $homePage;
     
-    public function __construct()
-    {  
+    public function __construct(Url $home)
+    {
+        $this->homePage = $home;
         $this->history = array();
         $this->pointer = 0;
     }
@@ -31,7 +33,7 @@ class History
     public function back($step = 1)
     {
         if ($this->pointer <= $step) {
-            Redirect::goHome();
+            redirect($this->homePage);
         } else {
             $this->pointer -= $step;
             redirect($this->history[$this->pointer - 1]);
@@ -41,7 +43,7 @@ class History
     public function forward($step = 1)
     {
         if ($this->pointer >= count($this->history) + $step) {
-            Redirect::goHome();
+            redirect($this->homePage);
         } else {
             $this->pointer += $this->step;
             redirect($this->history[$this->pointer - 1]);
@@ -51,7 +53,7 @@ class History
     public function refresh()
     {
         if ($this->pointer == 0)
-            Redirect::goHome();
+            redirect($this->homePage);
         else
             redirect($this->history[$this->pointer - 1]);
     }

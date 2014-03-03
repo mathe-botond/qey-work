@@ -74,6 +74,14 @@ class FormData {
     public function getModel() {
         return $this->model;
     }
+    
+    public function toClientModel() {
+        $descriptor = array();
+        foreach ($this->getFields() as $field) {
+            $descriptor[$field->getName()] = $field->toClientModel();
+        }
+        return $descriptor;
+    }
 }
 
 ?>

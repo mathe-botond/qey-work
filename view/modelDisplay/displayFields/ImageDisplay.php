@@ -6,11 +6,12 @@ namespace qeywork;
  */
 class ImageDisplay extends FieldDisplay {
     /** @var Url */
-    private $base;
+    protected $field;
     protected $alt;
     
-    public function __construct(Url $base) {
-        $this->base = $base;
+    public function __construct(ImageField $field) {
+        $this->field = $field;
+        parent::__construct($field);
     }
     
     public function setAlt($alt) {
@@ -18,9 +19,10 @@ class ImageDisplay extends FieldDisplay {
     }
     
     public function render() {
-        $image = $this->base->file($this->value);
+        $url = $this->field->url()->file($this->field->value());
+        
         $h = new HtmlFactory();
-        $imageNode = $h->img()->src($image);
+        $imageNode = $h->img()->cls('thumb')->src($url);
         if ($this->alt != null) {
             $imageNode->alt($this->alt);
         }

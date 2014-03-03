@@ -140,10 +140,6 @@ class HtmlNode implements IHtmlEntity
         } else {
             throw new ArgumentException('$mixed must be an IHtmlEntity, ' . gettype($mixed) . ' given.');
         }
-        
-        if (is_array($this->children)) {
-            var_dump($mixed);
-        }
             
         return $this;
     }
