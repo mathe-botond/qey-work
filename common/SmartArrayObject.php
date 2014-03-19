@@ -31,7 +31,7 @@ class SmartArrayObject extends \ArrayObject {
         $this->setFlags($flags);
     }
     
-    public function getArray($recursion = false)
+    public function getArray()
     {
         return $this->getArrayCopy();
     }
@@ -45,7 +45,8 @@ class SmartArrayObject extends \ArrayObject {
     }
     
     public function first() {
-        $firstItem = reset($this->getArrayCopy());
+        $copy = $this->getArrayCopy();
+        $firstItem = reset($copy);
         return $firstItem;
     }
 }

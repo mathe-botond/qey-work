@@ -7,10 +7,6 @@ namespace qeywork;
 class CheckBoxInput extends TextInput {
     protected $label;
     
-    public function setLabel($label) {
-        $this->label = $label;
-    }
-    
     public function render() {
         $h = new HtmlFactory();
         

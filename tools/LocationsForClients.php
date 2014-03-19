@@ -25,7 +25,7 @@ class LocationsForClients implements IAction {
                 $loc[$name] = $location->toString();
             }
         }
-        $loc = json_encode($loc, JSON_UNESCAPED_SLASHES);
+        $loc = json_encode($loc, 64);
         echo 'var qey_locations = ' . $loc . ';';
     }
 }

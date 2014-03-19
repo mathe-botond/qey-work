@@ -20,7 +20,10 @@ class ModelList extends SmartArrayObject implements IModelEntity {
         $this[] = $model;
     }
     
-    public function append(ModelList $value) {
+    public function append($value) {
+        if (! $value instanceof ModelList) {
+            throw new TypeException($value, 'ModelList');
+        }
         foreach ($value as $key => $item) {
             if ($this->array->offsetExists($key)) {
                 $this[] = $item;

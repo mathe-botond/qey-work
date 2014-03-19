@@ -2,7 +2,7 @@
 namespace qeywork;
 
 /**
- * Description of ResourceProvider
+ * Description of ResourceCollection
  *
  * @author Dexx
  */
