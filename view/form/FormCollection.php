@@ -84,4 +84,3 @@ class FormCollection extends SessionCacheble {
         $this->currentFormID = null;
     }
 }
-?>

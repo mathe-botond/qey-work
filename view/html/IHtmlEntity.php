@@ -7,5 +7,3 @@ namespace qeywork;
 interface IHtmlEntity extends IRenderable {
     public function __toString();
 }
-
-?>

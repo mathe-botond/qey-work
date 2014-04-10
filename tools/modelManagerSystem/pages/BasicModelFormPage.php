@@ -45,5 +45,3 @@ class BasicModelFormPage extends Page{
         return $this->form->render(); 
     }
 }
-
-?>

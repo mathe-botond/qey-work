@@ -24,5 +24,3 @@ class ClassNameFactory implements IPageFactory, IActionFactory {
         return $this->getTarget($name);
     }
 }
-
-?>

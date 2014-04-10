@@ -66,4 +66,3 @@ class PostForm extends Form implements IRenderable {
         return $this->formData->getPrg();
     }
 }
-?>

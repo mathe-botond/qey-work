@@ -96,4 +96,3 @@ class BasicModelManagerFactory extends AbstractModelManagerFactory {
         }
     }
 }
-?>

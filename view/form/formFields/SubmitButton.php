@@ -16,5 +16,3 @@ class SubmitButton implements IRenderable {
         return $h->input()->type('submit')->value($this->label);
     }    
 }
-
-?>

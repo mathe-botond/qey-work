@@ -46,4 +46,3 @@ abstract class ModelListViewVisualWithActions extends ModelListViewVisual {
     
     protected abstract function actions(Model $model);
 }
-?>

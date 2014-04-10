@@ -172,5 +172,3 @@ class ModelDbController extends ModelListablePersistentController
         return $this->model;
     }
 }
-
-?>

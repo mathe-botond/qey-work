@@ -28,5 +28,3 @@ class CheckBoxInput extends TextInput {
         return $labeledInput;
     }
 }
-
-?>

@@ -6,4 +6,3 @@ interface IMenuVisual extends IVisual {
     public function item($label, Url $target, MenuEntityCollection $submenu = null, $class = '', $iconImage = null);
     public function itemGroup($items, $class = null);
 }
-?>

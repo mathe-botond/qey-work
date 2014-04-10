@@ -93,4 +93,3 @@ class SocialMedia
         return $html;
     }
 }
-?>

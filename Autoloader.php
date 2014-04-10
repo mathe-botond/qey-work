@@ -25,7 +25,9 @@ class CustomFilterIterator extends \RecursiveFilterIterator {
     
     public function __construct($recursiveIterator, $filters = null) {
         parent::__construct($recursiveIterator);
-        if ($filters !== null) self::$FILTERS = $filters;
+        if ($filters !== null) {
+            self::$FILTERS = $filters;
+        }
     }
 
     public function accept() {
@@ -148,4 +150,3 @@ class Autoloader {
         }
     }
 }
-?>

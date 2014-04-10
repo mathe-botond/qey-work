@@ -137,5 +137,3 @@ abstract class ResourceCollection {
         $this->cacheNecesarryClasses($cache);
     }
 }
-
-?>

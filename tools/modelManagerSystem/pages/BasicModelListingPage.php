@@ -24,5 +24,3 @@ class BasicModelListingPage extends Page {
         return $this->listView->render();
     }
 }
-
-?>

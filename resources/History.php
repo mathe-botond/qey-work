@@ -58,4 +58,3 @@ class History
             redirect($this->history[$this->pointer - 1]);
     }
 }
-?>

@@ -31,4 +31,3 @@ abstract class SessionCacheble {
         $this->session->set($this->getSessionKey(), $obj);
     }
 }
-?>

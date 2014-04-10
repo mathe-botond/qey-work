@@ -10,7 +10,7 @@ class Form {
         'action' => '',
         'method' => '',
         'enctype' => 'multipart/form-data',
-        '-data-qey-form' => ''
+        'data-qey-form' => ''
     );
     
     /** @var FormData */
@@ -57,7 +57,7 @@ class Form {
         $this->attributes['action'] = $this->action;
         $this->attributes['method'] = $this->method;
         $this->attributes['id'] = get_class($formData);
-        $this->attributes['signature'] = $this->ajax ? 'ajax' : 'simple-form';
+        $this->attributes['data-qey-form'] = $this->ajax ? 'ajax' : 'simple-form';
         if (! $this->multiPart) {
             unset($this->attributes['multipart']);
         }
@@ -112,4 +112,3 @@ class Form {
         return $this->formData;
     }
 }
-?>

@@ -20,4 +20,3 @@ class ModelViewVisualUsingTable implements IModelViewVisual{
         );
     }
 }
-?>

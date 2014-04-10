@@ -35,9 +35,9 @@ class Locations {
         $this->basePath = $basePath;
     }
     
-    public function addTokenDictionary(ITokenDictionary $dictionary) {
-        $this->tokenDictionaries = array_unshift($this->tokenDictionaries, $dictionary);
-    }
+    //public function addTokenDictionary(ITokenDictionary $dictionary) {
+    //    $this->tokenDictionaries = array_unshift($this->tokenDictionaries, $dictionary);
+    //}
 
     /**
      * @return Url to action
@@ -71,5 +71,3 @@ class Locations {
         }
     }
 }
-
-?>

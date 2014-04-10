@@ -31,6 +31,10 @@ class SmartArrayObject extends \ArrayObject {
         $this->setFlags($flags);
     }
     
+    /**
+     * Alias for getArrayCopy()
+     * @return array
+     */
     public function getArray()
     {
         return $this->getArrayCopy();
@@ -50,5 +54,3 @@ class SmartArrayObject extends \ArrayObject {
         return $firstItem;
     }
 }
-
-?>

@@ -37,5 +37,3 @@ abstract class ModelDisplay {
         return $this->fields;
     }
 }
-
-?>

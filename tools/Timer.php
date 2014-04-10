@@ -36,4 +36,3 @@ class Timer extends ControllerEntity {
         return number_format(( microtime(true) - $this->start), $digits);
     }
 }
-?>

@@ -29,5 +29,3 @@ class LocationsForClients implements IAction {
         echo 'var qey_locations = ' . $loc . ';';
     }
 }
-
-?>

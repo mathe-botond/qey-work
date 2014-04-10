@@ -15,5 +15,3 @@ class MenuEntityCollection extends SmartArrayObject {
         $item->setParent($this);
     }
 }
-
-?>

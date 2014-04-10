@@ -67,5 +67,3 @@ interface IModelManagerFactory {
     public function getPathCollection();
     public function createPathCollection(Url $basepath);
 }
-
-?>

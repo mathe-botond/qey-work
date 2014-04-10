@@ -3,6 +3,7 @@ namespace qeywork;
 
 /**
  * HTML constants
+ * TODO: DEPRECATED by the HtmlFactory
  *
  * @author Dexx
  */
@@ -83,5 +84,3 @@ class HC {
     const U = "u";
     const UL = "ul";
 }
-
-?>

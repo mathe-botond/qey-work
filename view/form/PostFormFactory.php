@@ -46,5 +46,3 @@ class PostFormFactory {
             $visual);;
     }
 }
-
-?>

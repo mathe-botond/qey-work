@@ -9,5 +9,3 @@ namespace qeywork;
 interface IPageFactory {
     public function getPage($token);
 }
-
-?>

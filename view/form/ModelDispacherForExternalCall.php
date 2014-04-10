@@ -31,4 +31,3 @@ class ModelDispacherForExternalCall implements IAction {
         echo $dispatcher->output();
     }
 }
-?>

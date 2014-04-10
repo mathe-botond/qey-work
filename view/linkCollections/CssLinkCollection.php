@@ -6,7 +6,7 @@ namespace qeywork;
  *
  * @author Dexx
  */
-class CssLinkCollection extends LinkCollection
+class CssLinkCollection extends LinkCollection implements ICssLinkCollection
 {
     /** @var Url */
     protected $cssLocation;
@@ -31,4 +31,3 @@ class CssLinkCollection extends LinkCollection
         return $h->link()->rel('stylesheet')->href($file)->type('text/css')->media('all');
     }
 }
-?>

@@ -18,4 +18,3 @@ class ModifyAction extends FormAction {
         $persistance->update();
     }
 }
-?>

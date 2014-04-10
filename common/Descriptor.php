@@ -82,5 +82,3 @@ class Descriptor extends SmartArrayObject {
         }
     }
 }
-
-?>

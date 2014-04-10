@@ -16,5 +16,3 @@ class FileInput extends FieldInput {
         return $h->input->type('file')->name($this->name);
     }
 }
-
-?>

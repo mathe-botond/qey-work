@@ -20,4 +20,3 @@ class ClientModelDispatcher {
         return $code;
     }
 }
-?>

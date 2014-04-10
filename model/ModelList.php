@@ -37,5 +37,3 @@ class ModelList extends SmartArrayObject implements IModelEntity {
         return $this->type;
     }
 }
-
-?>

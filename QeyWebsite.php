@@ -32,8 +32,8 @@ abstract class QeyWebsite implements IWebsite {
     /**
      * @return User
      */
-    protected function createUser() {
-        $user = new User(null);
+    protected function createUser(Session $session) {
+        $user = new User($session);
         return $user;
     }
     
@@ -49,14 +49,14 @@ abstract class QeyWebsite implements IWebsite {
             throw new ApplicationException(
                 'Implementation of QeyWebsite::assambleTheResources must return a ResourceCollection type'
             );
-        };
+        }
         
-        $user = $this->createUser();        
+        $user = $this->createUser($resources->getSession());        
         if (! $user instanceof User) {
             throw new ApplicationException(
                 'Implementation of QeyWebsite::createUser must return a User'
             );
-        };
+        }
         
         $this->engine = new QeyEngine($resources, $user);
         $this->params = $resources->getParams();
@@ -68,7 +68,7 @@ abstract class QeyWebsite implements IWebsite {
             throw new ApplicationException(
                 'Implementation of QeyWebsite::assambleTheLayout must return an ILayout'
             );
-        };
+        }
         
         return $layout;
     }
@@ -111,4 +111,3 @@ abstract class QeyWebsite implements IWebsite {
         return $this->engine->processRequest($actions);
     }
 }
-?>

@@ -23,4 +23,3 @@ class DbExpression {
         return $this->expression;
     }
 }
-?>

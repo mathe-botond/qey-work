@@ -15,5 +15,3 @@ class HtmlWrapperNode extends HtmlEntity {
         return $this->content;
     }
 }
-
-?>

@@ -1,7 +1,7 @@
 <?php
 namespace qeywork;
 
-abstract class LinkCollection implements IRenderable
+abstract class LinkCollection implements ILinkCollection
 {
     protected $files;
 
@@ -34,4 +34,3 @@ abstract class LinkCollection implements IRenderable
         return $output;
     }
 }
-?>

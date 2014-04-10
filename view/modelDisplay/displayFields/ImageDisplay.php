@@ -29,5 +29,3 @@ class ImageDisplay extends FieldDisplay {
         return $imageNode;
     }
 }
-
-?>

@@ -105,7 +105,7 @@ var qeyForm = function() {
             validators: validators
         });
 
-        if ($form.attr('-data-qey-form') == 'ajax') {
+        if ($form.attr('data-qey-form') == 'ajax') {
             this.initAjaxForm();
         } else {
             $form.submit(this.beforeSubmit);
@@ -122,7 +122,7 @@ var qeyForm = function() {
 
 
 $(document).ready(function() {
-    var $forms = $('[-data-qey-form]');
+    var $forms = $('[data-qey-form]');
     $forms.each(function() {
         var form = new qeyForm();
         form.init($(this));

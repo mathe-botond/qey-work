@@ -20,5 +20,3 @@ class MandatoryValidator extends Validator {
         return self::VALIDATOR_NAME;
     }
 }
-
-?>

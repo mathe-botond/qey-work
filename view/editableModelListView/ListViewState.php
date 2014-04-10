@@ -34,5 +34,3 @@ class ListViewState {
         return $this->name;
     }
 }
-
-?>

@@ -13,9 +13,5 @@ class MenuEntity {
     
     public function setParent(MenuEntityCollection $parent) {
         $this->parent = $parent;
-    }
-    
-    
+    }   
 }
-
-?>

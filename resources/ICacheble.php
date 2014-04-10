@@ -3,4 +3,3 @@ namespace qeywork;
 
 interface ICacheble {
 }
-?>

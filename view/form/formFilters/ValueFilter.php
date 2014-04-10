@@ -8,5 +8,3 @@ interface ValueFilter {
     public function getName();
     public function execute($value);
 }
-
-?>

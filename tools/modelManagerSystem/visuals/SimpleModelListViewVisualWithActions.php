@@ -29,4 +29,3 @@ class SimpleModelListViewVisualWithActions extends ModelListViewVisual {
         );
     }
 }
-?>

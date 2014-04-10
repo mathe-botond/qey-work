@@ -18,4 +18,3 @@ abstract class TemplatedPage extends TemplatedBlock implements IPage
         return $title;
     }
 }
-?>

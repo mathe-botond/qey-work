@@ -18,4 +18,3 @@ class InputAction extends FormAction {
         $persistance->insert();
     }
 }
-?>

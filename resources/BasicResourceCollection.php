@@ -106,5 +106,3 @@ class BasicResourceCollection extends ResourceCollection {
         return $this->logger;
     }
 }
-
-?>

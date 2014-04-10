@@ -7,5 +7,3 @@ namespace qeywork;
 interface IActionFactory {
     public function getAction($token);
 }
-
-?>

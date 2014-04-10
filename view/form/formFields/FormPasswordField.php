@@ -11,5 +11,3 @@ class FormPasswordField extends FormField {
         return $input;
     }
 }
-
-?>

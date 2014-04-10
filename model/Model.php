@@ -60,5 +60,3 @@ class Model implements IModelEntity {
         return $this->fields;
     }
 }
-
-?>

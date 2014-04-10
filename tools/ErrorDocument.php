@@ -63,4 +63,3 @@ class ErrorDocument extends BasicPage {
             ), $html);
     }
 }
-?>

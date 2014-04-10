@@ -83,5 +83,3 @@ class FormData {
         return $descriptor;
     }
 }
-
-?>

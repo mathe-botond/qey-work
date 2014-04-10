@@ -72,4 +72,3 @@ class SimpleMenu extends MenuEntity implements IRenderable {
         return $this->visual->container($items, $this->id, $this->class);
     }
 }
-?>

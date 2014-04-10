@@ -42,4 +42,3 @@ class ModelView implements IRenderable {
         return $this->visual->base($entryList);;
     }
 }
-?>

@@ -15,5 +15,3 @@ class NullHtml implements IHtmlEntity {
         return self::EMPTY_RESULT;
     }    
 }
-
-?>

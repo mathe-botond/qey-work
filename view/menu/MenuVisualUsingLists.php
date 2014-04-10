@@ -51,4 +51,3 @@ class MenuVisualUsingLists implements IMenuVisual {
         return $group;
     }
 }
-?>

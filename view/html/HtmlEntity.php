@@ -9,5 +9,3 @@ abstract class HtmlEntity implements IHtmlEntity {
         return $this->render() . '';
     } 
 }
-
-?>

@@ -7,5 +7,3 @@ namespace qeywork;
 interface IAction {
     public function execute();
 }
-
-?>

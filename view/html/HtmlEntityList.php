@@ -62,5 +62,3 @@ class HtmlEntityList extends SmartArrayObject implements IHtmlEntity {
         return $this;
     }
 }
-
-?>

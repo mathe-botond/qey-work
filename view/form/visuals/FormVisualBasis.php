@@ -37,5 +37,3 @@ abstract class FormVisualBasis implements IFormVisual {
         return $h->input()->type('hidden')->name($name)->value($value);
     }
 }
-
-?>
