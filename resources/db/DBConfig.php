@@ -24,5 +24,3 @@ class DBConfig {
         $this->password = $password;
     }
 }
-
-?>

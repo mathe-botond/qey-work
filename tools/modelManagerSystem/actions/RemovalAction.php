@@ -22,5 +22,3 @@ class RemovalAction implements IAction{
         }
     }
 }
-
-?>

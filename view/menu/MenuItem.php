@@ -46,5 +46,3 @@ class MenuItem extends MenuEntity {
         $this->children->add($child);
     }
 }
-
-?>

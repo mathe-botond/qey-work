@@ -149,5 +149,3 @@ class FormField {
         return $this->render() . '';
     }
 }
-
-?>

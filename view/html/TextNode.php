@@ -31,5 +31,3 @@ class TextNode implements IHtmlEntity {
         return $this->get();
     }
 }
-
-?>

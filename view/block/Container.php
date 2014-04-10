@@ -17,4 +17,3 @@ abstract class Container implements IBlock {
         $this->recursiveRender();
     }
 }
-?>

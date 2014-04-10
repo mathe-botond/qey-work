@@ -6,4 +6,3 @@ interface IInputVisual {
     public function modelConnector($name, $class, $selectedItems, $sourceItems);
     public function multiInput($inputList);
 }
-?>

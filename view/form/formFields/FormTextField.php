@@ -11,4 +11,3 @@ class FormTextField extends FormField {
                 ->content($this->value());
     }
 }
-?>

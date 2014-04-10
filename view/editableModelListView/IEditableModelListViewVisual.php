@@ -56,4 +56,3 @@ interface IEditableModelListViewVisual extends IVisual {
      */
     public function actions();
 }
-?>

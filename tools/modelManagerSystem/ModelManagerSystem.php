@@ -124,5 +124,3 @@ abstract class ModelManagerSystem implements IPage, IAction {
         return $converter->toUrlCase();
     }
 }
-
-?>

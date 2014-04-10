@@ -15,5 +15,3 @@ class FormRichTextField extends FormTextField {
         return $input;
     }
 }
-
-?>

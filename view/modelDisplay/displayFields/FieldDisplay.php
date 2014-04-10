@@ -26,5 +26,3 @@ abstract class FieldDisplay implements IRenderable {
     
     public abstract function render();
 }
-
-?>

@@ -19,5 +19,3 @@ class PostFormData extends FormData {
         return $this->prg;
     }
 }
-
-?>

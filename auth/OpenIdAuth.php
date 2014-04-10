@@ -152,4 +152,3 @@ class OpenIdAuth extends AbstractAuth
         //TODO: Implement "remember me" for the User class
     }
 }
-?>

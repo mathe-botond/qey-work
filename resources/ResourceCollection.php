@@ -2,7 +2,7 @@
 namespace qeywork;
 
 /**
- * Description of ResourceProvider
+ * Description of ResourceCollection
  *
  * @author Dexx
  */
@@ -137,5 +137,3 @@ abstract class ResourceCollection {
         $this->cacheNecesarryClasses($cache);
     }
 }
-
-?>

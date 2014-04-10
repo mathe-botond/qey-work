@@ -15,7 +15,9 @@ class FormVisualUsingList extends FormVisualBasis {
             $hiddenInputs,
             $h->ul()->cls('form')->content(
                 $rows,
-                $submit
+                $h->li()->cls('submit-button-container')->content(
+                    $submit
+                )
             )
         );
     }
@@ -29,4 +31,3 @@ class FormVisualUsingList extends FormVisualBasis {
         );
     }
 }
-?>

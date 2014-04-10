@@ -21,7 +21,7 @@ class Path
     /**
      * Constructor of this class
      * @param array $dirs
-     * @param string $filename
+     * @param string $file
      */
     public function __construct($dirs, $file = "")
     {
@@ -31,16 +31,16 @@ class Path
             for ($i = 0; $i < strlen($dirs); $i++)
             {
                 $c = $dirs[$i];
-                if ($c != '/' && $c != '\\')
+                if ($c != '/' && $c != '\\') {
                     $token .= $c;
-                else
-                {
+                } else {
                     $this->dirs[] = $token;
                     $token = '';
                 }
             }
-            if ($token !== '')
+            if ($token !== '') {
                 $this->dirs[] = $token;
+            }
         }
         else if (is_array($dirs))
         {
@@ -52,9 +52,10 @@ class Path
     public function parentDir()
     {
         $dirs = $this->dirs;
-        if (count($this->dirs) > 1)
+        if (count($this->dirs) > 1) {
             array_pop($dirs);
-        
+        }
+
         return new Path($dirs, $this->file);
     }
     
@@ -62,11 +63,12 @@ class Path
     {
         $file = $this->file;
         $dirs = $this->dirs;
-        if (isset($args[0]))
+        if (isset($args[0])) {
             $value = $args[0];
-        else
+        } else {
             $value = '';
-        
+        }
+
         switch ($name)
         {
             case 'dirs':
@@ -96,9 +98,11 @@ class Path
     public function toString()
     {
         $path = '';
-        if (! empty($this->dirs))
-            foreach ($this->dirs as $dir)
+        if (!empty($this->dirs)) {
+            foreach ($this->dirs as $dir) {
                 $path .= $dir . '/';
+            }
+        }
         $path .= $this->file;
         return $path;
     }
@@ -108,4 +112,3 @@ class Path
         return $this->toString();
     }
 }
-?>

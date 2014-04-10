@@ -61,12 +61,11 @@ abstract class TemplatedBlock extends Container {
             }
         }
         $newTemplate = $this->afterRender($template);
-        return $newTemplate;
+        $htmledTemplate = new HtmlWrapperNode($newTemplate);
+        return $htmledTemplate;
     }
     
     protected function afterRender($html) {
         return $html;
     } 
 }
-
-?>

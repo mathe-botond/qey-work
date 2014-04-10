@@ -1,48 +1,44 @@
 <?php
 namespace qeywork;
 
-class Upload extends Singleton
+class Upload
 {
-    private $maximumFileSize;
-    private $uploadDir;
-    private $allowedExtensions;
+    private $filesGlobalHandler;
     
-    public function __construct($uploadDir, $maxFileSize = null, $allowedExtensions = null)
+    protected $name;
+    protected $valid;
+    
+    public function __construct(FileGlobalsHandler $filesGlobalHandler)
     {        
-        $this->uploadDir = $uploadDir;
-        $this->maximumFileSize = ($maxFileSize !== null) ? $maxFileSize : null;
-        $this->allowedExtensions = ($allowedExtensions !== null) ? $allowedExtensions : null;
-        
-        if (! is_dir($this->uploadDir)) {
-            throw new ArgumentException('Upload dir was not found');
-        }
+        $this->filesGlobalHandler = $filesGlobalHandler;
     }
     
-    public function upload($fileInput)
-    {        
-        if (empty($fileInput)) {
-            throw new ArgumentException('No file input name specified');
+    public function setFile($file) {
+        $this->name = $file;
+        $this->valid = false;
+    }
+    
+    public function validate(array $allowedExtensions = null, $maxFileSize = null) {        
+        $this->filesGlobalHandler->setFile($this->name);
+        if (! $this->filesGlobalHandler->isValid() ) {
+            return 'File is not in the FILES global';
         }
         
-        $f = new FileHandler($fileInput);
-        if (!$f->valid) return '';
-        $size = $f->size;
-        
+        $size = $this->filesGlobalHandler->getSize();
         if ($size == 0){
-            throw new UploadExceptions('File is empty', 1);
-        } 
-        if ($this->maximumFileSize != null && $size > $this->maximumFileSize){
-            throw new UploadExceptions('File too large', 2);
+            return 'File is empty';
         }
         
-        $pathinfo = pathinfo($f->name);
-        $name = $pathinfo['filename'];            
-        $extension = $pathinfo['extension'];
+        if ($maxFileSize != null && $size > $maxFileSize){
+            return 'File too large';
+        }
         
-        //limit file extensions on server side
-        if ($this->allowedExtensions !== null) {
+        $pathinfo = pathinfo( $this->filesGlobalHandler->getName() );
+        $extension = strtolower($pathinfo['extension']);
+        
+        if ($allowedExtensions !== null) {
             $extExists = false;
-            foreach ($this->allowedExtensions as $ext) {
+            foreach ($allowedExtensions as $ext) {
                 if (strtolower($extension) == $ext) {
                     $extExists = true;
                     break;
@@ -50,14 +46,35 @@ class Upload extends Singleton
             }
             
             if (! $extExists) {
-                throw new UploadExceptions('File extension mismatch', 4);
+                return 'File extension not allowed';
             }
         }
         
-        $name = $f->getUniqueName($this->uploadDir, $name, $extension);
-        $f->save($this->uploadDir . $name . '.' . $extension);
+        $this->valid = true;
+        return true;
+    }
 
-        return $name . '.' . $extension;
+
+    public function upload(Path $uploadDir)
+    {
+        if (! $this->valid) {
+            throw new \BadMethodCallException('Validate file first');
+        }
+        
+        if (! is_dir($uploadDir)) {
+            throw new ArgumentException('Upload dir was not found');
+        }
+
+        $pathinfo = pathinfo($this->filesGlobalHandler->getName());
+        $name = $pathinfo['filename'];            
+        $extension = $pathinfo['extension'];
+        
+        //limit file extensions on server side        
+        $localName = $this->filesGlobalHandler->getUniqueName($uploadDir, $name, $extension);
+        
+        $this->filesGlobalHandler->save(
+                $uploadDir . $localName . '.' . $extension);
+
+        return $localName . '.' . $extension;
     }
 }
-?>

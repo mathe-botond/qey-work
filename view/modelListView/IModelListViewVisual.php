@@ -36,4 +36,3 @@ interface IModelListViewVisual extends IVisual {
      */
     public function cell($value);
 }
-?>

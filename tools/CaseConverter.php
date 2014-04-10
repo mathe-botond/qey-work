@@ -88,5 +88,3 @@ class CaseConverter {
         return $result;
     }
 }
-
-?>

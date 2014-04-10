@@ -35,4 +35,3 @@ interface IFormVisual extends IVisual {
     
     public function hiddenSubmitData($name, $value);
 }
-?>

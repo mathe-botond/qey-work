@@ -30,4 +30,3 @@ class ModelListViewVisual implements IModelListViewVisual{
         return $h->td()->content($value);
     }
 }
-?>

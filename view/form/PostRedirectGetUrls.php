@@ -39,5 +39,3 @@ class PostRedirectGetUrls {
         return $this->redirect;
     }
 }
-
-?>

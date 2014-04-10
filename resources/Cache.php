@@ -64,4 +64,3 @@ class Cache
         $this->session->set(self::CACHE_KEY, $cache);
     }
 }
-?>

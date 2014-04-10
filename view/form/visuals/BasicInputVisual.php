@@ -60,4 +60,3 @@ class BasicInputVisual implements IInputVisual {
         return $container;
     }
 }
-?>

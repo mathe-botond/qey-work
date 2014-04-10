@@ -146,5 +146,3 @@ class ViewField {
         return $this->value() . '';
     }
 }
-
-?>

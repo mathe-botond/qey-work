@@ -87,4 +87,3 @@ class TypeException extends \Exception {
  * Bad return type
  */
 class ReturnValueException extends TypeException { }
-?>

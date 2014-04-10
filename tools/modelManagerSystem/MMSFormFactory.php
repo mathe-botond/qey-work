@@ -27,5 +27,3 @@ class MMSFormFactory {
         return $formFactory->createForm($this->resources, $this->meta, $model, $prg);
     }
 }
-
-?>

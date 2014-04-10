@@ -13,7 +13,7 @@ class JsLinkCollection extends LinkCollection
     
     protected function createEntry($file) {
         $h = new HtmlFactory();
-        return $h->script()->type('text/javascript')->src($file);
+        return $h->script()->type('text/javascript')->defer()->src($file);
     }
     
     public function setAppJs(Url $appJs) {
@@ -38,5 +38,3 @@ class JsLinkCollection extends LinkCollection
         return $this->qeyWorkJs;
     }
 }
-
-?>

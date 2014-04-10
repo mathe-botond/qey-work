@@ -12,4 +12,3 @@ class ImageField extends Field {
         $this->url = $url;
     }
 }
-?>

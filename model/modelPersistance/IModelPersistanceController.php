@@ -8,5 +8,3 @@ interface IModelPersistanceController {
     public function save();
     public function remove();
 }
-
-?>

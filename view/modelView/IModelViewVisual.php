@@ -15,4 +15,3 @@ interface IModelViewVisual extends IVisual {
      */
     public function entry($label, $value);
 }
-?>

@@ -7,23 +7,23 @@ class QeyMeta implements IRenderable
     /** @var HtmlEntityList */
     protected $meta;
     
-    /** @var CssLinkCollection */
+    /** @var ILinkCollection */
     public $cssLinks;
-    /** @var JsLinkCollection */
+    /** @var ILinkCollection */
     public $jsLinks;
     
-    public function __construct(CssLinkCollection $css, JsLinkCollection $js) {
+    public function __construct(ICssLinkCollection $css, JsLinkCollection $js) {
         $this->cssLinks = $css;
         $this->jsLinks = $js;
         
         $this->meta = new HtmlEntityList();
         $h = new HtmlFactory();
 
-        $this->setHeaderEntry('encoding', $h->meta()
+        $this->addHeaderEntry('encoding', $h->meta()
                 ->attr('http-equiv', 'Content-Type')
-                ->attr('content', 'text/html; charset=UTF8')
+                ->attr('content', 'text/html; charset=utf-8')
             );
-        $this->setHeaderEntry('robots', $h->meta()
+        $this->addHeaderEntry('robots', $h->meta()
                 ->attr('name', 'robots')
                 ->attr('content', 'all'));
         //$this->setHeaderEntry('favicon', $h->meta()
@@ -37,9 +37,15 @@ class QeyMeta implements IRenderable
         $this->title = $title;
     }
     
-    public function setHeaderEntry($key, HtmlNode $node)
+    public function addHeaderEntry($key, HtmlNode $node)
     {
         $this->meta[$key] = $node;
+    }
+    
+    public function addMetaEntry($name, $content) {
+        $node = new HtmlNode('meta', true);
+        $node->attr('name', $name)->attr('content', $content);
+        $this->addHeaderEntry($name, $node);
     }
     
     /**
@@ -69,4 +75,3 @@ class QeyMeta implements IRenderable
         return $headerStrings;
     }
 }
-?>

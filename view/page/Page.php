@@ -15,4 +15,3 @@ abstract class Page implements IPage
         return null;
     }
 }
-?>

@@ -6,7 +6,5 @@ namespace qeywork;
  */
 interface IWebsite {
     public function createPage($defaultPage);
-    public function processReqest();
+    public function processRequest();
 }
-
-?>

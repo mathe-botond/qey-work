@@ -7,5 +7,3 @@ namespace qeywork;
 interface IVisual {
     
 }
-
-?>

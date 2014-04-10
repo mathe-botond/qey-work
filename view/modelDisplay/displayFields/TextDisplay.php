@@ -9,5 +9,3 @@ class TextDisplay extends FieldDisplay {
         return ($this->value === null) ? '' : $this->value . '';;
     }
 }
-
-?>

@@ -84,7 +84,7 @@ namespace qeywork;
  * @method HtmlNode ul() Creates a node of ul
  */
 class HtmlFactory {
-    private static $selfClosedTags = array('br', 'meta', 'link', 'input', 'img');
+    private static $selfClosedTags = array('br', 'hr', 'meta', 'link', 'input', 'img');
     /**
      * @param string $tag
      * @param HtmlContainer $content
@@ -101,5 +101,3 @@ class HtmlFactory {
         return new HtmlNode($tag, $selfClosed);
      }
 }
-
-?>

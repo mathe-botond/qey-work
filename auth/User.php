@@ -57,4 +57,3 @@ class User extends SessionCacheble
         $this->user = null;
     }
 }
-?>

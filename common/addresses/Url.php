@@ -32,16 +32,13 @@ class Url
      */
     public function __construct($path = null, $page = '', $fields = '')
     {
-        if ($path == null)
+        if ($path == null) {
             return;
-        
+        }
+
         if (is_string($path))
         {
-            $data = parse_url($path);
-            if ($data == null)
-                getLogger()->error(__FILE__ ." ::: ". __LINE__ ." ::: ". __CLASS__ ." ::: ". __METHOD__ .":::\t". 
-                    "Invalid URL");
-            
+            $data = parse_url($path);            
             $this->domain = $data['scheme'] . '://' . $data['host'];
             
             $path = isset($data['path']) ? $data['path'] : '';
@@ -54,8 +51,9 @@ class Url
             
             $this->domain = $path[0];
             $this->dirs = array();
-            for ($i = 1; $i < count($data); ++$i)
-                $this->dirs[$i-1] = $data[$i];
+            for ($i = 1; $i < count($data); ++$i) {
+                $this->dirs[$i - 1] = $data[$i];
+            }
             $this->page = $page;
         }
         
@@ -74,10 +72,23 @@ class Url
     
     public static function getCurrentDomain()
     {
-        if ($_SERVER["SERVER_PORT"] != 80)
-            return "http://".$_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"];
-        else
-            return "http://".$_SERVER["SERVER_NAME"];
+        if ($_SERVER["SERVER_PORT"] != 80) {
+            return "http://" . $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"];
+        } else {
+            return "http://" . $_SERVER["SERVER_NAME"];
+        }
+    }
+    
+    public function parentDir()
+    {
+        $dirs = $this->dirs;
+        if (count($this->dirs) > 0) {
+            array_pop($dirs);
+        }
+
+        $url = clone($this);
+        $url->dirs = $dirs;
+        return $url;
     }
     
     public function __call($name, $args)
@@ -149,8 +160,9 @@ class Url
     public function toString()
     {
         $path = $this->domain . '/';
-        if (! empty($this->dirs))
+        if (!empty($this->dirs)) {
             $path .= implode($this->dirs, '/') . '/';
+        }
         $path .= $this->page;
         if (! empty($this->fields))
         {
@@ -159,8 +171,9 @@ class Url
             foreach ($this->fields as $name => $value)
             {
                 $query[$name] = $name;
-                if ($value != null)
+                if ($value != null) {
                     $query[$name] .= '=' . $value;
+                }
             }
             $path .= implode('&', $query);
         }
@@ -172,4 +185,3 @@ class Url
         return $this->toString();
     }
 }
-?>

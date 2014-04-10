@@ -8,4 +8,3 @@ interface IPage extends IBlock {
      */    
     public function getTitle();
 }
-?>

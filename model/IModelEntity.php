@@ -9,4 +9,3 @@ namespace qeywork;
  */
 interface IModelEntity {
 }
-?>

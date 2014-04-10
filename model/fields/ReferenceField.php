@@ -4,15 +4,21 @@ namespace qeywork;
 /**
  * @author Dexx
  */
-class ReferenceField extends Field {
+class ReferenceField extends TypedField {
     protected $model;
  
     public function __construct($name, Model $type) {
-        parent::__construct($name);
+        parent::__construct($name, TypedField::INT_TYPE);
         
+        $this->canBeNull(false);
         $this->model = $type;
     }
     
+    /**
+     * Get referenced Model type as instance of that model
+     * Useful for model information without referenced model being loaded
+     * @return Model
+     */
     public function getModelType() {
         return $this->model;
     }
@@ -26,6 +32,11 @@ class ReferenceField extends Field {
         }
     }
     
+    /**
+     * Get referenced model
+     * @return Model
+     * @throws ModelException when referenced model is not loaded
+     */
     public function getModel() {
         if ($this->value() != null && $this->model == null ||
                 $this->model != null && $this->model->getId() != $this->value()) {
@@ -43,5 +54,3 @@ class ReferenceField extends Field {
         }
     }
 }
-
-?>

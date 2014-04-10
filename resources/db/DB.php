@@ -60,8 +60,9 @@ class DB
             if ($params == null) {
                 $stmt->execute();
             } else {
-                foreach ($params as $key => $param)
+                foreach ($params as $key => $param) {
                     $stmt->bindValue($key, $param, $this->getConstantByType($param));
+                }
                 $stmt->execute();
             }
             
@@ -267,4 +268,3 @@ class DB
         return $this->db->lastInsertId();
     }
 }
-?>

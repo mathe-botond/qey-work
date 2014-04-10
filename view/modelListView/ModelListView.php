@@ -61,4 +61,3 @@ class ModelListView {
         return $this->visual->base($header, $rows);
     }
 }
-?>

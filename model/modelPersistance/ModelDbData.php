@@ -20,5 +20,3 @@ class ModelDbData implements IPersistentData {
         return self::DB_PERSISTANCE_NAME;
     }
 }
-
-?>

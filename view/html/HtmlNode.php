@@ -93,10 +93,12 @@ class HtmlNode implements IHtmlEntity
     public function cls($class)
     {
         $cleanClass = $this->cleanType($class);
-        $classes = explode(' ', $class);
-        foreach ($classes as $class)
-            if (! empty($class))
+        $classes = explode(' ', $cleanClass);
+        foreach ($classes as $class) {
+            if (!empty($class)) {
                 $this->classes[$class] = $class;
+            }
+        }
         return $this;
     }
     
@@ -131,8 +133,9 @@ class HtmlNode implements IHtmlEntity
         $mixed = $this->cleanType($mixed);
         
         if ($mixed instanceof HtmlEntityList) {        
-            foreach ($mixed as $item)
+            foreach ($mixed as $item) {
                 $this->children[] = $item;
+            }
         } else if ($mixed instanceof IHtmlEntity) {
             $this->children[] = $mixed;
         } else if (is_string($mixed)) {
@@ -145,6 +148,10 @@ class HtmlNode implements IHtmlEntity
     }
     
     public function __call($func, $attrs) {
+        if (empty($attrs)) {
+            $attrs[0] = '';
+        }
+        
         return $this->attr($func, $attrs[0]);
     }
     
@@ -173,7 +180,10 @@ class HtmlNode implements IHtmlEntity
         }
             
         foreach ($this->attributes as $key => $value) {
-            $html .= ' ' . $key . '="' . $value . '"';
+            $html .= ' ' . $key;
+            if (! empty($value)) {
+                $html .= '="' . $value . '"';
+            }
         }
         
         if ($this->selfClosed) {
@@ -185,4 +195,3 @@ class HtmlNode implements IHtmlEntity
         return $html;
     }
 }
-?>

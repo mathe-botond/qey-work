@@ -63,4 +63,3 @@ class Buffer
         return self::$level;
     }
 }
-?>

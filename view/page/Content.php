@@ -30,5 +30,3 @@ class Content extends Page {
         return $this->content->render();
     }
 }
-
-?>

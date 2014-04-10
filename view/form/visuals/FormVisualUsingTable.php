@@ -28,4 +28,3 @@ class FormVisualUsingTable extends  FormVisualBasis{
        );
     }
 }
-?>

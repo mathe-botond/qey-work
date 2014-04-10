@@ -20,5 +20,3 @@ abstract class ModelListablePersistentController implements IModelPersistanceCon
     public abstract function insert();
     public abstract function update();
 }
-
-?>

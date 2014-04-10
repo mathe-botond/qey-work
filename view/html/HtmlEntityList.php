@@ -44,7 +44,7 @@ class HtmlEntityList extends SmartArrayObject implements IHtmlEntity {
         $this->append($value);
     }
 
-    public function append(IHtmlEntity $value) {
+    public function append($value) {
         if ($value instanceof HtmlEntityList) {
             foreach ($value as $key => $item) {
                 if ($this->exists($key)) {
@@ -62,5 +62,3 @@ class HtmlEntityList extends SmartArrayObject implements IHtmlEntity {
         return $this;
     }
 }
-
-?>

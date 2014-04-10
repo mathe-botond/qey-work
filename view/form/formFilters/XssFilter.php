@@ -17,15 +17,18 @@ class XssFilter implements ValueFilter
     public function execute($value) {
         if (is_string($value))
         {
-            if ($this->modes & Security::HTML_TAGS)
+            if ($this->modes & Security::HTML_TAGS) {
                 $value = htmlspecialchars($value);
-            
-            if ($this->modes & Security::QUOTES)
+            }
+
+            if ($this->modes & Security::QUOTES) {
                 $value = htmlentities($value);
-            
-            if ($this->modes & Security::JS_LINKS)
+            }
+
+            if ($this->modes & Security::JS_LINKS) {
                 $value = str_replace('javascript:', 'javascript&#58;', $value);
-            
+            }
+
             return $value;
         }
         else
@@ -39,4 +42,3 @@ class XssFilter implements ValueFilter
         
     }
 }
-?>

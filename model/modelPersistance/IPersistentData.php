@@ -8,5 +8,3 @@ interface IPersistentData {
     public function getPersistannceName();
     public function getNameOfPersistanceObject();
 }
-
-?>

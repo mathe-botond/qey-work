@@ -43,5 +43,3 @@ abstract class TemplatedLayout extends TemplatedBlock implements ILayout {
         $this->setTitle();
     }
 }
-
-?>

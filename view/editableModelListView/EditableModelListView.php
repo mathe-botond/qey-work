@@ -143,4 +143,3 @@ class EditableModelListView {
         return $data;
     }
 }
-?>

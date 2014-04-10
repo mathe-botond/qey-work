@@ -14,5 +14,3 @@ class UserModel extends Model implements IUserModel {
         $this->password = new Field('password');
     }
 }
-
-?>

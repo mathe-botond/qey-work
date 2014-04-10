@@ -7,5 +7,3 @@ namespace qeywork;
 interface IUserModel {
     public function isAdmin();
 }
-
-?>

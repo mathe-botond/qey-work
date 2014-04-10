@@ -152,8 +152,9 @@ class ModelDbController extends ModelListablePersistentController
     public function getDataOrCreateTable($query) {
         $tableName = $this->model->persistanceData->getNameOfPersistanceObject();
         try {
-            return $this->db->search($this->model);
-        } catch (q\DbException $e) {
+            $result = $this->db->search($this->model);
+            return $result;
+        } catch (DbException $e) {
             $checker = new ModelDbChecker($this->db);
 
             $checker->check($this->model);
@@ -171,5 +172,3 @@ class ModelDbController extends ModelListablePersistentController
         return $this->model;
     }
 }
-
-?>

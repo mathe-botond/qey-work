@@ -36,4 +36,3 @@ class Mailer
         return true;
     }
 }
-?>
