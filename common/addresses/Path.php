@@ -100,7 +100,7 @@ class Path
         $path = '';
         if (!empty($this->dirs)) {
             foreach ($this->dirs as $dir) {
-                $path .= $dir . '/';
+                $path .= $dir . DIRECTORY_SEPARATOR;
             }
         }
         $path .= $this->file;

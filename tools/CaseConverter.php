@@ -65,7 +65,14 @@ class CaseConverter {
     }
     
     public function toUrlCase() {
-        return $this->toBeSeparatedWith(self::DELIMITER_URL);
+        $tokens = $this->tokens;
+        foreach ($tokens as $key => $token) {
+            if (! empty($token)) {
+                $tokens[$key] = strtolower($token);
+            }
+        }
+        
+        return implode(self::DELIMITER_URL, $tokens);
     }
     
     public function toUnderscoredCase() {

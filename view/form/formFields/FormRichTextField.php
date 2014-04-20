@@ -6,7 +6,9 @@ namespace qeywork;
  */
 class FormRichTextField extends FormTextField {
     protected function addDefaultFilters() {
-        //yeah... don't... don't do anything
+        //this is overriding a parent function
+        //which adds HTML filtering and whatnot by default,
+        //but this time don't do anything
     }
 
     public function render() {

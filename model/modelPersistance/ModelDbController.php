@@ -58,11 +58,13 @@ class ModelDbController extends ModelListablePersistentController
 
             $row = $result[0];
             unset($row["id"]);
+            $fields = $this->model->getFields();
             foreach ($row as $key => $value) {
-                if (! property_exists($this->model, $key) || ! $this->model->$key instanceof Field)
+                if (!array_key_exists($key, $fields) || !$fields[$key] instanceof Field) {
                     throw new ModelException("dbLoad failed: Table returned the '$key' " .
-                            "undefined in the model");
-                $this->model->$key->setValue( $value );
+                    "undefined in the model");
+                }
+                $fields[$key]->setValue( $value );
             }
         } catch(Exception $e) {
             throw new ModelException('Database load failed: '.$e->getMessage());
@@ -86,7 +88,7 @@ class ModelDbController extends ModelListablePersistentController
     {
         $params = array();
         
-        foreach($this->model as $key => $field) {
+        foreach($this->model->getFields() as $key => $field) {
             if (! $field instanceof Field ) {
                 continue;
             }
@@ -108,7 +110,7 @@ class ModelDbController extends ModelListablePersistentController
             $this->db->execute("insert into " . $this->getTableName() 
                     . " ($fields) values ($values)", $params);
             $this->id = $this->db->lastId();
-            $this->model->setId($id);
+            $this->model->setId($this->id);
             return $this->id;
         } catch(Exception $e) {
             throw new ModelException('Database insert failed: '.$e->getMessage());

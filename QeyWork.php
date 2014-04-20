@@ -1,14 +1,21 @@
 <?php
 namespace qeywork;
 
+require dirname(__FILE__).'/common/common.php';
+require dirname(__FILE__).'/common/Exceptions.php';
+require dirname(__FILE__).'/Autoloader.php';
+
+require dirname(__FILE__).'/tools/utils.php';
+
 /**
  * @author Dexx
  */
-abstract class QeyWebsite implements IWebsite {
+abstract class QeyWork {
     /** @var Params */
     private $params;
     protected $engine;
-    
+    private $autoloader;
+
     /**
      * @return IPageFactory
      */
@@ -44,6 +51,8 @@ abstract class QeyWebsite implements IWebsite {
     }
     
     public function __construct() {
+        $this->autoloader = new Autoloader(__NAMESPACE__, __DIR__, 'qeyWork');
+        
         $resources = $this->assambleTheResources();
         if (! $resources instanceof ResourceCollection) {
             throw new ApplicationException(
@@ -81,7 +90,7 @@ abstract class QeyWebsite implements IWebsite {
             throw new ApplicationException(
                 'Implementation of QeyWebsite::getApplicationPageFactory must return a IPageFactory'
             );
-        };
+        }
         
         $pages->addFactory($appPages);
         return $pages;
@@ -95,15 +104,15 @@ abstract class QeyWebsite implements IWebsite {
     }
     
     public function processRequest() {
-        $resources = $this->engine->resources;
+        $resources = $this->engine->getResources();
         $actions = new ActionFactoryCollection($resources->getParams());
         
         $appAction = $this->getApplicationActionFactory();
         if (! $appAction instanceof IActionFactory) {
             throw new ApplicationException(
-                'Implementation of QeyWebsite::getApplicationPageFactory must return a IPageFactory'
+                'Implementation of QeyWebsite::getApplicationActionFactory must return an IActionFactory'
             );
-        };
+        }
         
         $actions->addFactory( $appAction );
         $actions->addFactory( new QeyActionFactory($resources) );

@@ -29,10 +29,28 @@ class Locations {
     /** @var Url */
     public $filesPath;
     
-    public function __construct(Url $baseUrl, Path $basePath) {
+    public function __construct(
+            Url $baseUrl,
+            Path $basePath,
+            Url $appUrl,
+            Path $appPath,
+            Url $qeyWorkUrl,
+            Path $qeyWorkpath) {
+        
         $this->baseUrl = $baseUrl;
         $this->homePage = $baseUrl;
         $this->basePath = $basePath;
+        
+        $this->app = $appPath;
+        $style = $appUrl->dir('style');
+        $this->css = $style;
+        $this->cssImages = $style->dir('images');
+        
+        $this->appJs = $appUrl->dir('js');;
+        $this->qeyWork = $qeyWorkpath;
+        $this->qeyWorkJs = $qeyWorkUrl->dir('js');
+        $this->filesUrl = $this->baseUrl->dir('files');
+        $this->filesPath = $this->basePath->dir('files');
     }
     
     //public function addTokenDictionary(ITokenDictionary $dictionary) {

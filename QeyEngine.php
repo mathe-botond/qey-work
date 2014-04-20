@@ -3,11 +3,11 @@ namespace qeywork;
 
 class QeyEngine {
     /** @var ResourceCollection */
-    public $resources;
+    protected $resources;
     /** @var ILayout */
-    public $layout;
+    protected $layout;
     /** @var User */
-    public $user;
+    protected $user;
     
     public function __construct(
             ResourceCollection $resources,
@@ -15,6 +15,20 @@ class QeyEngine {
         
         $this->resources = $resources;
         $this->user = $user;
+    }
+    
+    /**
+     * @return BasicResourceCollection
+     */
+    public function getResources() {
+        return $this->resources;
+    }
+    
+    /**
+     * @return User
+     */
+    public function getUser() {
+        return $this->user;
     }
     
     public function createPage(ILayout $layout, PageFactoryCollection $pages) {

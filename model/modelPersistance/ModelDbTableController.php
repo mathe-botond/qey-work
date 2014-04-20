@@ -55,7 +55,6 @@ class ModelDbTableController {
                 } else {
                     $this->createModelTable();
                 }
-                $this->db->execute($query);
             } else if ($checker->isFieldMissing()) {
                 throw new ModelException("Table ($tableName) corrupted. Please remove it manually.");
             }

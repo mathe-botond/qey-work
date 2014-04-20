@@ -14,24 +14,8 @@ abstract class TemplatedBlock extends Container {
     protected function beforeRender() {}
     
     protected function beforeChildRender(IRenderable $child) {}
-
-    public function render() {
-        $this->beforeRender();
-        $templateFile = $this->provideTemplateFile();
-        if (! $templateFile instanceof Path) {
-            throw new ArgumentException(
-               'Overload of provideTemaplteFile must return a Path type'
-            );
-        }
-        
-        if (! file_exists($templateFile)) {
-            throw  new \BadMethodCallException(
-                'Template file "' . $templateFile . '" was not found'
-            );
-        }
-        
-        $template = file_get_contents($templateFile);
-        
+    
+    protected function processTemplates($template) {
         $matches = array();
         preg_match_all('/\{this\.([a-zA-Z0-9]*)\}/', $template, $matches);
         
@@ -60,7 +44,28 @@ abstract class TemplatedBlock extends Container {
                 }
             }
         }
-        $newTemplate = $this->afterRender($template);
+        return $template;
+    }
+
+    public function render() {
+        $this->beforeRender();
+        $templateFile = $this->provideTemplateFile();
+        if (! $templateFile instanceof Path) {
+            throw new ArgumentException(
+               'Overload of provideTemaplteFile must return a Path type'
+            );
+        }
+        
+        if (! file_exists($templateFile)) {
+            throw  new \BadMethodCallException(
+                'Template file "' . $templateFile . '" was not found'
+            );
+        }
+        
+        $template = file_get_contents($templateFile);
+        $precessed = $this->processTemplates($template);
+        
+        $newTemplate = $this->afterRender($precessed);
         $htmledTemplate = new HtmlWrapperNode($newTemplate);
         return $htmledTemplate;
     }

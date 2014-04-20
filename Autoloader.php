@@ -1,39 +1,41 @@
 <?php
 namespace qeywork;
 
+class AutoloaderException extends \Exception {};
+
 /**
  * Autoload classes
  *
  * @author Dexx
  */
 class SvnFilterIterator extends \RecursiveFilterIterator {
-    public static $FILTERS = array(
+    public static $filters = array(
         '.svn',
     );
 
     public function accept() {
         return !in_array(
             $this->current()->getFilename(),
-            self::$FILTERS,
+            self::$filters,
             true
         );
     }
 }
 
 class CustomFilterIterator extends \RecursiveFilterIterator {
-    public static $FILTERS = array();
+    public static $filters = array();
     
     public function __construct($recursiveIterator, $filters = null) {
         parent::__construct($recursiveIterator);
         if ($filters !== null) {
-            self::$FILTERS = $filters;
+            self::$filters = $filters;
         }
     }
 
     public function accept() {
         return !in_array(
             $this->current()->getFilename(),
-            self::$FILTERS,
+            self::$filters,
             true
         );
     }
@@ -49,10 +51,6 @@ class Autoloader {
     
     private static $instances = array();
     
-    public static function createInstance($namespace, $path, $key) {
-        self::$instances[$key] = new Autoloader($namespace, $path, $key);
-    }
-    
     public function init() {
         if (file_exists($this->file)) {
             $content = file_get_contents($this->file);
@@ -63,11 +61,13 @@ class Autoloader {
         }
     }
     
-    private function __construct($namespace, $path, $key) {
+    public function __construct($namespace, $path, $key) {
         $this->key = $key;
         $this->path = $path;
         $this->namaspace = $namespace;
         $this->file = $path . '/' . '.autoloader.config';
+        
+        self::$instances[$key] = $this;
         
         $this->init();
         
@@ -81,30 +81,37 @@ class Autoloader {
         $this->init();
     }
     
-    private function gatherClassFiles() {
+    protected function gatherClassFiles() {
         $dirIt = new \RecursiveDirectoryIterator($this->path);
-		$filterIterator = new CustomFilterIterator($dirIt, array_merge(SvnFilterIterator::$FILTERS, array('js')));
+		$filterIterator = new CustomFilterIterator($dirIt, array_merge(SvnFilterIterator::$filters, array('js')));
         $it = new \RecursiveIteratorIterator($filterIterator, \RecursiveIteratorIterator::SELF_FIRST);
         $this->classList = array();
         foreach($it as $file) {
+            /* @var $file \SplFileInfo */
             $filename = $file->getFilename();
             
-            $fc = $filename !== '' ? $filename[0] : '';
-            if (substr($filename, -4) === '.php' && $fc >= 'A' && $fc <= 'Z') {
+            $firstCharacter = $filename !== '' ? $filename[0] : '';
+            if (substr($filename, -4) === '.php' && $firstCharacter >= 'A' && $firstCharacter <= 'Z') {
                 $pathinfo = pathinfo($filename);
-                $filename = $pathinfo['filename'];
-                if (isset($this->classList[$filename])) {
-                    throw new \Exception('Multiple class definitions at: '
-                            . $this->classList[$filename] . ' and '
+                $classname = $pathinfo['filename'];
+                if (isset($this->classList[$classname])) {
+                    throw new AutoloaderException('Multiple class definitions at: '
+                            . $this->classList[$classname] . ' and '
                             . $file);
-                } else {
-                    $this->classList[$filename] = (string)$file;
+                } else { 
+                    $absolutePath = $file->getPath();
+                    $relativePath = str_replace($this->path, '', $absolutePath);
+                    $explodedRelativePath = explode(DIRECTORY_SEPARATOR, trim($relativePath, DIRECTORY_SEPARATOR));
+                    $this->classList[$classname] = array(
+                        'path' => $explodedRelativePath,
+                        'file' => $filename
+                    );
                 }
             }
         }
     }
     
-    private static function checkAllInstanceIntegrity($namespace) {
+    protected static function checkAllInstanceIntegrity($namespace) {
         $status = 0;
         foreach (self::$instances as $loader) {
             /* @var $loader Autoloader */
@@ -123,7 +130,7 @@ class Autoloader {
         return false;
     }
     
-    public function load($class) {        
+    public function load($class) {
         $result = true;
         $namespace = null;
         
@@ -142,11 +149,30 @@ class Autoloader {
         }
         
         if ($result && isset($this->classList[$class])) {
-            if (! file_exists($this->classList[$class])) {
+            $file = $this->path
+                    . DIRECTORY_SEPARATOR
+                    . implode(DIRECTORY_SEPARATOR, $this->classList[$class]['path'])
+                    . DIRECTORY_SEPARATOR
+                    . $this->classList[$class]['file'];
+            
+            if (! file_exists($file)) {
                 $this->reset();
             }
 
-            require_once($this->classList[$class]);
+            require_once($file);
         }
+    }
+    
+    public function getRelativePathToClass($class) {
+        $lastNsPos = strripos($class, '\\');
+        $class = substr($class, $lastNsPos + 1);
+        if (! isset($this->classList[$class])) {
+            throw new AutoloaderException("Don't know any class named '$class'");
+        }
+        return $this->classList[$class]['path'];
+    }
+    
+    public function getPath() {
+        return $this->path;
     }
 }

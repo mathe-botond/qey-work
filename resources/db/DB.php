@@ -55,7 +55,9 @@ class DB
      */
     public function query($query, $params = null, $fetch = null, $limit = -1)
     {
-        try {    
+        try {
+            $this->logger->debug(__FILE__ ." ::: ". __LINE__ ." ::: ". __CLASS__ ." ::: ". __METHOD__ .":::\t". "DB query: " . $query . " --- Params: " . print_r($params, true));
+            
             $stmt = $this->db->prepare($query);
             if ($params == null) {
                 $stmt->execute();
@@ -65,8 +67,6 @@ class DB
                 }
                 $stmt->execute();
             }
-            
-            $this->logger->debug(__FILE__ ." ::: ". __LINE__ ." ::: ". __CLASS__ ." ::: ". __METHOD__ .":::\t". "DB query: " . $query . " --- Params: " . print_r($params, true));
             
             $data = array();
             
@@ -112,12 +112,15 @@ class DB
     {
         $type = gettype($value);
         
-        if ($type === 'integer' || $type === 'double')
+        if ($type === 'integer' || $type === 'double') {
             return \PDO::PARAM_INT;
-        if ($type === 'boolean')
+        }
+        if ($type === 'boolean') {
             return \PDO::PARAM_BOOL;
-        if ($type === 'NULL')
+        }
+        if ($type === 'NULL') {
             return \PDO::PARAM_NULL;
+        }
         //Default 
         return \PDO::PARAM_STR;
     }
@@ -130,6 +133,8 @@ class DB
     public function execute($query, $params = null)
     {        
         try {
+            $this->logger->debug(__FILE__ ." ::: ". __LINE__ ." ::: ". __CLASS__ ." ::: ". __METHOD__ .":::\t". "DB query: " . $query . " --- Params: " . print_r($params, true));
+            
             $stmt = $this->db->prepare($query);
             
             if ($params == null) {
@@ -137,9 +142,7 @@ class DB
             } else {
                 $result = $stmt->execute($params);
             }
-            
-            $this->logger->debug(__FILE__ ." ::: ". __LINE__ ." ::: ". __CLASS__ ." ::: ". __METHOD__ .":::\t". "DB query: " . $query . " --- Params: " . print_r($params, true));
-            
+
             return $result;
         } catch (\PDOException $e) {
             throw new DbException('Database execute command failed: ' . $e->getMessage());

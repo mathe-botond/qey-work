@@ -78,7 +78,6 @@ class Params
             return $retVal;
         } else {
             throw new ClientDataException("Parameter '$name' does not exist");
-            return false;
         }
     }
 	

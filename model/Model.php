@@ -14,9 +14,9 @@ class Model implements IModelEntity {
             $this->fields = new SmartArrayObject();
         }
         
-        foreach ($this as $key => $field) {
+        foreach ($this as $field) {
             if ($field instanceof Field) {
-                $this->fields[$key] = $field;
+                $this->add($field);
             }
         }
     }
