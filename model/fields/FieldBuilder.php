@@ -18,4 +18,12 @@ class FieldBuilder {
     public function createTextField($name) {
         return new TypedField($name, TypedField::TEXT_TYPE);
     }
+    
+    public function createTimestampField($name, $defaultCurrent = true) {
+        $field = new TypedField($name, TypedField::TIMESPTAMPT_TYPE);
+        if ($defaultCurrent) {
+            $field->setDefault(TypedField::DEFAULT_TIMESTAMP);
+        }
+        return $field;
+    }
 }

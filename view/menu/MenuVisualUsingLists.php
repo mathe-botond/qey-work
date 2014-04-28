@@ -6,7 +6,7 @@ class MenuVisualUsingLists implements IMenuVisual {
 
     public function container($content, $id = null, $class = null) {
         $h = new HtmlFactory();
-        $menu = $h->ul()->content($content);
+        $menu = $h->nav()->content($h->ul()->content($content));
         if ($class !== null) {
             $menu->cls($class);
         }
@@ -16,22 +16,38 @@ class MenuVisualUsingLists implements IMenuVisual {
         return $menu;
     }
     
-    public function item($label, Url $target, MenuEntityCollection $submenu = null, $name = '', $class = null, $iconImage = null) {
+    public function item(
+            $label,
+            Url $target,
+            MenuEntityCollection $submenu = null, 
+            $name = '',
+            $iconImage = null,
+            $class = null,
+            $style = null) {
+        
+        if ($name != '') {
+            $name .= '-';
+        }
+        
         $h = new HtmlFactory();
         $icon = '';
         if ($iconImage != null) {
-             $icon = $h->img()->cls($name . '-icon')->attr('src', $iconImage);
+            $icon = $h->img()->cls($name . 'icon')->attr('src', $iconImage);
         }
         
         $item = $h->li()->content(
-            $h->a()->cls($name . '-link')->href($target)->content(
-                $h->span()->cls($name . '-label')->text($label),
+            $h->a()->cls($name . 'link')->href($target)->content(
+                $h->span()->cls($name . 'label')->text($label),
                 $icon
             )
         );
         
         if ($class != null) {
             $item->cls($class);
+        }
+        
+        if ($style != null) {
+            $item->style($style);
         }
         
         if ($submenu != null) {

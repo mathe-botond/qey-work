@@ -9,6 +9,8 @@ class QeyEngine {
     /** @var User */
     protected $user;
     
+    protected $pagePostProcessor;
+    
     public function __construct(
             ResourceCollection $resources,
             User $user) {
@@ -31,9 +33,24 @@ class QeyEngine {
         return $this->user;
     }
     
+    public function setPagePostProcessor(IPagePostProcessor $processor) {
+        $this->pagePostProcessor = $processor;
+    }
+    
+    protected function postProcess(IPage $page) {
+        if ($this->pagePostProcessor !== null) {
+            $page = $this->pagePostProcessor->process($page);
+            if (! $page instanceof IPage) {
+                throw new ReturnValueException($page, 'IPage');
+            }
+        }
+        return $page;
+    }
+    
     public function createPage(ILayout $layout, PageFactoryCollection $pages) {
         $target = $this->resources->getParams()->getRequestedTarget();
         $page = $pages->getCurrentPage($target);
+        $page = $this->postProcess($page);
         $layout->setContent($page);
         
         $history = $this->resources->getHistory();

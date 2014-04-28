@@ -10,7 +10,6 @@ class Params
     private $alias;
     private $method;
     
-    public $secured = true;
     public $trimmed = true;
     
     protected $args = array();

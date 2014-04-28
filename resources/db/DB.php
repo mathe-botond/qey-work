@@ -270,4 +270,8 @@ class DB
     {
         return $this->db->lastInsertId();
     }
+    
+    public function getModelTableController(Model $model) {
+        return new ModelDbTableController($this, $model);
+    }
 }

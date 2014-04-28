@@ -12,9 +12,13 @@ class MenuItem extends MenuEntity {
     /** @var MenuEntityCollection */
     protected $children;
     /** @var string */
-    public $class;
+    public $class = null;
+    /** @var string */
+    public $style = null;
     /** @var URL */
     public $iconImage;
+    /** @var string */
+    public $name = '';
     
     public function __construct($label, Url $link, MenuEntityCollection $children = null) {
         $this->label = $label;

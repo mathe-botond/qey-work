@@ -22,10 +22,17 @@ class PageFactoryCollection {
             $target = $this->defaultPage;
         }
         
+        if ($target == $this->defaultPage) {
+            $type = Page::FRONT_PAGE;
+        } else {
+            $type = Page::NO_SPECIAL_TYPE;
+        }
+        
         foreach ($this->collection as $factory) {
             /* @var $factory IPageFactory */
             $page = $factory->getPage($target);
             if ($page != null) {
+                $page->setType($type);
                 return $page;
             }
         }

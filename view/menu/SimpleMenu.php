@@ -64,7 +64,17 @@ class SimpleMenu extends MenuEntity implements IRenderable {
                 $class .= ' ' . $item->class;
             }
             
-            $items->append($this->visual->item($item->getLabel(), $item->getLink(), null, '', $class));
+            $items->append(
+                $this->visual->item(
+                    $item->getLabel(),
+                    $item->getLink(),
+                    null,
+                    $item->name,
+                    null,
+                    $class,
+                    $item->style
+                )
+            );
             
             ++$counter;
         }
