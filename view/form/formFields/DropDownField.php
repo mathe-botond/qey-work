@@ -18,7 +18,7 @@ class DropDownField extends FormField {
         $this->label = $label;
     }
     
-    public function setOptionList(SmartArrayObject $options) {
+    public function setOptionList(SmartArray $options) {
         $this->options = $options;
     }
 

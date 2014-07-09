@@ -27,7 +27,7 @@ abstract class QeyWork {
     protected abstract function getApplicationActionFactory();
         
     /**
-     * @return ResourceCollection
+     * @return Resources
      */
     protected abstract function assambleTheResources();
     
@@ -54,9 +54,9 @@ abstract class QeyWork {
         $this->autoloader = new Autoloader(__NAMESPACE__, __DIR__, 'qeyWork');
         
         $resources = $this->assambleTheResources();
-        if (! $resources instanceof ResourceCollection) {
+        if (! $resources instanceof Resources) {
             throw new ApplicationException(
-                'Implementation of QeyWebsite::assambleTheResources must return a ResourceCollection type'
+                'Implementation of QeyWebsite::assambleTheResources must return a Resources type'
             );
         }
         

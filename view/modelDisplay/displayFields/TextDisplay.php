@@ -6,6 +6,6 @@ namespace qeywork;
  */
 class TextDisplay extends FieldDisplay {
     public function render() {
-        return ($this->value === null) ? '' : $this->value . '';;
+        return $this->field->value();
     }
 }

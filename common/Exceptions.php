@@ -2,6 +2,11 @@
 namespace qeywork;
 
 /**
+ * Use when testing reference against null 
+ */
+class NullRefenceException extends \Exception {}
+
+/**
  * Used when malformed model was detected 
  */
 class ModelException extends \Exception {}
@@ -86,4 +91,13 @@ class TypeException extends \Exception {
 /**
  * Bad return type
  */
-class ReturnValueException extends TypeException { }
+class ReturnValueException extends \Exception {
+    public function __construct($method, $typeExpected, $code = 0) {
+        $type = gettype($variable);
+        if ($type == 'object') {
+            $type = get_class($variable);
+        }
+        $message = "$method should have returned $typeExpected, $type given.";
+        parent::__construct($message, $code);
+    }
+}

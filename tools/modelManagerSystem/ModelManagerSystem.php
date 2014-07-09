@@ -30,7 +30,7 @@ abstract class ModelManagerSystem implements IPage, IAction {
     
     /** @var IAction */
     private $action;
-    
+
     /**
      * @param IModelManagerConfigurator $configurator
      * @param string $mode 
@@ -72,17 +72,21 @@ abstract class ModelManagerSystem implements IPage, IAction {
     public function __construct(
             Locations $locations,
             Params $params,
+            IModelManagerFactory $factory,
             $whatAmI)
     {
+        $this->locations = $locations;
+        
         $args = $params->getArgs();
-        $this->factory = $this->build();
-        $this->factory->createPathCollection($locations->baseUrl, $this->getDefaultName());
+        $this->factory = $factory;
+        $this->factory->createPathCollection(
+                $locations->baseUrl,
+                $this->getDefaultName());
         
         $mode = isset($args[0]) ? $args[0] : self::MODE_LIST;
         $this->id = isset($args[1]) ? $args[1] : -1;
         $this->mode = $mode;
         
-        $this->locations = $locations;
         
         switch ($whatAmI) {
             case self::YOURE_AN_ACTION:
@@ -93,11 +97,6 @@ abstract class ModelManagerSystem implements IPage, IAction {
                 break;
         }
     }
-    
-    /**
-     * @return IModelManagerFactory
-     */
-    protected abstract function build();
     
     public function getTitle() {
         return $this->page->getTitle();

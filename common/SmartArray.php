@@ -2,12 +2,12 @@
 namespace qeywork;
 
 /**
- * class SmartArrayObject
+ * class SmartArray
  * Multidimensional ArrayObject with additional functionality
  *
  * @author Dexx
  */
-class SmartArrayObject extends \ArrayObject {
+class SmartArray extends \ArrayObject {
     public function __construct( $array = array(), $nested = true, $flags = 2 ) 
     {
         if (!is_array($array)) {

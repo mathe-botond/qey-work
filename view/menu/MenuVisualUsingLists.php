@@ -4,9 +4,9 @@ namespace qeywork;
 class MenuVisualUsingLists implements IMenuVisual {
     /** @var HtmlFactory */
 
-    public function container($content, $id = null, $class = null) {
+    public function menu($content, $id = null, $class = null) {
         $h = new HtmlFactory();
-        $menu = $h->nav()->content($h->ul()->content($content));
+        $menu = $h->nav()->content($content);
         if ($class !== null) {
             $menu->cls($class);
         }
@@ -19,7 +19,7 @@ class MenuVisualUsingLists implements IMenuVisual {
     public function item(
             $label,
             Url $target,
-            MenuEntityCollection $submenu = null, 
+            IRenderable $submenu = null, 
             $name = '',
             $iconImage = null,
             $class = null,
@@ -51,7 +51,7 @@ class MenuVisualUsingLists implements IMenuVisual {
         }
         
         if ($submenu != null) {
-            $item->append($submenu);
+            $item->append($submenu->render());
         }
         
         return $item;

@@ -93,7 +93,7 @@ class HtmlNode implements IHtmlEntity
     public function cls($class)
     {
         $cleanClass = $this->cleanType($class);
-        $classes = explode(' ', $cleanClass);
+        $classes = explode(' ', trim($cleanClass));
         foreach ($classes as $class) {
             if (!empty($class)) {
                 $this->classes[$class] = $class;

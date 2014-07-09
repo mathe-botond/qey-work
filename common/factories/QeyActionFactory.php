@@ -7,7 +7,7 @@ namespace qeywork;
 class QeyActionFactory implements IActionFactory {
     protected $resources;
     
-    public function __construct(ResourceCollection $resources) {
+    public function __construct(Resources $resources) {
         $this->resources = $resources;
     }
     

@@ -12,6 +12,6 @@ interface IPage extends IBlock {
     public function getTitle();
     
     public function setType($type);
-    
+
     public function isFrontPage();
 }

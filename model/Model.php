@@ -5,17 +5,19 @@ namespace qeywork;
  * @author Dexx
  */
 class Model implements IModelEntity {
+    const ID_FIELD_NAME = 'id';
     protected $id;
-    /** @var SmartArrayObject */
+    protected $idField;
+    /** @var SmartArray */
     protected $fields;
     
     protected function addClassPropertiesAsFields() {
         if ($this->fields == null) {
-            $this->fields = new SmartArrayObject();
+            $this->fields = new SmartArray();
         }
         
         foreach ($this as $field) {
-            if ($field instanceof Field) {
+            if ($field instanceof Field && $field->getName() != self::ID_FIELD_NAME) {
                 $this->add($field);
             }
         }
@@ -23,6 +25,7 @@ class Model implements IModelEntity {
     
     public function __construct() {
         $this->addClassPropertiesAsFields();
+        $this->idField = new Field(self::ID_FIELD_NAME);
     }
     
     public function add(Field $field) {
@@ -40,7 +43,12 @@ class Model implements IModelEntity {
         return $this->id;
     }
     
+    public function getIdField() {
+        return $this->idField;
+    }
+    
     public function setId($id) {
+        $this->idField->setValue($id);
         return $this->id = $id;
     }
     

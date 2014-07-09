@@ -12,7 +12,7 @@ class PostFormFactory {
     private $meta;
     
     public function __construct(
-            ResourceCollection $resources,
+            Resources $resources,
             QeyMeta $meta) {
         
         $this->meta = $meta;

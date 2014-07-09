@@ -188,9 +188,11 @@ class DB
             $conditionList = array();
             $valueList = array();
             
-            if (!is_array($conditions)) $conditions = array(); 
-            foreach ($conditions as $name => $value)
-            {
+            if (!is_array($conditions)) {
+                $conditions = array(); 
+            }
+            
+            foreach ($conditions as $name => $value) {
                 $condition = $name;
                 if (is_array($value)) {
                     $condition .= ' IN ';
@@ -222,6 +224,9 @@ class DB
             }
             
             if (! empty($order)) {
+                if (is_array($order)) {
+                    $order = implode('`, `', $order);
+                }
                 $orderDir = empty($orderDir) ? 'ASC' : 'DESC';
                 $query .= " ORDER BY `$order` " . $orderDir;
             }
@@ -237,11 +242,9 @@ class DB
             $result = $this->query($query, $valueList, $model);
             //var_dump($query, $result);
             return $result;
-        }
-        catch(\PDOException $e)
-        {
-            throw new DbException('Table filtering failed: ' . $e->getMessage() . var_export(debug_backtrace(), true));
-            return false;
+        
+        } catch(\PDOException $e) {
+            throw new DbException('Table search failed: ' . $e->getMessage() . var_dump(debug_backtrace()));
         }
     }
     

@@ -23,7 +23,7 @@ abstract class FormAction implements IAction {
         return $params->exists('qey-form-id');
     }
     
-    public function __construct(ResourceCollection $resources, FormCollection $forms) {
+    public function __construct(Resources $resources, FormCollection $forms) {
         $params = $resources->getParams();
         if ($this->isPostFormSubmitted($params)) { 
             $this->formId = $params->qeyFormId;

@@ -56,7 +56,8 @@ class Form {
         
         $this->attributes['action'] = $this->action;
         $this->attributes['method'] = $this->method;
-        $this->attributes['id'] = get_class($formData);
+        $class = explode('\\', get_class($formData));
+        $this->attributes['id'] = end($class);
         $this->attributes['data-qey-form'] = $this->ajax ? 'ajax' : 'simple-form';
         if (! $this->multiPart) {
             unset($this->attributes['multipart']);
@@ -68,8 +69,9 @@ class Form {
         $entryList = new HtmlEntityList();
         $fields = $formData->getFields();
         foreach ($fields as $field) {
-            if (! $field instanceof FormField)
+            if (! $field instanceof FormField) {
                 continue;
+            }
             
             $input = $field->render();
             

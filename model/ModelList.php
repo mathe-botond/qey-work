@@ -7,7 +7,7 @@ namespace qeywork;
  *
  * @author Dexx
  */
-class ModelList extends SmartArrayObject implements IModelEntity {
+class ModelList extends SmartArray implements IModelEntity {
     /** @var Model */
     protected $type;
     

@@ -2,7 +2,7 @@
 namespace qeywork;
 
 class QeyEngine {
-    /** @var ResourceCollection */
+    /** @var Resources */
     protected $resources;
     /** @var ILayout */
     protected $layout;
@@ -12,7 +12,7 @@ class QeyEngine {
     protected $pagePostProcessor;
     
     public function __construct(
-            ResourceCollection $resources,
+            Resources $resources,
             User $user) {
         
         $this->resources = $resources;
@@ -20,7 +20,7 @@ class QeyEngine {
     }
     
     /**
-     * @return BasicResourceCollection
+     * @return BasicResources
      */
     public function getResources() {
         return $this->resources;

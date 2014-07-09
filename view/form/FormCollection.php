@@ -7,7 +7,7 @@ namespace qeywork;
 class FormCollection extends SessionCacheble {
     const SESSION_KEY = 'formCollection';
 
-    /** @var SmartArrayObject */
+    /** @var SmartArray */
     protected $forms;
     protected $currentFormID;
 
@@ -17,7 +17,7 @@ class FormCollection extends SessionCacheble {
     
     public function __construct(Session $session)
     {
-        $this->forms = new SmartArrayObject();
+        $this->forms = new SmartArray();
         $this->currentFormID = null;
         
         parent::__construct($session);

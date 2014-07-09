@@ -2,11 +2,11 @@
 namespace qeywork;
 
 /**
- * Description of ResourceCollection
+ * Description of Resources
  *
  * @author Dexx
  */
-abstract class ResourceCollection {
+abstract class Resources {
     /** @var DB */
     protected $db;
     /** @var History */

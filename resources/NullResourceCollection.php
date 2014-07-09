@@ -4,7 +4,7 @@ namespace qeywork;
 /**
  * @author Dexx
  */
-class NullResourceCollection extends NullResourceCollection {
+class NullResources extends NullResources {
     public function __construct() {
         ;
     }

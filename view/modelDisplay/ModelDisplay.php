@@ -4,33 +4,48 @@ namespace qeywork;
 /**
  * @author Dexx
  */
-abstract class ModelDisplay {
+class ModelDisplay {
+    private $model;
     protected $fields;
+    
+    public function __construct(Model $type) {
+        $this->model = $type;
+        $this->addClassPropertiesAsFields();
+    }
     
     protected function addClassPropertiesAsFields() {
         if ($this->fields == null) {
-            $this->fields = new SmartArrayObject();
+            $this->fields = new SmartArray();
         }
         
-        foreach ($this as $key => $field) {
+        foreach ($this as $field) {
             if ($field instanceof FieldDisplay) {
-                $this->fields[$key] = $field;
+                $this->add($field);
             }
         }
     }
     
-    protected abstract function getModelType();
-    
-    protected abstract function createFields(Model $model);
+    public function add(FieldDisplay $field) {
+        if ($this->fields == null) {
+            $this->fields = new SmartArray();
+        }
+        
+        if ($this->fields->offsetExists($field->getName())) {
+            throw new ArgumentException('Field with the same name already exists');
+        }
+        $this->fields[$field->getName()] = $field;
+    }
 
     public function injectModel(Model $model) {
-        $paramType = get_class($this->getModelType());
+        $paramType = get_class($this->model);
         if (! $model instanceof $paramType) {
             throw new TypeException($model, $paramType);
         }
         
-        $this->createFields($model);
-        $this->addClassPropertiesAsFields();
+        $injectFields = $model->getFields();
+        foreach ($this->model->getFields() as $key => $field) {
+            $field->setValue( $injectFields[$key]->value() );
+        }
     }
     
     public function getFields() {

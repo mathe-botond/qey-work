@@ -9,9 +9,16 @@ class ModelDbTableController {
     
     protected $model;
     
-    public function __construct(DB $db, Model $model) {
-        $this->model = $model;
+    public function __construct(DB $db, Model $model = null) {
         $this->db = $db;
+        
+        if ($model != null) {
+            $this->setModel($model);
+        }
+    }
+    
+    public function setModel(Model $model) {
+        $this->model = $model;
         
         $persistance = $model->persistanceData;
         if ($persistance == null || $persistance->getPersistannceName() != DB::PERSISTANCE_NAME) {
@@ -20,6 +27,10 @@ class ModelDbTableController {
     }
     
     public function createModelTable() {
+        if ($this->model == null) {
+            throw new \BadMethodCallException('No model was set');
+        }
+        
         $table = $this->model->persistanceData->getNameOfPersistanceObject();
         $fieldList[0] = 'id INT NOT NULL AUTO_INCREMENT';
         $keys[0] = 'PRIMARY KEY (id)';
@@ -43,6 +54,10 @@ class ModelDbTableController {
     }
     
     public function getDataOrCreateTable($query = null) {
+        if ($this->model == null) {
+            throw new \BadMethodCallException('No model was set');
+        }
+        
         $tableName = $this->model->persistanceData->getNameOfPersistanceObject();
         try {
             return $this->db->search($this->model);

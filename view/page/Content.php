@@ -15,7 +15,7 @@ class Content extends Page {
     }
     
     public function ViewDI(
-            ResourceCollection $resources,
+            Resources $resources,
             QeyMeta $meta,
             User $user,
             array $args) {

@@ -6,7 +6,7 @@ namespace qeywork;
  *
  * @author Dexx
  */
-class BasicResourceCollection extends ResourceCollection {
+class BasicResources extends Resources {
     /** @var DBConfig */
     protected $dbConfing;
     /** @var Locations */
@@ -90,14 +90,14 @@ class BasicResourceCollection extends ResourceCollection {
     }
     
     /**
-     * BasicResourceCollection uses Location class to initialize the Logger
+     * BasicResources uses Location class to initialize the Logger
      * @return Logger
      */
     public function getLogger() {
         if ($this->logger == null) {
             if (! $this->isLoggingUsed()) {
                 throw new DependencyException('Logging is not used. ' .
-                        'Call BasicResourceCollection::useLoggingForResources first '.
+                        'Call BasicResources::useLoggingForResources first '.
                         'to provide Logger dependencies.');
             }
             $this->logger = $this->initializeLogger($this->logFile);

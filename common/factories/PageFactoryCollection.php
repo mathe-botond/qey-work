@@ -33,6 +33,9 @@ class PageFactoryCollection {
             $page = $factory->getPage($target);
             if ($page != null) {
                 $page->setType($type);
+                if ($page instanceof IPageByToken) {
+                    $page->setToken($target);
+                }
                 return $page;
             }
         }

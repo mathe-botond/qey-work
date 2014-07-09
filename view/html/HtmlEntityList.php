@@ -7,7 +7,7 @@ namespace qeywork;
  *
  * @author Dexx
  */
-class HtmlEntityList extends SmartArrayObject implements IHtmlEntity {
+class HtmlEntityList extends SmartArray implements IHtmlEntity {
     /**
      * @param mixed $index
      * @param IHtmlEntity $newval

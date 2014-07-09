@@ -105,10 +105,10 @@ class FormUtils {
         
         if (isset($record->class)) $record->input->class .= " " . $record->class;
         if (isset($record->style)) $record->input->style .= " " . $record->style;
-        $record->input->name = $key;
+        $record->input->token = $key;
         
         if (isset($record['multiple']) && $record['multiple'] == true) {
-            $record->input->name .= '[]';
+            $record->input->token .= '[]';
         }
         
         $input = '';
@@ -168,7 +168,7 @@ class FormUtils {
                 $data = $record['datasource'];
                 $options = FormUtils::getDataForModelConnector($data['type'], $data);
                 $input = $visual->modelConnector(
-                    $record->input->name,
+                    $record->input->token,
                     $options['selected'],
                     $options['source'],
                     $record->input->getRaw()
@@ -192,7 +192,7 @@ class FormUtils {
         
             case 'checkbox':
                 $record->input->type = 'checkbox';
-                $record->input->name .= '[]';
+                $record->input->token .= '[]';
                 foreach ($record['options'] as $optionKey => $optionValue) {
                     $checkboxNode = qeyNode('input')->attr($record->input->getRaw())->val($optionKey);
         
@@ -224,7 +224,7 @@ class FormUtils {
             case 'file-list':
                 $record->input->type = 'file';
                 $record->input->multiple = 'true';
-                $record->input->name .= '[]';
+                $record->input->token .= '[]';
                 for ($i = 0; $i < $record['count']; $i++)
                     $input .= qeyNode('input')->attr($record->input->getRaw());
                 break;

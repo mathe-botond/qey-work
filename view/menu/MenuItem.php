@@ -4,7 +4,7 @@ namespace qeywork;
 /**
  * @author Dexx
  */
-class MenuItem extends MenuEntity {
+class MenuItem implements IMenuEntity {
     /** @var string */
     protected $label;
     /** @var Path */
@@ -18,12 +18,19 @@ class MenuItem extends MenuEntity {
     /** @var URL */
     public $iconImage;
     /** @var string */
-    public $name = '';
-    
-    public function __construct($label, Url $link, MenuEntityCollection $children = null) {
+    protected $token = '';
+    protected $parent;
+
+
+    public function __construct($token, $label, Url $link, MenuEntityCollection $children = null) {
+        $this->token = $token;
         $this->label = $label;
         $this->link = $link;
         $this->children = $children;
+    }
+    
+    public function getToken() {
+        return $this->token;
     }
     
     public function getLabel() {
@@ -38,15 +45,27 @@ class MenuItem extends MenuEntity {
         return $this->children;
     }
     
-    public function setChildCotainer(MenuEntityCollection $container) {
+    public function setChildContainer(MenuEntityCollection $container) {
         $this->children = $container;
+        $container->setParent($this);
     }
     
-    public function addChild(MenuEntity $child) {
+    public function addChild(IMenuEntity $child) {
         if ($this->children == null) {
-            throw new BadFunctionCallException('Child cotainer is null. Call setChildCotainer.');
+            throw new \BadFunctionCallException('Child cotainer is null. Call setChildCotainer.');
         }
         
         $this->children->add($child);
     }
+    
+    public function setParent(MenuEntityCollection $parent) {
+        $this->parent = $parent;
+    }
+    
+    /**
+     * @return MenuEntityCollection
+     */
+    public function getParent() {
+        return $this->parent;
+    } 
 }

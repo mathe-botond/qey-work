@@ -30,8 +30,8 @@ class FormField {
     public function __construct(Field $field) {
         $this->field = $field;
         
-        $this->validators = new SmartArrayObject();
-        $this->filters = new SmartArrayObject();
+        $this->validators = new SmartArray();
+        $this->filters = new SmartArray();
         
         $this->errors = null;
     }

@@ -7,7 +7,7 @@ namespace qeywork;
  *
  * @author Dexx
  */
-class Descriptor extends SmartArrayObject {    
+class Descriptor extends SmartArray {    
     public function __construct($descriptor = array())
     {
         $nested = true;

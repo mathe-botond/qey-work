@@ -6,12 +6,13 @@ namespace qeywork;
  */
 class ReferenceField extends TypedField {
     protected $model;
+    protected $modelType;
  
     public function __construct($name, Model $type) {
         parent::__construct($name, TypedField::INT_TYPE);
         
         $this->canBeNull(false);
-        $this->model = $type;
+        $this->modelType = $type;
     }
     
     /**
@@ -20,7 +21,7 @@ class ReferenceField extends TypedField {
      * @return Model
      */
     public function getModelType() {
-        return $this->model;
+        return $this->modelType;
     }
     
     public function setModel(Model $model = null) {

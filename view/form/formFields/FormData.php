@@ -5,6 +5,7 @@ namespace qeywork;
  * @author Dexx
  */
 class FormData {
+    const DEFAULT_SUBMIT_LABEL = 'Submit';
     protected $fields;
     /** @var SubmitButton */
     protected $submit;
@@ -15,7 +16,7 @@ class FormData {
     
     protected function addClassPropertiesAsFields() {
         if ($this->fields == null) {
-            $this->fields = new SmartArrayObject();
+            $this->fields = new SmartArray();
         }
         
         foreach ($this as $key => $field) {
@@ -25,7 +26,7 @@ class FormData {
         }
     }
     
-    public function __construct(Model $model, $submitLabel) {
+    public function __construct(Model $model, $submitLabel = self::DEFAULT_SUBMIT_LABEL) {
         $this->submit = new SubmitButton($submitLabel);
         $this->model = $model;
         $this->addClassPropertiesAsFields();
@@ -33,7 +34,7 @@ class FormData {
     
     public function add(FormField $field) {
         if ($this->fields == null) {
-            $this->fields = new SmartArrayObject();
+            $this->fields = new SmartArray();
         }
         
         if ($this->fields->offsetExists($field->getName())) {

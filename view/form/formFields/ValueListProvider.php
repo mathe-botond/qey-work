@@ -19,7 +19,7 @@ class ValueListProvider {
     
     public function getValueList() {
         $result = $this->db->search($this->type);
-        $list = new SmartArrayObject();
+        $list = new SmartArray();
         foreach ($result as $entry) {
             /* @var $entry Model */
             $fields = $entry->getFields();
