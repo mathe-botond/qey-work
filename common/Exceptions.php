@@ -92,7 +92,7 @@ class TypeException extends \Exception {
  * Bad return type
  */
 class ReturnValueException extends \Exception {
-    public function __construct($method, $typeExpected, $code = 0) {
+    public function __construct($method, $typeExpected, $variable, $code = 0) {
         $type = gettype($variable);
         if ($type == 'object') {
             $type = get_class($variable);

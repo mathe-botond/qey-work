@@ -4,7 +4,7 @@ namespace qeywork;
 /**
  * @author Dexx
  */
-class FieldBuilder {
+class FieldFactory {
     public function createStringField($name, $size = 255) {
         $field = new TypedField($name, TypedField::VARCHAR_TYPE);
         $field->setSize($size);

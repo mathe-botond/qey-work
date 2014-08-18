@@ -11,6 +11,7 @@ class CaseConverter {
     const CASE_CAMEL = 1;
     const CASE_URL = 2;
     const CASE_UNDERSCORE = 3;
+    const SIMPLE_TEXT = 4;
 
     const DELIMITER_URL = '-';
     const DELIMITER_UNDERSCORE = '_';
@@ -26,6 +27,14 @@ class CaseConverter {
         $input = trim($input);
         if (empty($input)) {
             $this->tokens = array();
+            return ;
+        }
+        
+        if ($caseFlag == self::SIMPLE_TEXT) {
+            $this->tokens = preg_split('/\\s/', $input);
+            foreach ($this->tokens as $key => $token) {
+                $this->tokens[$key] = strtolower($token);
+            }
             return ;
         }
         

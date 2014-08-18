@@ -5,13 +5,7 @@ class ModelListView {
     protected $modelList;
     protected $visual;
     protected $display;
-    
-    /**
-     * Constructor of this class
-     * @param string $name
-     * @param ModelEntity $model 
-     * @param CModelManager $modelManager
-     */
+
     public function __construct(ModelList $modelList, ModelDisplay $display, IModelListViewVisual $visual = null) {
         if ($visual == null) {
             $visual = new ModelListViewVisual();
@@ -29,23 +23,18 @@ class ModelListView {
         }
     }
     
-    /**
-     * @return string
-     */
     public function render()
     {
         $fields = $this->display->getFields();
         
         $headerCells = new HtmlEntityList();
         foreach ($fields as $field) {
-            if ($field instanceof Field) {
-                if ($field->displayControl !== null && $field->displayControl->isVisible()) {
-                    $headerCells[] = $this->visual->headerCell($field->label);
-                }
+            if ($field->isVisible()) {
+                $headerCells[] = $this->visual->headerCell($field->label);
             }
         }
         
-        $header = $this->visual->header($headerCells);#
+        $header = $this->visual->header($headerCells);
         
         $rows = new HtmlEntityList();
         foreach ($this->modelList as $model) {

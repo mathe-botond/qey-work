@@ -6,6 +6,8 @@ namespace qeywork;
  */
 class FormData {
     const DEFAULT_SUBMIT_LABEL = 'Submit';
+    
+    /** @var SmartArray */
     protected $fields;
     /** @var SubmitButton */
     protected $submit;
@@ -63,6 +65,13 @@ class FormData {
     
     public function getFields() {
         return $this->fields;
+    }
+    
+    public function getField($name) {
+        if (! $this->fields->exists($name)) {
+            throw new ArgumentException("Form field '$name' does not exist");
+        }
+        return $this->fields[$name];
     }
     
     /**

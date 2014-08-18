@@ -65,7 +65,7 @@ class Params
         return isset($this->alias[$name]);
     }
     
-    public function __get($name)
+    public function get($name)
     {
         $converter = new CaseConverter($name, CaseConverter::CASE_CAMEL);
         $name = $converter->toUrlCase();
@@ -78,6 +78,10 @@ class Params
         } else {
             throw new ClientDataException("Parameter '$name' does not exist");
         }
+    }
+    
+    public function __get($name) {
+        return $this->get($name);
     }
 	
     public function getRequestedTarget()

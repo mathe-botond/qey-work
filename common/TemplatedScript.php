@@ -12,9 +12,13 @@ abstract class TemplatedScript implements IAction {
 
     protected abstract function getTemplateValue($token);
     
+    protected function getTemplateRegexString() {
+        return '/0\/\*\{([a-zA-Z0-9]*)\}\*\//';
+    }
+    
     protected function processTemplates($template) {
         $matches = array();
-        preg_match_all('/0\/\*\{([a-zA-Z0-9]*)\}\*\//', $template, $matches);
+        preg_match_all($this->getTemplateRegexString(), $template, $matches);
         
         if (isset($matches[1])) {
             foreach ($matches[1] as $key => $token) {

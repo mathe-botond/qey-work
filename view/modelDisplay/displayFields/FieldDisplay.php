@@ -8,6 +8,8 @@ abstract class FieldDisplay implements IRenderable {
     protected $field;
     protected $visible = true;
     
+    public $label;
+    
     public function __construct(Field $field) {
         $this->field = $field;
     }
@@ -20,6 +22,10 @@ abstract class FieldDisplay implements IRenderable {
         $this->visible = true;
     }
     
+    public function setLabel($label) {
+        $this->label = $label;
+    }
+
     public function isVisible() {
         return $this->visible;
     }

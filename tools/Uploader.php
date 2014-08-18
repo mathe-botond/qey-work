@@ -1,36 +1,36 @@
 <?php
 namespace qeywork;
 
-class Upload
+class Uploader
 {
     private $filesGlobalHandler;
     
-    protected $name;
     protected $valid;
     
     public function __construct(FileGlobalsHandler $filesGlobalHandler)
     {        
         $this->filesGlobalHandler = $filesGlobalHandler;
-    }
-    
-    public function setFile($file) {
-        $this->name = $file;
         $this->valid = false;
     }
     
-    public function validate(array $allowedExtensions = null, $maxFileSize = null) {        
-        $this->filesGlobalHandler->setFile($this->name);
+    /**
+     * Validate file upload
+     * @param array $allowedExtensions
+     * @param int $maxFileSize in kB
+     * @return string|boolean
+     */
+    public function validate(array $allowedExtensions = null, $maxFileSize = null) {
         if (! $this->filesGlobalHandler->isValid() ) {
-            return 'File is not in the FILES global';
+            throw new UploadExceptions('File upload failed: ' . $this->filesGlobalHandler->getError());
         }
         
         $size = $this->filesGlobalHandler->getSize();
         if ($size == 0){
-            return 'File is empty';
+            throw new UploadExceptions('File is empty');
         }
         
         if ($maxFileSize != null && $size > $maxFileSize){
-            return 'File too large';
+            throw new UploadExceptions('File too large');
         }
         
         $pathinfo = pathinfo( $this->filesGlobalHandler->getName() );
@@ -46,7 +46,7 @@ class Upload
             }
             
             if (! $extExists) {
-                return 'File extension not allowed';
+                throw new UploadExceptions('File extension not allowed');
             }
         }
         

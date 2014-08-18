@@ -43,6 +43,6 @@ class PostFormFactory {
             $this->forms,
             $formData,
             $this->meta,
-            $visual);;
+            $visual);
     }
 }

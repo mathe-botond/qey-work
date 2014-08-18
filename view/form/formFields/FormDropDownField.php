@@ -4,7 +4,7 @@ namespace qeywork;
 /**
  * @author Dexx <dev@qwerty.ms>
  */
-class DropDownField extends FormField {
+class FormDropDownField extends FormField {
     protected $options;
     
     public function __construct(Field $field, ValueListProvider $provider = null) {

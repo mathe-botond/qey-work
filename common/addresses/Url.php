@@ -5,25 +5,12 @@ namespace qeywork;
  * Url path handler
  * So I dont need to think about slashes anymore
  * @author Dexx
- * @method dirs(array $dirList) Set directory (or parameter) list 
- * @method params(array $paramList) Set parameter (or directory) list
- * @method Url dir($directory) Append a single directory (parameter) 
- * @method Url addDir($directory) Same as dir($directory)
- * @method Url param($param) Append a single parameter (directory)
- * @method Url addParam($param) Same as param($param)
- * @method Url addDirs(array $dirList) Append directory (or parameter) list 
- * @method Url addParams(array $paramList) Append parameter (or directory) list
- * @method Url page($page) Specify page (or file)
- * @method Url file($file) Specify file (or page)
- * @method Url field($field,  $value = null) Specify file (or page)
  * TODO: continue, also do it for Path
  */
-class Url
+class Url extends AbstractPath
 {
-    private $domain;
-    private $dirs;
-    private $page;
-    private $fields;
+    public $domain;
+    public $fields;
     
     /**
      * Constructor of this class
@@ -43,7 +30,7 @@ class Url
             
             $path = isset($data['path']) ? $data['path'] : '';
             $this->dirs = array_filter(explode('/', trim($path, '/')));
-            $this->page = $page;
+            $this->file = $page;
         }
         else
         {
@@ -54,7 +41,7 @@ class Url
             for ($i = 1; $i < count($data); ++$i) {
                 $this->dirs[$i - 1] = $data[$i];
             }
-            $this->page = $page;
+            $this->file = $page;
         }
         
         $this->fields = array();
@@ -79,75 +66,49 @@ class Url
         }
     }
     
-    public function parentDir()
-    {
-        $dirs = $this->dirs;
-        if (count($this->dirs) > 0) {
-            array_pop($dirs);
-        }
-
-        $url = clone($this);
-        $url->dirs = $dirs;
-        return $url;
-    }
-    
-    public function __call($name, $args)
-    {
-        if (count($args) === 0) {
-            throw new ArgumentException('At least one arg should be specified');
-        }
-        
-        $page = $this->page;
-        $dirs = $this->dirs;
-        $domain = $this->domain;
-        $value = $args[0];
-        $fields = $this->fields;
-        
-        switch ($name)
-        {
-            case 'dirs':
-            case 'params':
-                $dirs = $value;
-                break;
-            case 'dir':
-            case 'addDir':
-            case 'param':
-            case 'addParam':
-                $dirs[] = $value; 
-                break;
-            case 'addDirs':
-            case 'addParams':
-                $dirs = array_merge($dirs, $value);
-                break;
-            case 'page':
-            case 'file':
-            case 'method':
-                $page = $value;
-                break;
-            case 'domain':
-                $domain = $value;
-                break;
-            case 'field':
-                $fields[$args[0]] = isset($args[1]) ? $args[1] : null;
-                break;
-            default:
-                trigger_error('Call to undefined method '.__CLASS__.'::'.$name);
-        }
-        
+    protected function getCopy() {        
         $retVal = new Url();
-        $retVal->domain = $domain;
-        $retVal->dirs = $dirs;
-        $retVal->page = $page;
-        $retVal->fields = $fields;
+        $retVal->domain = $this->domain;
+        $retVal->dirs = $this->dirs;
+        $retVal->file = $this->file;
+        $retVal->fields = $this->fields;
         return $retVal;
     }
     
-    public function getDirs() {
-        return $this->dirs;
+    public function params(array $params) {
+        return $this->dirs($params);
+    }
+    
+    public function param($param) {
+        return $this->dir($param);
+    }
+    
+    public function addParam($param) {
+        return $this->dir($param);
+    }
+    
+    public function addParams(array $params) {
+        return $this->addDirs($params);
+    }
+    
+    public function page($page) {
+        return $this->file($page);
+    }
+    
+    public function domain($domain) {
+        $copy = $this->getCopy();
+        $copy->domain = $domain;
+        return $copy;
+    }
+    
+    public function field($name, $value) {
+        $copy = $this->getCopy();
+        $copy->fields[$name] = $value;
+        return $copy;
     }
     
     public function getPage() {
-        return $this->page;
+        return $this->file;
     }
     
     public function getFields() {
@@ -163,7 +124,7 @@ class Url
         if (!empty($this->dirs)) {
             $path .= implode($this->dirs, '/') . '/';
         }
-        $path .= $this->page;
+        $path .= $this->file;
         if (! empty($this->fields))
         {
             $path .= '?';

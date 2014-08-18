@@ -106,6 +106,11 @@ class FormField {
         return empty($this->errors);
     }
     
+    public function isEmpty() {
+        $value = $this->value();
+        return empty($value);
+    }
+    
     public function cleanValidation() {
         $this->errors = null;
     }

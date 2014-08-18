@@ -46,6 +46,7 @@ class ModelDisplay {
         foreach ($this->model->getFields() as $key => $field) {
             $field->setValue( $injectFields[$key]->value() );
         }
+        $this->model->setId($model->getId());
     }
     
     public function getFields() {

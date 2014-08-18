@@ -26,6 +26,10 @@ class Field implements IModelEntity{
     public function getName() {
         return $this->name;
     }
+    
+    public function isEmpty() {
+        return empty($this->value);
+    }
 
     public function __toString() {
         return $this->value() . '';
