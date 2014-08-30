@@ -11,23 +11,13 @@ abstract class TemplatedLayout extends TemplatedBlock implements ILayout {
     protected $meta;
     protected $content;
     
-    public function __construct(Locations $locations) {
-        $this->meta = $this->createMeta($locations);
+    public function __construct(QeyMeta $meta) {
+        $this->meta = $meta;
+        $this->add(QeyMeta::NAME, $meta);
     }
     
     public function getContent() {
         return $this->content;
-    }
-    
-    protected function createMeta(Locations $locations) {
-        $css = new CssLinkCollection();
-        $css->setCssLocation($locations->css);
-        
-        $js = new JsLinkCollection();
-        $js->setAppJs($locations->appJs);
-        $js->setQeyWorkJs($locations->qeyWorkJs);
-        
-        return new QeyMeta($css, $js);
     }
     
     public function getMeta() {
@@ -40,6 +30,7 @@ abstract class TemplatedLayout extends TemplatedBlock implements ILayout {
     
     public function setContent(IPage $content) {
         $this->content = $content;
+        $this->add('content', $content);
         $this->setTitle();
     }
 }

@@ -6,6 +6,9 @@ class Params
     const ALL      = 0;
     const GET      = 1;
     const POST     = 2;
+    const COSTUM   = 3;
+    
+    const TARGET = '_target';
     
     private $alias;
     private $method;
@@ -23,12 +26,11 @@ class Params
         }
     }
     
-    public function __construct()
+    public function __construct($method = self::GET, array $alias = array())
     {
-        $this->method = Params::ALL;
-        $this->alias = $_REQUEST;
+        $this->setMethod($method, $alias);
         
-        $this->args = explode('/', trim( $_GET['_target'] , '/'));
+        $this->args = explode('/', trim( $alias[self::TARGET] , '/'));
         
         $this->shiftTarget();
     }
@@ -38,7 +40,7 @@ class Params
         return $this->method;
     }
     
-    public function setMethod($method)
+    public function setMethod($method, array $alias = array())
     {
         $this->method = $method;
         switch ($this->method)
@@ -53,6 +55,10 @@ class Params
             
             case Params::ALL:
                 $this->alias = $_REQUEST;
+                break;
+            
+            case Params::COSTUM:
+                $this->alias = $alias;
                 break;
             
             default:

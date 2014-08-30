@@ -5,6 +5,10 @@ namespace qeywork;
  * @author Dexx
  */
 class DBConfig {
+    const PROTOCOL_MYSQL = 'mysql';
+    const HOST_LOCALHOST = 'localhost';
+    const USER_ROOT = 'root';
+    
     public $protocol;
     public $host;
     public $dbName;
@@ -12,10 +16,10 @@ class DBConfig {
     public $password;
     
     public function __construct(
-            $protocol = '',
-            $host = '',
+            $protocol = self::PROTOCOL_MYSQL,
+            $host = self::HOST_LOCALHOST,
             $dbName = '',
-            $user = '',
+            $user = self::USER_ROOT,
             $password = '') {
         $this->protocol = $protocol;
         $this->host = $host;

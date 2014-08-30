@@ -28,6 +28,7 @@ class PageFactoryCollection {
             $type = Page::NO_SPECIAL_TYPE;
         }
         
+        $page = null;
         foreach ($this->collection as $factory) {
             /* @var $factory IPageFactory */
             $page = $factory->getPage($target);

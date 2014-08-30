@@ -46,7 +46,7 @@ class Locations {
         $this->css = $style;
         $this->cssImages = $style->dir('images');
         
-        $this->appJs = $appUrl->dir('js');;
+        $this->appJs = $appUrl->dir('js');
         $this->qeyWork = $qeyWorkpath;
         $this->qeyWorkJs = $qeyWorkUrl->dir('js');
         $this->filesUrl = $this->baseUrl->dir('files');

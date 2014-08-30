@@ -15,11 +15,6 @@ class Session
             $_SESSION[$this->baseKey] = array();
         }
     }
-    
-    static function start()
-    {
-        session_start();
-    }
  
     function &get($key) {
         if(isset($_SESSION[$this->baseKey][$key])) {

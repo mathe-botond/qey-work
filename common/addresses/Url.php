@@ -57,12 +57,12 @@ class Url extends AbstractPath
         }
     }
     
-    public static function getCurrentDomain()
+    public static function getCurrentDomain(array $serverVar)
     {
-        if ($_SERVER["SERVER_PORT"] != 80) {
-            return "http://" . $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"];
+        if (isset($serverVar["SERVER_PORT"]) && $serverVar["SERVER_PORT"] != 80) {
+            return "http://" . $serverVar["SERVER_NAME"] . ":" . $serverVar["SERVER_PORT"];
         } else {
-            return "http://" . $_SERVER["SERVER_NAME"];
+            return "http://" . $serverVar["SERVER_NAME"];
         }
     }
     

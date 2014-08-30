@@ -1,7 +1,9 @@
 <?php
 namespace qeywork;
 
-class AutoloaderException extends \Exception {};
+class AutoloaderException extends \Exception {}
+
+define('NAMESPACE_SEPARATOR', '\\');
 
 /**
  * Autoload classes
@@ -47,7 +49,6 @@ class Autoloader {
     private $file;
     private $key;
     private $status = 1;
-    private $namaspace;
     
     private static $instances = array();
     
@@ -61,10 +62,9 @@ class Autoloader {
         }
     }
     
-    public function __construct($namespace, $path, $key) {
+    public function __construct($path, $key) {
         $this->key = $key;
         $this->path = $path;
-        $this->namaspace = $namespace;
         $this->file = $path . '/' . '.autoloader.config';
         
         self::$instances[$key] = $this;
@@ -74,11 +74,35 @@ class Autoloader {
         spl_autoload_register(array($this, 'load'));
     }
     
+    public function getKey() {
+        return $this->key;
+    }
+    
     private function reset() {
         if (file_exists($this->file)) {
             unlink($this->file);
         }
         $this->init();
+    }
+    
+    private function extractNamespace(\SplFileInfo $file) {
+        $f = $file->openFile();
+        $inPhp = false;
+        $matches = array();
+        while ($line = $f->fgets()) {
+            if (($pos = strpos($line, '<?php')) !== false) {
+                $inPhp = true;
+                //remove <?php and everything before it from this line
+                //because the namespace clause might be in this exact same line
+                $line = substr($line, $pos + 5);
+            }
+            if ($inPhp) {
+                if (preg_match('/\\s*namespace\\s+([\\w\\d\\\\]+)\\s*;/', $line, $matches)) {
+                    $namespace = $matches[1];
+                    return $namespace;
+                }
+            }
+        }
     }
     
     protected function gatherClassFiles() {
@@ -102,7 +126,8 @@ class Autoloader {
                     $absolutePath = $file->getPath();
                     $relativePath = str_replace($this->path, '', $absolutePath);
                     $explodedRelativePath = explode(DIRECTORY_SEPARATOR, trim($relativePath, DIRECTORY_SEPARATOR));
-                    $this->classList[$classname] = array(
+                    $namespace = $this->extractNamespace($file);
+                    $this->classList[$namespace . NAMESPACE_SEPARATOR . $classname] = array(
                         'path' => $explodedRelativePath,
                         'file' => $filename
                     );
@@ -111,13 +136,10 @@ class Autoloader {
         }
     }
     
-    protected static function checkAllInstanceIntegrity($namespace) {
+    protected static function checkAllInstanceIntegrity() {
         $status = 0;
         foreach (self::$instances as $loader) {
-            /* @var $loader Autoloader */
-            if ($namespace !== null && $loader->namaspace === $namespace) {
-                $status += $loader->status;
-            }
+            $status += $loader->status;
         }
         
         if ($status === 0) { //all loaders failed to find missing class
@@ -132,20 +154,9 @@ class Autoloader {
     
     public function load($class) {
         $result = true;
-        $namespace = null;
-        
-        if (false !== ($lastNsPos = strripos($class, '\\'))) {
-            $namespace = substr($class, 0, $lastNsPos);
-            if ($namespace != $this->namaspace) {
-                return;
-            }
-            
-            $class = substr($class, $lastNsPos + 1);
-        }
-        
         if (! isset($this->classList[$class])) {
             $this->status = 0;
-            $result = self::checkAllInstanceIntegrity($namespace);
+            $result = self::checkAllInstanceIntegrity();
         }
         
         if ($result && isset($this->classList[$class])) {
@@ -160,12 +171,11 @@ class Autoloader {
             }
 
             require_once($file);
+            //$class::$classname = $class;
         }
     }
     
     public function getRelativePathToClass($class) {
-        $lastNsPos = strripos($class, '\\');
-        $class = substr($class, $lastNsPos + 1);
         if (! isset($this->classList[$class])) {
             throw new AutoloaderException("Don't know any class named '$class'");
         }

@@ -17,22 +17,22 @@ class DB
     private $logger = null;
     
     /**
-     * @param DbConfig $dbConfigurator
+     * @param DbConfig $dbConfig
      * @param Logger $logger
      * @throws DbException
      */
-    public function __construct($dbConfigurator, $logger = null)
+    public function __construct(DBConfig $dbConfig, Logger $logger)
     {
         try
         {
-            $connectionStr = $dbConfigurator->protocol
-                    . ":" . "host=" . $dbConfigurator->host
-                    . ";dbname=" . $dbConfigurator->dbName;
+            $connectionStr = $dbConfig->protocol
+                    . ":" . "host=" . $dbConfig->host
+                    . ";dbname=" . $dbConfig->dbName;
             
             $this->db = new \PDO(
                     $connectionStr,
-                    $dbConfigurator->user,
-                    $dbConfigurator->password, 
+                    $dbConfig->user,
+                    $dbConfig->password, 
                     array(\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8")
                );
             $this->db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);

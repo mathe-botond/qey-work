@@ -6,7 +6,7 @@ class Cache
     const CACHE_KEY = ".cache";
     protected $session;
     
-    public function __construct($session) {
+    public function __construct(Session $session) {
         $this->session = $session;
     }
     

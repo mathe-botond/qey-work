@@ -7,6 +7,8 @@ require dirname(__FILE__).'/Autoloader.php';
 
 require dirname(__FILE__).'/tools/utils.php';
 
+$qeyWorkAutoloader = new Autoloader(__DIR__, 'qeyWork');
+
 /**
  * @author Dexx
  */
@@ -51,7 +53,8 @@ abstract class QeyWork {
     }
     
     public function __construct() {
-        $this->autoloader = new Autoloader(__NAMESPACE__, __DIR__, 'qeyWork');
+        global $qeyWorkAutoloader;
+        $this->autoloader = $qeyWorkAutoloader;
         
         $resources = $this->assambleTheResources();
         if (! $resources instanceof Resources) {

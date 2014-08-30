@@ -3,6 +3,8 @@ namespace qeywork;
 
 class QeyMeta implements IRenderable
 {
+    const NAME = 'qey-meta';
+    
     protected $title = null;
     /** @var HtmlEntityList */
     protected $meta;
@@ -12,9 +14,17 @@ class QeyMeta implements IRenderable
     /** @var ILinkCollection */
     public $jsLinks;
     
-    public function __construct(ICssLinkCollection $css, JsLinkCollection $js) {
+    public function __construct(
+            ICssLinkCollection $css,
+            JsLinkCollection $js, 
+            Locations $locations) {
         $this->cssLinks = $css;
         $this->jsLinks = $js;
+        
+        $css->setCssLocation($locations->css);
+
+        $js->setAppJs($locations->appJs);
+        $js->setQeyWorkJs($locations->qeyWorkJs);
         
         $this->meta = new HtmlEntityList();
         $h = new HtmlFactory();

@@ -2,35 +2,22 @@
 namespace qeywork;
 
 class QeyEngine {
-    /** @var Resources */
-    protected $resources;
+    /** @var History */
+    private $history;
+    /**  @var Params  */
+    private $params;
+
     /** @var ILayout */
     protected $layout;
-    /** @var User */
-    protected $user;
     
     protected $pagePostProcessor;
     
     public function __construct(
-            Resources $resources,
-            User $user) {
+            Params $params,
+            History $history) {
         
-        $this->resources = $resources;
-        $this->user = $user;
-    }
-    
-    /**
-     * @return BasicResources
-     */
-    public function getResources() {
-        return $this->resources;
-    }
-    
-    /**
-     * @return User
-     */
-    public function getUser() {
-        return $this->user;
+        $this->params = $params;
+        $this->history = $history;
     }
     
     public function setPagePostProcessor(IPagePostProcessor $processor) {
@@ -48,13 +35,12 @@ class QeyEngine {
     }
     
     public function createPage(ILayout $layout, PageFactoryCollection $pages) {
-        $target = $this->resources->getParams()->getRequestedTarget();
+        $target = $this->params->getRequestedTarget();
         $page = $pages->getCurrentPage($target);
         $page = $this->postProcess($page);
         $layout->setContent($page);
         
-        $history = $this->resources->getHistory();
-        $history->addCurrent();
+        $this->history->addCurrent();
         
         return $layout->render();
     }
