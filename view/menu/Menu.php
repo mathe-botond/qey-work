@@ -35,6 +35,10 @@ class Menu  implements IMenuEntity, IRenderable {
         $this->menuItems->add($item);
     }
     
+    public function getChildren() {
+        return $this->menuItems;
+    }
+    
     public function render() {
         $items = $this->menuItems->render();
         return $this->visual->menu($items, $this->id, $this->class);

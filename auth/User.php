@@ -35,7 +35,7 @@ class User extends SessionCacheble
         return ($this->isLoggedIn() && $this->user->isAdmin());
     }
 
-    public function getRecord()
+    public function getModel()
     {
         return $this->user;
     }

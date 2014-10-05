@@ -67,6 +67,11 @@ class FormData {
         return $this->fields;
     }
     
+    /**
+     * @param string $name
+     * @return FormField
+     * @throws ArgumentException
+     */
     public function getField($name) {
         if (! $this->fields->exists($name)) {
             throw new ArgumentException("Form field '$name' does not exist");

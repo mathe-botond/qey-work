@@ -6,7 +6,7 @@ namespace qeywork;
  *
  * @author Dexx
  */
-class NullActionFactory implements IActionFactory {
+class NullActionFactory implements IActionRouter {
     public function getAction($token) {
         return null;
     }

@@ -5,21 +5,12 @@ namespace qeywork;
  * Default implementation of the IBasicPage interface
  * @author Dexx
  */
-abstract class Page implements IPage, IPageByToken {
+abstract class Page implements IPage {
     
     private $type = IPage::NO_SPECIAL_TYPE;
-    private $token;
 
     public function setType($type) {
         $this->type = $type;
-    }
-    
-    public function setToken($token) {
-        $this->token = $token;
-    }
-    
-    public function getToken() {
-        return $this->token;
     }
     
     /**

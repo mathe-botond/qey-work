@@ -12,7 +12,7 @@ abstract class SessionCacheble {
     public function __construct(Session $session) {
         $key = $this->getSessionKey();
         if ($session->exists($key)) {
-            $object = $session->get($key);
+            $object = unserialize($session->get($key));
             foreach ($object as $parameter => $value) {
                 $this->$parameter = $value;
             }
@@ -28,6 +28,6 @@ abstract class SessionCacheble {
             }
         }
 
-        $this->session->set($this->getSessionKey(), $obj);
+        $this->session->set($this->getSessionKey(), serialize($obj));
     }
 }

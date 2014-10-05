@@ -4,7 +4,7 @@ namespace qeywork;
 /**
  * @author Dexx
  */
-class QeyActionFactory implements IActionFactory {
+class QeyActionFactory implements IActionRouter {
     protected $resources;
     
     public function __construct(Resources $resources) {

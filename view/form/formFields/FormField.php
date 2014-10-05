@@ -36,6 +36,10 @@ class FormField {
         $this->errors = null;
     }
     
+    public function getField() {
+        return $this->field;
+    }
+    
     public function setLabel($label) {
         $this->label = $label;
         return $this;

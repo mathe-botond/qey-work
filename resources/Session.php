@@ -9,7 +9,9 @@ class Session
      * @param string $appName
      */
     public function __construct($appName) {
-        session_start();
+        if(session_id() == '') {
+            session_start();
+        }
         $this->baseKey = $appName;
         if (! isset($_SESSION[$this->baseKey])) {
             $_SESSION[$this->baseKey] = array();

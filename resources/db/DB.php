@@ -183,7 +183,7 @@ class DB
     {
         try
         {
-            $table = $model->persistanceData->getNameOfPersistanceObject();
+            $table = $model->getPersistenceData()->getNameOfPersistenceObject();
             
             $conditionList = array();
             $valueList = array();
@@ -267,14 +267,10 @@ class DB
     
     
     /**
-     * Get id of the record inserted last
+     * Get id of the model inserted last
      */
     public function lastId()
     {
         return $this->db->lastInsertId();
-    }
-    
-    public function getModelTableController(Model $model) {
-        return new ModelDbTableController($this, $model);
     }
 }

@@ -2,13 +2,18 @@
 namespace qeywork;
 
 class Params 
-{ 
+{
+
+    /**
+     * @var Globals
+     */
+    private $globals;
+
     const ALL      = 0;
     const GET      = 1;
     const POST     = 2;
     const COSTUM   = 3;
     
-    const TARGET = '_target';
     
     private $alias;
     private $method;
@@ -18,21 +23,10 @@ class Params
     protected $args = array();
     protected $target = null;
     
-    public function shiftTarget() {
-        if (count($this->args) >= 1) {
-            $this->target = array_shift($this->args);
-        } else {
-            $this->target = null;
-        }
-    }
-    
-    public function __construct($method = self::GET, array $alias = array())
+    public function __construct(Globals $globals, $method = self::ALL)
     {
-        $this->setMethod($method, $alias);
-        
-        $this->args = explode('/', trim( $alias[self::TARGET] , '/'));
-        
-        $this->shiftTarget();
+        $this->globals = $globals;        
+        $this->setMethod($method);
     }
     
     public function getMethod()
@@ -46,15 +40,15 @@ class Params
         switch ($this->method)
         {
             case Params::GET:
-                $this->alias = $_GET;
+                $this->alias = $this->globals->getGlobal(Globals::KEY_GET);
                 break;
             
             case Params::POST:
-                $this->alias = $_POST;
+                $this->alias = $this->globals->getGlobal(Globals::KEY_POST);
                 break;
             
             case Params::ALL:
-                $this->alias = $_REQUEST;
+                $this->alias = $this->globals->getGlobal(Globals::KEY_REQUEST);
                 break;
             
             case Params::COSTUM:
@@ -88,11 +82,6 @@ class Params
     
     public function __get($name) {
         return $this->get($name);
-    }
-	
-    public function getRequestedTarget()
-    {
-        return $this->target;
     }
     
     public function getArgs()

@@ -141,7 +141,7 @@ class HtmlNode implements IHtmlEntity
         } else if (is_string($mixed)) {
             $this->children[] = new TextNode($mixed);
         } else {
-            throw new ArgumentException('$mixed must be an IHtmlEntity, ' . gettype($mixed) . ' given.');
+            throw new ArgumentException('$mixed must be an IHtmlEntity, ' . gettype($mixed) . ' given: ' . var_export($mixed)); 
         }
             
         return $this;
@@ -164,7 +164,7 @@ class HtmlNode implements IHtmlEntity
         return clone $this;
     }
     
-     public function render() {
+    public function render() {
         return $this;
     }
     
@@ -193,5 +193,9 @@ class HtmlNode implements IHtmlEntity
         }
         
         return $html;
+    }
+    
+    public function toString() {
+        return $this->__toString();
     }
 }

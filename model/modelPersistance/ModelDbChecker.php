@@ -41,15 +41,11 @@ class ModelDbChecker {
     }
     
     public function check(Model $model) {
-        if ($model->persistanceData == null) {
-            throw new ModelException('Model has no persistance information');
+        if ($model->getPersistenceData()->getPersistannceName() != DB::PERSISTANCE_NAME) {
+            throw new ModelException('Model persistance is not of a relational database');
         }
         
-        if ($model->persistanceData->getPersistannceName() != DB::PERSISTANCE_NAME) {
-            throw new ModelException('Model persistance is not of for relational database');
-        }
-        
-        $tableName = $model->persistanceData->getNameOfPersistanceObject();
+        $tableName = $model->getPersistenceData()->getNameOfPersistenceObject();
         
         $params = array('table_name' => $tableName);
         $tableResult = $this->db->query(self::CHECK_TABLE, $params);

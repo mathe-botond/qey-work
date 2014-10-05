@@ -1,125 +1,120 @@
 <?php
 namespace qeywork;
 
-require dirname(__FILE__).'/common/common.php';
-require dirname(__FILE__).'/common/Exceptions.php';
-require dirname(__FILE__).'/Autoloader.php';
-
-require dirname(__FILE__).'/tools/utils.php';
-
-$qeyWorkAutoloader = new Autoloader(__DIR__, 'qeyWork');
-
 /**
  * @author Dexx
  */
-abstract class QeyWork {
-    /** @var Params */
-    private $params;
-    protected $engine;
-    private $autoloader;
+class QeyWork {
+    const DEFAULT_HOME_PAGE = 'home';
 
-    /**
-     * @return IPageFactory
-     */
-    protected abstract function getApplicationPageFactory();
+    /** @var Locations */
+    private $locations;
+    /** @var PageHandler */
+    private $pageHandler;
+    /** @var Autoloader */
+    private $autoloader;
+    /** @var QeyWorkAssambler  */
+    protected $assambler;
+    /** @var Globals  */
+    private $globals;
     
-    /**
-     * @return IActionFactory
-     */
-    protected abstract function getApplicationActionFactory();
+    protected $pages;
+    protected $actions;
+    
+    private $layout;
+
+    public function __construct(Locations $locations,
+            $indexPageClass,
+            $buildLater = false) {
         
-    /**
-     * @return Resources
-     */
-    protected abstract function assambleTheResources();
-    
-    /**
-     * @return ILayout
-     */
-    protected abstract function assambleTheLayout();
-    
-    /**
-     * @return User
-     */
-    protected function createUser(Session $session) {
-        $user = new User($session);
-        return $user;
-    }
-    
-    public function getName() {
-        $name = get_class($this);
-        $converter = new CaseConverter($name, CaseConverter::CASE_CAMEL);
-        return $converter->toUrlCase();
-    }
-    
-    public function __construct() {
         global $qeyWorkAutoloader;
         $this->autoloader = $qeyWorkAutoloader;
+        $this->locations = $locations;
         
-        $resources = $this->assambleTheResources();
-        if (! $resources instanceof Resources) {
-            throw new ApplicationException(
-                'Implementation of QeyWebsite::assambleTheResources must return a Resources type'
-            );
+        $this->assambler = new QeyWorkAssambler();
+        $this->globals = new Globals();
+        
+        $this->pages = new PageRouteCollection($indexPageClass);
+        $this->actions = new ActionRouteCollection();
+        
+        if (! $buildLater) {
+            $this->build();
         }
-        
-        $user = $this->createUser($resources->getSession());        
-        if (! $user instanceof User) {
-            throw new ApplicationException(
-                'Implementation of QeyWebsite::createUser must return a User'
-            );
-        }
-        
-        $this->engine = new QeyEngine($resources, $user);
-        $this->params = $resources->getParams();
     }
     
-    protected function getLayout() {
-        $layout = $this->assambleTheLayout();
-        if (! $layout instanceof ILayout) {
-            throw new ApplicationException(
-                'Implementation of QeyWebsite::assambleTheLayout must return an ILayout'
-            );
-        }
-        
-        return $layout;
+    public function configureDb(DBConfig $config) {
+        $this->assambler->configureDb($config);
     }
     
-    protected function getPages($defaultPage) {
-        $pages = new PageFactoryCollection($defaultPage);
-        
-        $appPages = $this->getApplicationPageFactory();
-        if (! $appPages instanceof IPageFactory) {
-            throw new ApplicationException(
-                'Implementation of QeyWebsite::getApplicationPageFactory must return a IPageFactory'
-            );
-        }
-        
-        $pages->addFactory($appPages);
-        return $pages;
+    public function setAssambler(QeyWorkAssambler $assambler) {
+        $this->assambler = $assambler;
     }
     
-    public function createPage($defaultPage) {
-        $layout = $this->getLayout();
-        $pages = $this->getPages($defaultPage);
-        
-        return $this->engine->createPage($layout, $pages);
+    /**
+     * @return QeyWorkAssambler
+     */
+    public function getAssambler() {
+        return $this->assambler;
     }
     
-    public function processRequest() {
-        $resources = $this->engine->getResources();
-        $actions = new ActionFactoryCollection($resources->getParams());
-        
-        $appAction = $this->getApplicationActionFactory();
-        if (! $appAction instanceof IActionFactory) {
-            throw new ApplicationException(
-                'Implementation of QeyWebsite::getApplicationActionFactory must return an IActionFactory'
-            );
+    public function setGlobals(Globals $globals) {
+        $this->globals = $globals;
+    }
+    
+    public function getGlobals() {
+        return $this->globals;
+    }
+    
+    public function build() {
+        $this->assambler->setupIoC($this->locations, $this->globals);
+    }
+    
+    public function setLayout($layoutClass) {
+        $this->layout = $this->assambler->createLayout($layoutClass);
+        if (! $this->layout instanceof ILayout) {
+            throw new TypeException($this->layoutClass, 'ILayout');
         }
+    }
+    
+    public function registerPageClass($token, $pageClass) {
+        $this->pages->addPageClass($token, $pageClass);
+    }
+    
+    public function registerActionClass($token, $actionClass) {
+        $this->actions->addActionClass($token, $actionClass);
+    }
+    
+    public function getLayout() {
+        if ($this->layout == null) {
+            $this->layout = $this->assambler->createLayout();
+        }
+        return $this->layout;
+    }
+
+    /**
+     * Creates a page based on the URL
+     * @param string $defaultPage the page used if no URL parameter is defined
+     * @return type
+     */
+    public function render() {
+        $this->assambler->setupIocForPageCreation($this->pages);
+        $pageHandler = $this->assambler->createPageHandler();
+        $pageClass = $pageHandler->getRequestedPage($this->pages);
+        if (is_string($pageClass)) {
+            $page = $this->assambler->createPage($pageClass);
+        }
+        $pageHandler->postProcess($page);
         
-        $actions->addFactory( $appAction );
-        $actions->addFactory( new QeyActionFactory($resources) );
-        
-        return $this->engine->processRequest($actions);
+        $layout = $this->getLayout();        
+        $layout->setContent($page);
+        return $layout->render();
+    }
+    
+    public function run() {
+        /* @var $actionHandler ActionsHandler */
+        $actionHandler = $this->assambler->createActionHandler();
+        $actionClass = $actionHandler->getRequestedAction($this->actions);
+        $action = $this->assambler->createAction($actionClass);
+        return $action->execute();
     }
 }

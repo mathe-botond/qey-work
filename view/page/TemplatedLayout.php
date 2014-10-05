@@ -13,7 +13,6 @@ abstract class TemplatedLayout extends TemplatedBlock implements ILayout {
     
     public function __construct(QeyMeta $meta) {
         $this->meta = $meta;
-        $this->add(QeyMeta::NAME, $meta);
     }
     
     public function getContent() {
@@ -32,5 +31,10 @@ abstract class TemplatedLayout extends TemplatedBlock implements ILayout {
         $this->content = $content;
         $this->add('content', $content);
         $this->setTitle();
+    }
+    
+    public function render() {
+        $this->add(QeyMeta::NAME, $this->meta);
+        return parent::render();
     }
 }

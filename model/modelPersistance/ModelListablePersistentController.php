@@ -6,7 +6,7 @@ namespace qeywork;
  *
  * @author Dexx
  */
-abstract class ModelListablePersistentController implements IModelPersistanceController {
+abstract class ModelListablePersistentController implements IPersistence {
     protected $id;
     
     public function save() {
@@ -16,7 +16,4 @@ abstract class ModelListablePersistentController implements IModelPersistanceCon
             return $this->update();
         }
     }
-    
-    public abstract function insert();
-    public abstract function update();
 }

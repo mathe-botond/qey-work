@@ -12,7 +12,7 @@ class ModelDbData implements IPersistentData {
         $this->name = $tableName;
     }
     
-    public function getNameOfPersistanceObject() {
+    public function getNameOfPersistenceObject() {
         return $this->name;
     }
 

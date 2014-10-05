@@ -11,17 +11,16 @@ class JsLinkCollection extends LinkCollection
     protected $appJs;
     protected $qeyWorkJs;
     
+    public function __construct(Locations $loc) {
+        $this->appJs = $loc->appJs;
+        $this->qeyWorkJs = $loc->qeyWorkJs;
+        
+        parent::__construct();
+    }
+    
     protected function createEntry($file) {
         $h = new HtmlFactory();
         return $h->script()->type('text/javascript')->defer()->src($file);
-    }
-    
-    public function setAppJs(Url $appJs) {
-        $this->appJs = $appJs;
-    }
-    
-    public function setQeyWorkJs(Url $qeyWorkJs) {
-        $this->qeyWorkJs = $qeyWorkJs;
     }
     
     /**

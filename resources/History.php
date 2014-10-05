@@ -8,7 +8,7 @@ class History
     private $homePage;
     private $server;
 
-    public function __construct(Url $home, SuperGlobals $globals)
+    public function __construct(Url $home, Globals $globals)
     {
         $this->homePage = $home;
         $this->history = array();

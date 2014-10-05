@@ -5,14 +5,18 @@ namespace qeywork;
  * @author Dexx
  */
 class SubmitButton implements IRenderable {
-    protected $label;
+    protected $button;
     
     public function __construct($label) {
-        $this->label = $label;
+        $h = new HtmlFactory();
+        $this->button = $h->input()->type('submit')->value($label);
+    }
+    
+    public function getInput() {
+        return $this->button;
     }
     
     public function render() {
-        $h = new HtmlFactory();
-        return $h->input()->type('submit')->value($this->label);
+        return $this->button;
     }    
 }

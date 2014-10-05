@@ -6,7 +6,7 @@ namespace qeywork;
  *
  * @author Dexx
  */
-abstract class AbstractPath {
+abstract class AbstractPath implements IRenderable {
     public $dirs;
     public $file;
     
@@ -109,16 +109,23 @@ abstract class AbstractPath {
         $copy = $this->getCopy();
         $dirs = $path->getDirs();
         $i = 0;
-        while ($dirs[$i] == '.' || $dirs[$i] == '..') {
+        while (isset($dirs[$i]) && ($dirs[$i] == '.' || $dirs[$i] == '..')) {
             if ($dirs[$i] == '..') {
-                $copy->parentDir();
+                $copy = $copy->parentDir();
             }
             array_shift($dirs);
         }
-        $copy = $copy->addDirs($dirs)->file($path->getFile());
+        if ($dirs != null) {
+            $copy = $copy->addDirs($dirs);
+        }
+        $copy = $copy->file($path->getFile());
         return $copy;
     }
     
     public abstract function toString();
     public abstract function __toString();
+    
+    public function render() {
+        return $this->toString();
+    }
 }

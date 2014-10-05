@@ -13,7 +13,7 @@ class ActionFactoryCollection {
     }
     
         
-    public function addFactory(IActionFactory $factory) {
+    public function addRouter(IActionRouter $factory) {
         array_unshift($this->collection, $factory);
     }
     

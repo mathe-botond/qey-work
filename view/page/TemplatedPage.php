@@ -7,14 +7,19 @@ namespace qeywork;
  */
 abstract class TemplatedPage extends TemplatedBlock implements IPage
 {   
+    public function setType($type) {
+        $this->type = $type;
+    }
+    
     /**
      * Generates title from class name
      * @return string Title 
      */
-    public function getTitle()
-    {
-        $classname = get_class($this);
-        $title = ltrim(preg_replace('/([A-Z])/', ' $1', $classname));
-        return $title;
+    public function getTitle() {
+        return null;
+    }
+    
+    public function isFrontPage() {
+        return ($this->type & self::FRONT_PAGE) == 1;
     }
 }

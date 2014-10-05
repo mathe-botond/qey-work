@@ -9,20 +9,25 @@ class FormVisualUsingTable extends  FormVisualBasis{
             HtmlEntityList $rows,
             IHtmlEntity $submit) {
         $h = new HtmlFactory();
-        return $h->form()->attr($formAttriubtes)->content(
+        $form = $h->form()->attr($formAttriubtes)->content(
             $hiddenInputs,
             $h->table()->cls('form')->content(
                 $rows,
-                $submit
+                $h->tr()->content(
+                    $h->td()->colspan(2)->cls('submit-row')->content(
+                        $submit
+                    )
+                )
             )
         );
+        return $form;
     }
     
    public function entry($id, $class, $label, IHtmlEntity $input, $comment, $message) {
        $h = new HtmlFactory();
        return $h->tr()->id($id)->cls($class)->content(
-           $h->td()->cls('form-entry-label')->text($label),
-           $h->td()->cls('form-entry-input')->content(
+           $h->td()->cls('label form-entry-label')->text($label),
+           $h->td()->cls('input form-entry-input')->content(
                $input, new TextNode($comment), $message
            )
        );

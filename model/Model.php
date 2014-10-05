@@ -4,7 +4,11 @@ namespace qeywork;
 /**
  * @author Dexx
  */
-class Model implements IModelEntity {
+class Model {
+
+    /** @var IPersistentData */
+    private $persistenceData;
+
     const ID_FIELD_NAME = 'id';
     protected $id;
     protected $idField;
@@ -23,20 +27,15 @@ class Model implements IModelEntity {
         }
     }
     
-    public function __construct() {
+    public function __construct(IPersistentData $persistenceData) {
         $this->addClassPropertiesAsFields();
         $this->idField = new Field(self::ID_FIELD_NAME);
+        
+        $this->persistenceData = $persistenceData;
     }
     
     public function add(Field $field) {
         $this->fields[ $field->getName() ] = $field;
-    }
-    
-    /** @var IPersistentData $persistanceData Data concerning persistance */
-    public $persistanceData; 
-    
-    public function setPersistanceData(IPersistentData $persistanceData) {
-        $this->persistanceData = $persistanceData;
     }
     
     public function getId() {
@@ -66,5 +65,9 @@ class Model implements IModelEntity {
                     ' (you forgot to call the constructor or Model::addClassPropertiesAsFields() )');
         }
         return $this->fields;
+    }
+    
+    public function getPersistenceData() {
+        return $this->persistenceData;
     }
 }

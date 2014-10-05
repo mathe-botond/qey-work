@@ -77,7 +77,7 @@ class MenuEntityCollection extends SmartArray implements IRenderable {
                     $item->getLink(),
                     $item->getChildren(),
                     $item->getToken(),
-                    null,
+                    $item->iconImage,
                     $class,
                     $item->style
                 )
