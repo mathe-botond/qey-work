@@ -8,25 +8,16 @@ To start using it you should check out the *Hello World* project.
 
 * Concept
 * Usage
-    - Creating instance
+    - Initializing engine
     - Adding pages and actions
+    - Create a layout
+    - Using the database
 
-### How do I get set up? ###
+### Initializing engine ###
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+To get started you need to create an engine instance:
 
-### Contribution guidelines ###
+```
+$qeywork = new QeyWork();
+```
 
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
