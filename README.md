@@ -1,12 +1,15 @@
-# README #
+# QeyWork #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+QeyWork is a simple PHP Framework for testable and correct OOP projects. 
 
-### What is this repository for? ###
+To start using it you should check out the *Hello World* project.
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+### Summary ###
+
+* Concept
+* Usage
+    - Creating instance
+    - Adding pages and actions
 
 ### How do I get set up? ###
 
