@@ -26,12 +26,12 @@ class MenuVisualUsingLists implements IMenuVisual {
         if ($iconImage != null) {
             return $h->img()->cls($name . 'icon menu-item-icon')->attr('src', $iconImage);
         }
-        return '';
+        return new NullHtml();
     }
     
     protected function createLink($label, Url $target, $name, $iconImage) {
         $h = new HtmlFactory();
-        return $h->a()->cls($name . 'link menu-item-link')->href($target)->content(
+        return $h->a()->cls($name . 'link menu-item-link')->href($target)->content (
             $this->createLabel($label, $name),
             $this->createIcon($iconImage, $name)
         );

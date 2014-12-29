@@ -21,12 +21,15 @@ class MenuItem implements IMenuEntity {
     protected $token = '';
     protected $parent;
 
-
     public function __construct($token, $label, Url $link, MenuEntityCollection $children = null) {
         $this->token = $token;
         $this->label = $label;
         $this->link = $link;
         $this->children = $children;
+    }
+    
+    public function setLink(Url $link) {
+        $this->link = $link;
     }
     
     public function getToken() {

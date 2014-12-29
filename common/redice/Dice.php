@@ -61,9 +61,12 @@ class Dice implements IoC {
         if (isset($this->rules[$tname])) {
             return $this->rules[$tname];
         }
-        foreach ($this->rules as $key => $rule) {
-            if ($rule->instanceOf === null && $key !== '*' && is_subclass_of($name, $key) && $rule->inherit === true) {
-                return $rule;
+
+        if (strstr($name, '$') === false) {
+            foreach ($this->rules as $key => $rule) {
+                if ($rule->instanceOf === null && $key !== '*' && is_subclass_of($name, $key) && $rule->inherit === true) {
+                    return $rule;
+                }
             }
         }
         return isset($this->rules['*']) ? $this->rules['*'] : new Rule;
@@ -85,7 +88,9 @@ class Dice implements IoC {
         }
         $component = trim($component, '\\');
         
-        if (!isset($this->rules[strtolower($component)]) && !class_exists($component)) {
+        if (!isset($this->rules[strtolower($component)])
+                && strstr($component, '$') === false
+                && !class_exists($component)) {
             throw new \Exception('Class does not exist for creation: ' . $component);
         }
 
@@ -151,9 +156,10 @@ class Dice implements IoC {
                 }
             }
             $paramClassName = $param->getClass() ? strtolower($param->getClass()->name) : false;
+
             if ($paramClassName && isset($rule->substitutions[$paramClassName])) {
                 $parameters[] = is_string($rule->substitutions[$paramClassName]) ? new Instance($rule->substitutions[$paramClassName]) : $rule->substitutions[$paramClassName];
-            } else if ($paramClassName && class_exists($paramClassName)) {
+            } else if ($paramClassName && strstr($paramClassName, '$') === false && class_exists($paramClassName)) {
                 $parameters[] = $this->create($paramClassName, $share, in_array($paramClassName, array_map('strtolower', $rule->newInstances)), null);
             } else if (is_array($args) && count($args) > 0) {
                 $parameters[] = array_shift($args);
@@ -225,8 +231,22 @@ class RuleBuilder {
     }
     
     public function addSubstitution($class, $instance) {
-        $class = trim($class, '\\');
+        $class = strtolower( trim($class, '\\') );
         $this->rule->substitutions[$class] = $instance;
+        return $this;
+    }
+    
+    public function addDecoratingSubstitution($class, $decorator) {
+        $class = strtolower( trim($class, '\\') );
+        if (! isset($this->rule->substitutions[$class])) {
+            throw new \qeywork\ArgumentException("$class doesn't have a substitution yet, can't decorate.");
+        }
+        $seed = $this->rule->substitutions[$class];
+        $this->addSubstitution($class, $decorator);
+        
+        $this->ioc->getRuleBuilder($decorator)
+            ->addSubstitution($class, $seed)
+            ->save();
         return $this;
     }
     
@@ -242,6 +262,12 @@ class RuleBuilder {
     
     public function setInstanceOf($instance) {
         $this->rule->instanceOf = $instance;
+        return $this;
+    }
+    
+    public function setShareInstances(array $sharedInstances) {
+        $this->rule->shareInstances = $sharedInstances;
+        return $this;
     }
     
     public function getRule() {

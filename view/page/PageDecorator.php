@@ -3,10 +3,10 @@ namespace qeywork;
 /**
  * @author Dexx
  */
-abstract class PageDecorator implements IPageByToken {
+abstract class PageDecorator implements IPage {
     private $page;
 
-    public function __construct(IPageByToken $page) {
+    public function setPage(IPage $page) {
         $this->page = $page;
     }
  
@@ -21,21 +21,13 @@ abstract class PageDecorator implements IPageByToken {
     public function isFrontPage() {
         return $this->page->isFrontPage();
     }
-
-    public function getToken() {
-        return $this->page->getToken();
-    }
-
-    public function setToken($token) {
-        $this->page->setToken($token);
-    }
     
     protected abstract function decorate(IHtmlEntity $page);
 
     public function render() {
         $decoratedPage = $this->decorate($this->page->render());
         if (! $decoratedPage instanceof IHtmlEntity) {
-            throw new ReturnValueException($decoratedPage, 'IHtmlEntity');
+            throw new ReturnValueException('PageDecorator::decorate', 'IHtmlEntity', $decoratedPage);
         }
         return $decoratedPage;
     }

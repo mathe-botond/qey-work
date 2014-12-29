@@ -11,6 +11,7 @@ class Url extends AbstractPath
 {
     public $domain;
     public $fields;
+    public $hash;
     
     /**
      * Constructor of this class
@@ -115,6 +116,13 @@ class Url extends AbstractPath
         return $this->fields;
     }
     
+    public function setHash($hash) {
+        $copy = $this->getCopy();
+        $copy->hash = trim($hash, '#');
+        return $copy;
+    }
+
+
     /**
      * Generates a string representing this path
      */
@@ -138,6 +146,11 @@ class Url extends AbstractPath
             }
             $path .= implode('&', $query);
         }
+        
+        if (!empty($this->hash)) {
+            $path .= '#' . $this->hash;
+        }
+        
         return $path;
     }
     

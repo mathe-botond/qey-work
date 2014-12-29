@@ -7,7 +7,7 @@ namespace qeywork;
  * @author Dexx
  */
 abstract class AbstractPath implements IRenderable {
-    public $dirs;
+    public $dirs = array();
     public $file;
     
     /**

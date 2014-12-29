@@ -17,7 +17,7 @@ class ModelListViewVisual implements IModelListViewVisual{
     
     public function headerCell($label) {
         $h = new HtmlFactory();
-        return $h->th()->content($label);
+        return $h->th()->htmlContent($label);
     }
     
     public function entry($id, IHtmlEntity $cells) {
@@ -27,6 +27,6 @@ class ModelListViewVisual implements IModelListViewVisual{
     
     public function cell($value) {
         $h = new HtmlFactory();
-        return $h->td()->content($value);
+        return $h->td()->htmlContent($value);
     }
 }

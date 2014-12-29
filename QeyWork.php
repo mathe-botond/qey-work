@@ -9,8 +9,6 @@ class QeyWork {
 
     /** @var Locations */
     private $locations;
-    /** @var PageHandler */
-    private $pageHandler;
     /** @var Autoloader */
     private $autoloader;
     /** @var QeyWorkAssambler  */
@@ -90,6 +88,18 @@ class QeyWork {
         }
         return $this->layout;
     }
+    
+    public function registerPagePostprocessor($postProcessorClass) {
+        $this->assambler->registerPagePostProcessor($postProcessorClass);
+    }
+    
+    public function addPageRouter(IPageRouter $router) {
+        $this->pages->addRouter($router);
+    }
+    
+    public function addActionRouter(IActionRouter $router) {
+        $this->actions->addRouter($router);
+    }
 
     /**
      * Creates a page based on the URL
@@ -97,13 +107,14 @@ class QeyWork {
      * @return type
      */
     public function render() {
-        $this->assambler->setupIocForPageCreation($this->pages);
-        $pageHandler = $this->assambler->createPageHandler();
+        $this->assambler->setupIocForPageCreation($this->pages);    
+        
+        $pageHandler = $this->assambler->getPageHandler();
         $pageClass = $pageHandler->getRequestedPage($this->pages);
         if (is_string($pageClass)) {
             $page = $this->assambler->createPage($pageClass);
         }
-        $pageHandler->postProcess($page);
+        $page = $pageHandler->postProcess($page);
         
         $layout = $this->getLayout();        
         $layout->setContent($page);
@@ -111,8 +122,11 @@ class QeyWork {
     }
     
     public function run() {
+        $this->actions->addRouter(new QeyActionRouter());
+        
         /* @var $actionHandler ActionsHandler */
-        $actionHandler = $this->assambler->createActionHandler();
+        $actionHandler = $this->assambler->getActionHandler();
+        
         $actionClass = $actionHandler->getRequestedAction($this->actions);
         $action = $this->assambler->createAction($actionClass);
         return $action->execute();

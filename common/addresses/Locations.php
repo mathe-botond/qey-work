@@ -7,6 +7,7 @@ class Locations {
     const DEFAULT_IMAGES_DIR = 'images';
     const DEFAULT_JS_DIR = 'js';
     const DEFAULT_FILES_DIR = 'files';
+    const LAYOUT_DIR = 'layout';
     
     private $pendingRedirect = false;
     
@@ -53,7 +54,8 @@ class Locations {
         $this->appPath = $this->basePath->appendRelativePath($app);
         $this->appUrl = $this->baseUrl->appendRelativePath($app);
         
-        $this->css = $this->appUrl->dir(self::DEFAULT_STYLE_DIR);
+        $layout = $this->appUrl->dir(self::LAYOUT_DIR);
+        $this->css = $layout->dir(self::DEFAULT_STYLE_DIR);
         $this->cssImages = $this->css->dir(self::DEFAULT_IMAGES_DIR);
         
         $this->appJs = $this->appUrl->dir(self::DEFAULT_JS_DIR);

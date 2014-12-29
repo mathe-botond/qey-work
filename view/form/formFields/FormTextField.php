@@ -8,6 +8,6 @@ class FormTextField extends FormField {
         return $h->textarea()
                 ->cls($this->class)
                 ->name($this->getName())
-                ->content($this->value());
+                ->htmlContent($this->value());
     }
 }

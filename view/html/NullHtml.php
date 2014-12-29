@@ -12,6 +12,6 @@ class NullHtml implements IHtmlEntity {
     }
 
     public function render() {
-        return self::EMPTY_RESULT;
-    }    
+        return $this;
+    }
 }

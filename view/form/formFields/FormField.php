@@ -11,8 +11,6 @@ class FormField {
     protected $field;
     
     public $label;
-    /** @var FieldInput */
-    public $inputControl;
     public $dataSourceControl;
     public $readOnly;
     /** @var array */
@@ -71,9 +69,6 @@ class FormField {
         }
         
         $this->field->setValue($value);
-        if ($this->inputControl != null) {
-            $this->inputControl->setValue($value);
-        }
         return $this;
     }
     
@@ -130,10 +125,6 @@ class FormField {
             'label' => $this->label,
             'readonly' => $this->isReadOnly(),
         );
-        
-        if ($this->inputControl != null) {
-            $clientModel['input'] = $this->inputControl->getName();
-        }
         
         if ($this->class != null) {
             $clientModel['class'] = $this->class;

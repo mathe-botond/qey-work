@@ -124,27 +124,34 @@ class HtmlNode implements IHtmlEntity
         return $this;
     }
     
-    public function append($mixed)
-    {
-        if ($mixed == NULL) {
+    public function htmlContent($html) {
+        $this->clean();
+        $this->children[] = new HtmlWrapperNode($html);
+        return $this;
+    }
+    
+    public function append(IHtmlEntity $item) {
+        if ($item == NULL) {
             return $this;
         }
         
-        $mixed = $this->cleanType($mixed);
+        $item = $this->cleanType($item);
         
-        if ($mixed instanceof HtmlEntityList) {        
-            foreach ($mixed as $item) {
+        if ($item instanceof HtmlEntityList) {        
+            foreach ($item as $item) {
                 $this->children[] = $item;
             }
-        } else if ($mixed instanceof IHtmlEntity) {
-            $this->children[] = $mixed;
-        } else if (is_string($mixed)) {
-            $this->children[] = new TextNode($mixed);
+        } else if ($item instanceof IHtmlEntity) {
+            $this->children[] = $item;
         } else {
-            throw new ArgumentException('$mixed must be an IHtmlEntity, ' . gettype($mixed) . ' given: ' . var_export($mixed)); 
+            throw new ArgumentException('$mixed must be an IHtmlEntity, ' . gettype($item) . ' given: ' . var_export($item)); 
         }
             
         return $this;
+    }
+    
+    public function add(IHtmlEntity $item) {
+        $this->append($item);
     }
     
     public function __call($func, $attrs) {

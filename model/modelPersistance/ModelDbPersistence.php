@@ -53,8 +53,9 @@ class ModelDbPersistence extends ModelListablePersistentController
             $fields = $this->model->getFields();
             foreach ($row as $key => $value) {
                 if (!array_key_exists($key, $fields) || !$fields[$key] instanceof Field) {
-                    throw new ModelException("dbLoad failed: Table returned the '$key' " .
-                    "undefined in the model");
+                    //throw new ModelException("dbLoad failed: Table returned the '$key' " .
+                    //"undefined in the model");
+                    continue ;
                 }
                 $fields[$key]->setValue( $value );
             }
@@ -68,8 +69,10 @@ class ModelDbPersistence extends ModelListablePersistentController
     public function loadReferences() {
         foreach ($this->model->getFields() as $field) {
             if ($field instanceof ReferenceField && intval($field->value()) != 0) {
-                $controller = new static($field->getModelType(), $this->db);
+                $controller = new static($this->db);
+                $controller->setModel($field->getModelType());
                 $controller->load($field->value());
+                $field->setModel($controller->getModel());
             }
         }
     }

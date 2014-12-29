@@ -10,6 +10,10 @@ abstract class TemplatedBlock extends Container {
      * @return Path
      */
     
+    public function addString($key, $value) {
+        $this->children[$key] = $value;
+    }
+    
     protected abstract function provideTemplateFile();
     
     protected function beforeRender() {}
@@ -18,16 +22,14 @@ abstract class TemplatedBlock extends Container {
     
     protected function processTemplates($template) {
         foreach ($this->getChildren() as $key => $child) {
-            $renderedChild = $child->render();
-            if ($renderedChild instanceof IHtmlEntity) {
-                $renderedChild .= '';
+            if ($child instanceof IRenderable) {
+                $child = $child->render();
+                if ($child instanceof IHtmlEntity) {
+                    $child .= '';
+                }
             }
             $templateKey = "{{$key}}";
-            $count = 0;
-            $template = str_replace($templateKey, $renderedChild, $template, $count);
-            if ($count == 0) {
-                throw new TemplateException("Template must contain '{{$key}}'");
-            }
+            $template = str_replace($templateKey, $child, $template);
         }
         return $template;
     }

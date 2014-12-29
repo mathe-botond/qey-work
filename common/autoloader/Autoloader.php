@@ -51,6 +51,8 @@ class Autoloader {
     private $status = 1;
     
     private static $instances = array();
+    private static $firstError = true;
+    
     private $namespaceExtractor;
 
     public function init() {
@@ -119,7 +121,7 @@ class Autoloader {
         }
     }
     
-    protected static function checkAllInstanceIntegrity() {
+    protected static function checkAllInstanceIntegrity($class) {
         $status = 0;
         foreach (self::$instances as $loader) {
             $status += $loader->status;
@@ -127,6 +129,13 @@ class Autoloader {
         
         if ($status === 0) { //all loaders failed to find missing class
             foreach (self::$instances as $loader) {
+                echo "Can't find '$class'. Reset.</br>";
+                if (self::$firstError) {
+                    self::$firstError = false;
+                    echo 'error';
+                    $e = new \Exception();
+                    echo($e->getTraceAsString());
+                }
                 $loader->reset();
             }
             return true;
@@ -139,7 +148,7 @@ class Autoloader {
         $result = true;
         if (! isset($this->classList[$class])) {
             $this->status = 0;
-            $result = self::checkAllInstanceIntegrity();
+            $result = self::checkAllInstanceIntegrity($class);
         }
         
         if ($result && isset($this->classList[$class])) {

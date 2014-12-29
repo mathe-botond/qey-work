@@ -60,11 +60,20 @@ class QeyWorkAssambler {
             ->save();
     }
     
-    public function createPageHandler() {
+    /**
+     * @return PageHandler
+     */
+    public function getPageHandler() {
         return $this->ioc->create('\\qeywork\\PageHandler');
     }
     
-    public function createActionHandler() {
+    public function registerPagePostProcessor($processorClass) {
+        $processor = $this->ioc->create($processorClass);
+        $pageHandler = $this->getPageHandler();
+        $pageHandler->setPagePostProcessor($processor);
+    }
+    
+    public function getActionHandler() {
         return $this->ioc->create('\\qeywork\\ActionsHandler');
     }
     

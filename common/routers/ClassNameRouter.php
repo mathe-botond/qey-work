@@ -3,7 +3,7 @@ namespace qeywork;
 /**
  * @author Dexx
  */
-class ClassNameFactory implements IPageRouter, IActionRouter {
+class ClassNameRouter implements IPageRouter, IActionRouter {
     protected $namespace;
     
     public function __construct($namespace) {

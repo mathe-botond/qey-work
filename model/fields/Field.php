@@ -28,7 +28,8 @@ class Field implements IModelEntity{
     }
     
     public function isEmpty() {
-        return empty($this->value);
+        $value = $this->value();
+        return empty($value);
     }
 
     public function __toString() {

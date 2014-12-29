@@ -4,8 +4,9 @@ namespace qeywork;
 /**
  * @author Dexx
  */
-class Model {
-
+class Model extends Friendly {
+    const FIELD = 'field';
+    
     /** @var IPersistentData */
     private $persistenceData;
 
@@ -19,19 +20,33 @@ class Model {
         if ($this->fields == null) {
             $this->fields = new SmartArray();
         }
-        
-        foreach ($this as $field) {
-            if ($field instanceof Field && $field->getName() != self::ID_FIELD_NAME) {
+
+        foreach ($this as $key => $field) {
+            if (in_array($key, array('id', 'fields'))) {
+                continue;
+            }
+            
+            if ($field == null) {
+                
+                $converter = new CaseConverter($key, CaseConverter::CASE_CAMEL);
+                $this->add(new WrapperField($converter->toUnderscoredCase(), $this, $key));
+                
+            } else if ($field instanceof Field && $field->getName() != self::ID_FIELD_NAME) {
+                
                 $this->add($field);
+                
             }
         }
     }
     
     public function __construct(IPersistentData $persistenceData) {
-        $this->addClassPropertiesAsFields();
+        parent::__construct(array('WrapperField'));
+        
         $this->idField = new Field(self::ID_FIELD_NAME);
         
         $this->persistenceData = $persistenceData;
+        
+        $this->addClassPropertiesAsFields();
     }
     
     public function add(Field $field) {

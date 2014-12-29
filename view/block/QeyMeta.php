@@ -74,7 +74,7 @@ class QeyMeta implements IRenderable
         $js = $this->jsLinks->render();
         
         $headerStrings = $this->meta;
-        $headerStrings->append($h->title()->content($this->title));
+        $headerStrings->append($h->title()->htmlContent($this->title));
         $headerStrings->append($css);
         $headerStrings->append($js);
         return $headerStrings;

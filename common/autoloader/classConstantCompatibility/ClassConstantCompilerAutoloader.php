@@ -13,8 +13,7 @@ class ClassConstantCompilerAutoloader extends Autoloader {
     private $classConstantCompiler;
 
     protected function isPreprocessedNeeded() {
-        //return PHP_VERSION_ID < 50500;
-        return true;
+        return PHP_VERSION_ID < 50500;
     }
     
     public function __construct($path, $key,

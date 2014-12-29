@@ -9,7 +9,7 @@ class SubmitButton implements IRenderable {
     
     public function __construct($label) {
         $h = new HtmlFactory();
-        $this->button = $h->input()->type('submit')->value($label);
+        $this->button = $h->input()->type('submit')->value($label)->cls('submit-button');
     }
     
     public function getInput() {

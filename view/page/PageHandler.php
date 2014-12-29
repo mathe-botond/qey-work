@@ -32,7 +32,7 @@ class PageHandler {
         if ($this->pagePostProcessor !== null) {
             $page = $this->pagePostProcessor->process($page);
             if (! $page instanceof IPage) {
-                throw new ReturnValueException($page, 'IPage');
+                throw new ReturnValueException('PageHandler::postProcess', 'IPage', $page);
             }
         }
         return $page;

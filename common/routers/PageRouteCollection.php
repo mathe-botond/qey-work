@@ -37,6 +37,6 @@ class PageRouteCollection {
             }
         }
         
-        throw new RouteException("Page with target '$target' not found.");
+        throw new RouteException("Page with token '$target' not found.");
     }
 }

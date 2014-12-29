@@ -7,13 +7,13 @@ namespace qeywork;
 class Arguments {
     const TARGET = '_target';
     
-    private $token;
-    private $args;
+    protected $token;
+    protected $args;
     
     private function getRequestedTarget() {
         $target = $this->getArgument(0);
         return !empty($target) ? $target : PageRouteCollection::INDEX_TOKEN;
-    }
+    }  
 
     public function __construct(Params $params) {
         $this->args = \explode('/', trim( $params->get(self::TARGET) , '/'));
@@ -26,6 +26,10 @@ class Arguments {
     
     public function getArgument($number) {
         return isset($this->args[$number]) ? $this->args[$number] : null;
+    }
+    
+    public function getArguments() {
+        return $this->args;
     }
     
     public function forceOtherToken($token) {
