@@ -64,7 +64,12 @@ class Params
     {
         return isset($this->alias[$name]);
     }
-    
+
+    /**
+     * @param string $name
+     * @throws ClientDataException
+     * @return string
+     */
     public function get($name)
     {
         $converter = new CaseConverter($name, CaseConverter::CASE_CAMEL);
@@ -99,5 +104,9 @@ class Params
                 }
             }
         }
+    }
+
+    public function isPosted() {
+        return $_SERVER['REQUEST_METHOD'] == 'POST';
     }
 }

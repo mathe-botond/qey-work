@@ -33,7 +33,7 @@ class QeyWorkTest extends \PHPUnit_Framework_TestCase {
     public function setUp() {
         $loc = getLocations();
         $this->qeywork = new \qeywork\QeyWork($loc, TestPage::class, true);
-        $this->qeywork->getAssambler()->getIoC()->setVerbose(true);
+        $this->qeywork->getAssembler()->getIoC()->setVerbose(true);
         $this->qeywork->setGlobals(getTestGlobals(''));
         $this->qeywork->build();
     }

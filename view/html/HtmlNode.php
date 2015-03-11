@@ -27,13 +27,6 @@ class HtmlNode implements IHtmlEntity
         $this->children = new HtmlEntityList();
     }
     
-    protected function cleanType($value) {
-        if ($value instanceof Field) {
-            return $value->value();
-        }
-        return $value;
-    }
-    
     /**
      * Add an attrivute to yourt element
      * @param string $mixed
@@ -52,14 +45,12 @@ class HtmlNode implements IHtmlEntity
             $mixed .= ''; //convert to string if possible
         }
         
-        if (is_string($mixed)) {
-            $cleanValue = $this->cleanType($value);
-            $this->attributes[$mixed] = $cleanValue;
-        } else {
+        if (is_array($mixed)) {
             foreach ($mixed as $key => $value) {
-                $cleanValue = $this->cleanType($value);
-                $this->attributes[$key] = $cleanValue;
+                $this->attributes[$key] = $value;
             }
+        } else {
+            $this->attributes[$mixed] = $value . '';
         }
         return $this;
     }
@@ -92,8 +83,7 @@ class HtmlNode implements IHtmlEntity
      */
     public function cls($class)
     {
-        $cleanClass = $this->cleanType($class);
-        $classes = explode(' ', trim($cleanClass));
+        $classes = explode(' ', trim($class));
         foreach ($classes as $class) {
             if (!empty($class)) {
                 $this->classes[$class] = $class;
@@ -108,7 +98,6 @@ class HtmlNode implements IHtmlEntity
     }
     
     public function text($text) {
-        $text = $this->cleanType($text);
         $this->content(new TextNode(htmlspecialchars($text)));
         return $this;
     }
@@ -134,8 +123,6 @@ class HtmlNode implements IHtmlEntity
         if ($item == NULL) {
             return $this;
         }
-        
-        $item = $this->cleanType($item);
         
         if ($item instanceof HtmlEntityList) {        
             foreach ($item as $item) {
@@ -175,7 +162,7 @@ class HtmlNode implements IHtmlEntity
         return $this;
     }
     
-    public function __toString() {
+    public function toString() {    
         $html = '<' . $this->tag;
         
         if ($this->idAttr !== null) {
@@ -202,7 +189,7 @@ class HtmlNode implements IHtmlEntity
         return $html;
     }
     
-    public function toString() {
-        return $this->__toString();
+    public function __toString() {
+        return $this->toString();
     }
 }

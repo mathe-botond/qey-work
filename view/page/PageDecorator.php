@@ -21,8 +21,12 @@ abstract class PageDecorator implements IPage {
     public function isFrontPage() {
         return $this->page->isFrontPage();
     }
+
+    public function isType($type) {
+        return $this->page->isType($type);
+    }
     
-    protected abstract function decorate(IHtmlEntity $page);
+    protected abstract function decorate(IHtmlEntity $renderedPage);
 
     public function render() {
         $decoratedPage = $this->decorate($this->page->render());

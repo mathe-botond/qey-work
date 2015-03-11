@@ -19,7 +19,12 @@ class PageRouteCollection {
     public function addRouter(IPageRouter $router) {
         $this->routers[] = $router;
     }
-    
+
+    /**
+     * @param Arguments $target
+     * @return string
+     * @throws RouteException
+     */
     public function getCurrentPage(Arguments $target) {
         if (trim($target->toString()) == '') {
             $target->forceOtherToken(self::INDEX_TOKEN);

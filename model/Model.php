@@ -27,14 +27,12 @@ class Model extends Friendly {
             }
             
             if ($field == null) {
-                
                 $converter = new CaseConverter($key, CaseConverter::CASE_CAMEL);
-                $this->add(new WrapperField($converter->toUnderscoredCase(), $this, $key));
+                $this->$key = new Field($converter->toUnderscoredCase());
+            }
                 
-            } else if ($field instanceof Field && $field->getName() != self::ID_FIELD_NAME) {
-                
-                $this->add($field);
-                
+            if ($this->$key instanceof Field && $this->$key->getName() != self::ID_FIELD_NAME) {
+                $this->add($this->$key);
             }
         }
     }

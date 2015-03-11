@@ -24,4 +24,8 @@ abstract class Page implements IPage {
     public function isFrontPage() {
         return ($this->type & self::FRONT_PAGE) == 1;
     }
+
+    public function isType($type) {
+        return ($this->type & $type) > 0;
+    }
 }

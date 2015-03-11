@@ -46,7 +46,13 @@ class FormRenderer {
     }
     
     protected function createHiddenData() {
-        return null;
+        $hidden = $this->formData->getHiddenFields();
+        $rendered = new HtmlEntityList();
+        foreach ($hidden as $field) {
+            /* @var $field FormHiddenField */
+            $rendered->add($field->render());
+        }
+        return $rendered;
     }
     
     /**

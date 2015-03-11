@@ -163,7 +163,6 @@ class Autoloader {
             }
 
             require_once($file);
-            //$class::$classname = $class;
         }
     }
     

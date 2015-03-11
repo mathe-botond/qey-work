@@ -13,7 +13,9 @@ class ClassConstantCompilerAutoloader extends Autoloader {
     private $classConstantCompiler;
 
     protected function isPreprocessedNeeded() {
-        return PHP_VERSION_ID < 50500;
+        //return PHP_VERSION_ID < 50500;
+        //TODO: Fix this
+        return true;
     }
     
     public function __construct($path, $key,
@@ -39,7 +41,7 @@ class ClassConstantCompilerAutoloader extends Autoloader {
             parent::init();
             return;
         }
-        
+
         if (file_exists($this->file)) {
             $content = file_get_contents($this->file);
             $content = unserialize($content);

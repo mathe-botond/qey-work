@@ -6,7 +6,7 @@ namespace qeywork;
  *
  * @author Dexx
  */
-abstract class TemplatedLayout extends TemplatedBlock implements ILayout {
+abstract class AbstractTemplatedLayout extends AbstractTemplatedBlock implements ILayout {
     /** @var QeyMeta */
     protected $meta;
     protected $content;

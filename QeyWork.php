@@ -12,9 +12,11 @@ class QeyWork {
     /** @var Autoloader */
     private $autoloader;
     /** @var QeyWorkAssambler  */
-    protected $assambler;
+    protected $assembler;
     /** @var Globals  */
     private $globals;
+    /** @var IContentPostProcessor  */
+    protected $contentPostProcessor;
     
     protected $pages;
     protected $actions;
@@ -29,7 +31,7 @@ class QeyWork {
         $this->autoloader = $qeyWorkAutoloader;
         $this->locations = $locations;
         
-        $this->assambler = new QeyWorkAssambler();
+        $this->assembler = new QeyWorkAssambler();
         $this->globals = new Globals();
         
         $this->pages = new PageRouteCollection($indexPageClass);
@@ -41,18 +43,18 @@ class QeyWork {
     }
     
     public function configureDb(DBConfig $config) {
-        $this->assambler->configureDb($config);
+        $this->assembler->configureDb($config);
     }
     
-    public function setAssambler(QeyWorkAssambler $assambler) {
-        $this->assambler = $assambler;
+    public function setAssembler(QeyWorkAssambler $assembler) {
+        $this->assembler = $assembler;
     }
     
     /**
      * @return QeyWorkAssambler
      */
-    public function getAssambler() {
-        return $this->assambler;
+    public function getAssembler() {
+        return $this->assembler;
     }
     
     public function setGlobals(Globals $globals) {
@@ -64,11 +66,11 @@ class QeyWork {
     }
     
     public function build() {
-        $this->assambler->setupIoC($this->locations, $this->globals);
+        $this->assembler->setupIoC($this->locations, $this->globals);
     }
     
     public function setLayout($layoutClass) {
-        $this->layout = $this->assambler->createLayout($layoutClass);
+        $this->layout = $this->assembler->createLayout($layoutClass);
         if (! $this->layout instanceof ILayout) {
             throw new TypeException($this->layoutClass, 'ILayout');
         }
@@ -84,13 +86,17 @@ class QeyWork {
     
     public function getLayout() {
         if ($this->layout == null) {
-            $this->layout = $this->assambler->createLayout();
+            $this->layout = $this->assembler->createLayout();
         }
         return $this->layout;
     }
     
     public function registerPagePostprocessor($postProcessorClass) {
-        $this->assambler->registerPagePostProcessor($postProcessorClass);
+        $this->assembler->registerPagePostProcessor($postProcessorClass);
+    }
+
+    public function registerContentPostProcessor($postProcessorClass) {
+        $this->contentPostProcessor = $this->assembler->getIoC()->create($postProcessorClass);
     }
     
     public function addPageRouter(IPageRouter $router) {
@@ -101,34 +107,57 @@ class QeyWork {
         $this->actions->addRouter($router);
     }
 
+    private function postProcess($renderedLayout)
+    {
+        if ($this->contentPostProcessor == null) {
+            return $renderedLayout;
+        }
+
+        return $this->contentPostProcessor->process($renderedLayout);
+    }
+
     /**
      * Creates a page based on the URL
      * @param string $defaultPage the page used if no URL parameter is defined
      * @return type
      */
     public function render() {
-        $this->assambler->setupIocForPageCreation($this->pages);    
-        
-        $pageHandler = $this->assambler->getPageHandler();
-        $pageClass = $pageHandler->getRequestedPage($this->pages);
-        if (is_string($pageClass)) {
-            $page = $this->assambler->createPage($pageClass);
+        $layout = $this->getLayout();
+        try {
+            $this->assembler->setupIocForPageCreation($this->pages);
+
+            $pageHandler = $this->assembler->getPageHandler();
+            $pageClass = $pageHandler->getRequestedPage($this->pages);
+            if (is_string($pageClass)) {
+                $pageClass = $this->assembler->createPage($pageClass);
+            }
+            $page = $pageHandler->postProcess($pageClass);
+
+            $layout->setContent($page);
+            $renderedLayout = $layout->render();
+
+            $renderedLayout = $this->postProcess($renderedLayout);
         }
-        $page = $pageHandler->postProcess($page);
-        
-        $layout = $this->getLayout();        
-        $layout->setContent($page);
-        return $layout->render();
+        catch (RouteException $e) {
+            $layout->setContent(new ErrorPage(404));
+            $renderedLayout = $layout->render();
+        }
+        catch (\Exception $e) {
+            $layout->setContent(new ErrorPage(500, $e));
+            $renderedLayout = $layout->render();
+        }
+
+        return $renderedLayout;
     }
     
     public function run() {
         $this->actions->addRouter(new QeyActionRouter());
         
         /* @var $actionHandler ActionsHandler */
-        $actionHandler = $this->assambler->getActionHandler();
+        $actionHandler = $this->assembler->getActionHandler();
         
         $actionClass = $actionHandler->getRequestedAction($this->actions);
-        $action = $this->assambler->createAction($actionClass);
+        $action = $this->assembler->createAction($actionClass);
         return $action->execute();
     }
 }

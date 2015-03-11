@@ -8,6 +8,9 @@ class FormData {
     const DEFAULT_SUBMIT_LABEL = 'Submit';
     
     /** @var SmartArray */
+    protected $hiddenFields = array();
+    
+    /** @var SmartArray */
     protected $fields;
     /** @var SubmitButton */
     protected $submit;
@@ -32,6 +35,10 @@ class FormData {
         $this->submit = new SubmitButton($submitLabel);
         $this->model = $model;
         $this->addClassPropertiesAsFields();
+    }
+    
+    public function addHiddenField(FormHiddenField $field) {
+        $this->hiddenFields[] = $field;
     }
     
     public function add(FormField $field) {
@@ -65,6 +72,10 @@ class FormData {
     
     public function getFields() {
         return $this->fields;
+    }
+    
+    public function getHiddenFields() {
+        return $this->hiddenFields;
     }
     
     /**

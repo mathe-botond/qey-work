@@ -75,7 +75,7 @@ class ClassConstantCompatibilityCompiler {
             } else {
                 $output = $directory;
             }
-            
+
             $newFile = str_replace(self::FILE_PREC_ENDING, '', $filename);
             if (file_exists($output . DIRECTORY_SEPARATOR . $newFile) 
                     && filemtime($directory . DIRECTORY_SEPARATOR . $filename) <

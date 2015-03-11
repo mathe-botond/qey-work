@@ -26,8 +26,12 @@ class TextNode implements IHtmlEntity {
     public function render() {
         return $this;
     }
+
+    public function toString() {
+        return $this->get();
+    }
     
     public function __toString() {
-        return $this->get();
+        return $this->toString();
     }
 }

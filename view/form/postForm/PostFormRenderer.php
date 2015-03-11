@@ -18,9 +18,12 @@ class PostFormRenderer extends FormRenderer implements IRenderable {
     public function setMultipart(bool $multipart) {
         $this->multiPart = $multipart;
     }
-    
+
     /**
      * Constructor of this class
+     * @param PostFormCollection $formCollection
+     * @param PostFormLinker $linker
+     * @param IFormVisual $visual
      */
     public function __construct(
             PostFormCollection $formCollection,
@@ -50,7 +53,9 @@ class PostFormRenderer extends FormRenderer implements IRenderable {
     }
     
     public function createHiddenData() {
-        return $this->formVisual->hiddenSubmitData('qey-form-id', $this->id);
+        $hiddenData = parent::createHiddenData();
+        $hiddenData->append($this->formVisual->hiddenSubmitData('qey-form-id', $this->id));
+        return $hiddenData;
     }
     
     /**

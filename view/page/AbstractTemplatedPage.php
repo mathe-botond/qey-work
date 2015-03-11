@@ -5,10 +5,16 @@ namespace qeywork;
  * Default implementation of the IBasicPage interface
  * @author Dexx
  */
-abstract class TemplatedPage extends TemplatedBlock implements IPage
+abstract class AbstractTemplatedPage extends AbstractTemplatedBlock implements IPage
 {   
+    private $type;
+    
     public function setType($type) {
         $this->type = $type;
+    }
+
+    public function isType($type) {
+        return $this->type & $type == 1;
     }
     
     /**

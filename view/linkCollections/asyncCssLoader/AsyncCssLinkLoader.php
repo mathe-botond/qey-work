@@ -6,7 +6,7 @@ namespace qeywork;
  *
  * @author Dexx
  */
-class AsyncCssLinkLoader extends TemplatedBlock implements ICssLinkCollection
+class AsyncCssLinkLoader extends AbstractTemplatedBlock implements ICssLinkCollection
 {    
     const TEMPLATE_FILE = 'async-css-loader.js.tpl';
     

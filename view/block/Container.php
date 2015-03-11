@@ -4,7 +4,7 @@ namespace qeywork;
 /**
  * @author Dexx
  */
-abstract class Container implements IBlock {
+class Container implements IBlock {
     protected $children = array();
     
     public function add($name, IRenderable $child) {

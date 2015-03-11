@@ -6,10 +6,10 @@ namespace qeywork;
  */
 abstract class FormAction implements IAction {
     
-    /** @var FormData */
+    /** @var PostFormData */
     protected $form;
     /** @var SubmittedFormHandler */
-    protected $formHandler;
+    private $formHandler;
     
     
     public function __construct(SubmittedFormHandler $submittedFormHandler) {
@@ -17,6 +17,9 @@ abstract class FormAction implements IAction {
         $this->form = $submittedFormHandler->getSubmittedForm();
     }
 
+    protected function redirectForward() {
+        $this->formHandler->redirect();
+    }
 
     /**
      * Form gateway, entry point of form handling
@@ -40,7 +43,7 @@ abstract class FormAction implements IAction {
             if ($this->formHandler->isAjaxRequest()) { 
                 return $result;
             } else {
-                $this->formHandler->redirect();
+                $this->redirectForward();
             }
         } else {
             //there were some errors

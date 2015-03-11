@@ -13,7 +13,7 @@ interface IoC {
     public function setVerbose($verbose);
     
     /**
-     * @param Object $object Assign an instance
+     * @param /StdObject $object Assign an instance
      * that can be used in the dependency tree
      */
     public function assign($object);
