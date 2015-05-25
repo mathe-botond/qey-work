@@ -32,6 +32,8 @@ class Mailer
         }
         
         $this->phpMailer->Send();
+        
+        $this->phpMailer->Clear();
 
         return true;
     }

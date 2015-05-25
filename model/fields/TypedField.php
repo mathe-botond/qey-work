@@ -45,7 +45,7 @@ class TypedField extends Field {
     }
     
     public function getTypeString() {
-        $type = $this->name . ' ' .  $this->type;
+        $type = '`' . $this->name . '` ' .  $this->type;
         
         if ($this->size != 0) {
             $type .= '(' . $this->size . ')';

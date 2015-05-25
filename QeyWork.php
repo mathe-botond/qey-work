@@ -1,122 +1,163 @@
 <?php
 namespace qeywork;
 
-require dirname(__FILE__).'/common/common.php';
-require dirname(__FILE__).'/common/Exceptions.php';
-require dirname(__FILE__).'/Autoloader.php';
-
-require dirname(__FILE__).'/tools/utils.php';
-
 /**
  * @author Dexx
  */
-abstract class QeyWork {
-    /** @var Params */
-    private $params;
-    protected $engine;
+class QeyWork {
+    const DEFAULT_HOME_PAGE = 'home';
+
+    /** @var Locations */
+    private $locations;
+    /** @var Autoloader */
     private $autoloader;
+    /** @var QeyWorkAssambler  */
+    protected $assembler;
+    /** @var Globals  */
+    private $globals;
+    /** @var IContentPostProcessor  */
+    protected $contentPostProcessor;
+    
+    protected $pages;
+    protected $actions;
+    
+    private $layout;
+
+    public function __construct(Locations $locations,
+            $indexPageClass,
+            $buildLater = false) {
+        
+        global $qeyWorkAutoloader;
+        $this->autoloader = $qeyWorkAutoloader;
+        $this->locations = $locations;
+        
+        $this->assembler = new QeyWorkAssambler();
+        $this->globals = new Globals();
+        
+        $this->pages = new PageRouteCollection($indexPageClass);
+        $this->actions = new ActionRouteCollection();
+        
+        if (! $buildLater) {
+            $this->build();
+        }
+    }
+    
+    public function configureDb(DBConfig $config) {
+        $this->assembler->configureDb($config);
+    }
+    
+    public function setAssembler(QeyWorkAssambler $assembler) {
+        $this->assembler = $assembler;
+    }
+    
+    /**
+     * @return QeyWorkAssambler
+     */
+    public function getAssembler() {
+        return $this->assembler;
+    }
+    
+    public function setGlobals(Globals $globals) {
+        $this->globals = $globals;
+    }
+    
+    public function getGlobals() {
+        return $this->globals;
+    }
+    
+    public function build() {
+        $this->assembler->setupIoC($this->locations, $this->globals);
+    }
+    
+    public function setLayout($layoutClass) {
+        $this->layout = $this->assembler->createLayout($layoutClass);
+        if (! $this->layout instanceof ILayout) {
+            throw new TypeException($this->layoutClass, 'ILayout');
+        }
+    }
+    
+    public function registerPageClass($token, $pageClass) {
+        $this->pages->addPageClass($token, $pageClass);
+    }
+    
+    public function registerActionClass($token, $actionClass) {
+        $this->actions->addActionClass($token, $actionClass);
+    }
+    
+    public function getLayout() {
+        if ($this->layout == null) {
+            $this->layout = $this->assembler->createLayout();
+        }
+        return $this->layout;
+    }
+    
+    public function registerPagePostprocessor($postProcessorClass) {
+        $this->assembler->registerPagePostProcessor($postProcessorClass);
+    }
+
+    public function registerContentPostProcessor($postProcessorClass) {
+        $this->contentPostProcessor = $this->assembler->getIoC()->create($postProcessorClass);
+    }
+    
+    public function addPageRouter(IPageRouter $router) {
+        $this->pages->addRouter($router);
+    }
+    
+    public function addActionRouter(IActionRouter $router) {
+        $this->actions->addRouter($router);
+    }
+
+    private function postProcess($renderedLayout)
+    {
+        if ($this->contentPostProcessor == null) {
+            return $renderedLayout;
+        }
+
+        return $this->contentPostProcessor->process($renderedLayout);
+    }
 
     /**
-     * @return IPageFactory
+     * Creates a page based on the URL
+     * @param string $defaultPage the page used if no URL parameter is defined
+     * @return type
      */
-    protected abstract function getApplicationPageFactory();
-    
-    /**
-     * @return IActionFactory
-     */
-    protected abstract function getApplicationActionFactory();
-        
-    /**
-     * @return Resources
-     */
-    protected abstract function assambleTheResources();
-    
-    /**
-     * @return ILayout
-     */
-    protected abstract function assambleTheLayout();
-    
-    /**
-     * @return User
-     */
-    protected function createUser(Session $session) {
-        $user = new User($session);
-        return $user;
-    }
-    
-    public function getName() {
-        $name = get_class($this);
-        $converter = new CaseConverter($name, CaseConverter::CASE_CAMEL);
-        return $converter->toUrlCase();
-    }
-    
-    public function __construct() {
-        $this->autoloader = new Autoloader(__NAMESPACE__, __DIR__, 'qeyWork');
-        
-        $resources = $this->assambleTheResources();
-        if (! $resources instanceof Resources) {
-            throw new ApplicationException(
-                'Implementation of QeyWebsite::assambleTheResources must return a Resources type'
-            );
-        }
-        
-        $user = $this->createUser($resources->getSession());        
-        if (! $user instanceof User) {
-            throw new ApplicationException(
-                'Implementation of QeyWebsite::createUser must return a User'
-            );
-        }
-        
-        $this->engine = new QeyEngine($resources, $user);
-        $this->params = $resources->getParams();
-    }
-    
-    protected function getLayout() {
-        $layout = $this->assambleTheLayout();
-        if (! $layout instanceof ILayout) {
-            throw new ApplicationException(
-                'Implementation of QeyWebsite::assambleTheLayout must return an ILayout'
-            );
-        }
-        
-        return $layout;
-    }
-    
-    protected function getPages($defaultPage) {
-        $pages = new PageFactoryCollection($defaultPage);
-        
-        $appPages = $this->getApplicationPageFactory();
-        if (! $appPages instanceof IPageFactory) {
-            throw new ApplicationException(
-                'Implementation of QeyWebsite::getApplicationPageFactory must return a IPageFactory'
-            );
-        }
-        
-        $pages->addFactory($appPages);
-        return $pages;
-    }
-    
-    public function createPage($defaultPage) {
+    public function render() {
         $layout = $this->getLayout();
-        $pages = $this->getPages($defaultPage);
-        
-        return $this->engine->createPage($layout, $pages);
+        try {
+            $this->assembler->setupIocForPageCreation($this->pages);
+
+            $pageHandler = $this->assembler->getPageHandler();
+            $pageClass = $pageHandler->getRequestedPage($this->pages);
+            if (is_string($pageClass)) {
+                $pageClass = $this->assembler->createPage($pageClass);
+            }
+            $page = $pageHandler->postProcess($pageClass);
+
+            $layout->setContent($page);
+            $renderedLayout = $layout->render();
+
+            $renderedLayout = $this->postProcess($renderedLayout);
+        }
+        catch (RouteException $e) {
+            $layout->setContent(new ErrorPage(404));
+            $renderedLayout = $layout->render();
+        }
+        catch (\Exception $e) {
+            $layout->setContent(new ErrorPage(500, $e));
+            $renderedLayout = $layout->render();
+        }
+
+        return $renderedLayout;
     }
     
-    public function processRequest() {
-        $resources = $this->engine->getResources();
-        $actions = new ActionFactoryCollection($resources->getParams());
+    public function run() {
+        $this->actions->addRouter(new QeyActionRouter());
         
-        $appAction = $this->getApplicationActionFactory();
-        if (! $appAction instanceof IActionFactory) {
-            throw new ApplicationException(
-                'Implementation of QeyWebsite::getApplicationActionFactory must return an IActionFactory'
-            );
-        }
+        /* @var $actionHandler ActionsHandler */
+        $actionHandler = $this->assembler->getActionHandler();
         
-        $actions->addFactory( $appAction );
-        $actions->addFactory( new QeyActionFactory($resources) );
-        
-        return $this->engine->processRequest($actions);
+        $actionClass = $actionHandler->getRequestedAction($this->actions);
+        $action = $this->assembler->createAction($actionClass);
+        return $action->execute();
     }
 }

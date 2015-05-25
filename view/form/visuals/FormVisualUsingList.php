@@ -26,7 +26,7 @@ class FormVisualUsingList extends FormVisualBasis {
         $h = new HtmlFactory();
         return $h->li()->id($id)->cls($class)->content(
             $h->label()->cls('form-entry-label')->text($label),
-            $input, $message,
+            $input, new HtmlWrapperNode($message),
             $h->span()->cls('form-entry-comment')->text($comment)
         );
     }

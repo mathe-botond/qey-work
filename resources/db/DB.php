@@ -17,22 +17,22 @@ class DB
     private $logger = null;
     
     /**
-     * @param DbConfig $dbConfigurator
+     * @param DbConfig $dbConfig
      * @param Logger $logger
      * @throws DbException
      */
-    public function __construct($dbConfigurator, $logger = null)
+    public function __construct(DBConfig $dbConfig, Logger $logger)
     {
         try
         {
-            $connectionStr = $dbConfigurator->protocol
-                    . ":" . "host=" . $dbConfigurator->host
-                    . ";dbname=" . $dbConfigurator->dbName;
+            $connectionStr = $dbConfig->protocol
+                    . ":" . "host=" . $dbConfig->host
+                    . ";dbname=" . $dbConfig->dbName;
             
             $this->db = new \PDO(
                     $connectionStr,
-                    $dbConfigurator->user,
-                    $dbConfigurator->password, 
+                    $dbConfig->user,
+                    $dbConfig->password, 
                     array(\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8")
                );
             $this->db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
@@ -63,6 +63,9 @@ class DB
                 $stmt->execute();
             } else {
                 foreach ($params as $key => $param) {
+                    if (is_numeric($key)) {
+                        $key += 1;
+                    }
                     $stmt->bindValue($key, $param, $this->getConstantByType($param));
                 }
                 $stmt->execute();
@@ -87,10 +90,8 @@ class DB
                     $model = new $type();
                     /* @var $model Model */
                     $model->setId($row['id']);
-                    foreach ($model as $field) {
-                        if ($field instanceof Field) {
-                            $field->setValue($row[$field->getName()]);
-                        }
+                    foreach ($model->getFields() as $field) {
+                        $field->setValue($row[$field->getName()]);
                     }
                     $data[ $row['id'] ] = $model;
                 }
@@ -176,51 +177,20 @@ class DB
      */
     public function search(
             Model $model,
-            $conditions = array(),
+            ConditionList $conditions = null,
             $order = null,
             $orderDir = DB::ORDER_ASC,
             $limit = null)
     {
         try
         {
-            $table = $model->persistanceData->getNameOfPersistanceObject();
-            
-            $conditionList = array();
+            $table = $model->getPersistenceData()->getNameOfPersistenceObject();      
             $valueList = array();
             
-            if (!is_array($conditions)) {
-                $conditions = array(); 
-            }
-            
-            foreach ($conditions as $name => $value) {
-                $condition = $name;
-                if (is_array($value)) {
-                    $condition .= ' IN ';
-                } else if (strpos($value, "%") !== false) {
-                    $condition .= ' LIKE ';
-                } else if ($value === null) {
-                    $condition .= ' IS ';
-                } else {
-                    $condition .= ' = ';
-                }
-                
-                if (is_array($value)) {
-                    $condition .= '(' . implode(',', array_fill(0, count($value), '?')) . ')';
-                    $valueList = array_merge($valueList, $value); 
-                } else if ($value === null) {
-                    $condition .= 'NULL';
-                } else {
-                    $condition .= '?';
-                    array_push($valueList, $value);
-                }
-                
-                $conditionList[] = $condition;
-            }
-            
             $query = "SELECT * FROM `$table`";
-            if (! empty($conditionList)) {
-                $conditions = implode($conditionList, ' AND ');
-                $query .= " WHERE " . $conditions;
+            if ($conditions != null) {
+                $query .= $conditions->toString();
+                $valueList = $conditions->getValues();
             }
             
             if (! empty($order)) {
@@ -236,21 +206,18 @@ class DB
                 $valueList = array_merge($valueList, $limit);
             }
             
-            $valueList = array_merge(array(0), array_values($valueList));
-            unset($valueList[0]);
-            
             $result = $this->query($query, $valueList, $model);
             //var_dump($query, $result);
             return $result;
         
         } catch(\PDOException $e) {
-            throw new DbException('Table search failed: ' . $e->getMessage() . var_dump(debug_backtrace()));
+            throw new DbException('Table search failed: ' . $e->getMessage());
         }
     }
     
     public function getUnique (
             Model $model,
-            $conditions = array()) {
+            ConditionList $conditions = null) {
         
         /* @var $result ModelList */
         $result = $this->search($model, $conditions);
@@ -267,14 +234,10 @@ class DB
     
     
     /**
-     * Get id of the record inserted last
+     * Get id of the model inserted last
      */
     public function lastId()
     {
         return $this->db->lastInsertId();
-    }
-    
-    public function getModelTableController(Model $model) {
-        return new ModelDbTableController($this, $model);
     }
 }

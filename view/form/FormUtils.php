@@ -79,36 +79,36 @@ class FormUtils {
         }
     }
     
-    public static function buildMultiField($record, $key) {
+    public static function buildMultiField($model, $key) {
         
         $visual = new BasicInputVisual();
-        $data = $record['datasource'];
+        $data = $model['datasource'];
         $values = FormUtils::getDataForMultiInputs($data['type'], $data);
         $inputList = array();
         foreach ($values as $value) {
-            $recordCopy = clone($record);
-            $inputList[] = self::buildInputField($recordCopy, $key, $value);
+            $modelCopy = clone($model);
+            $inputList[] = self::buildInputField($modelCopy, $key, $value);
         }
         
-        $inputList['empty'] = self::buildInputField($record, $key);
+        $inputList['empty'] = self::buildInputField($model, $key);
         return $visual->multiInput($inputList);
     }
 
-    public static function buildInputField($record, $key, $value = null) {
-        if (is_string($record->input)) {
-            $inputType = $record->input;
-            $record->input = new Descriptor();
+    public static function buildInputField($model, $key, $value = null) {
+        if (is_string($model->input)) {
+            $inputType = $model->input;
+            $model->input = new Descriptor();
         } else {
-            $inputType = $record->input->type;
-            unset($record->input->type);
+            $inputType = $model->input->type;
+            unset($model->input->type);
         }
         
-        if (isset($record->class)) $record->input->class .= " " . $record->class;
-        if (isset($record->style)) $record->input->style .= " " . $record->style;
-        $record->input->token = $key;
+        if (isset($model->class)) $model->input->class .= " " . $model->class;
+        if (isset($model->style)) $model->input->style .= " " . $model->style;
+        $model->input->token = $key;
         
-        if (isset($record['multiple']) && $record['multiple'] == true) {
-            $record->input->token .= '[]';
+        if (isset($model['multiple']) && $model['multiple'] == true) {
+            $model->input->token .= '[]';
         }
         
         $input = '';
@@ -116,40 +116,40 @@ class FormUtils {
         switch ($inputType) {
             case 'text':
             case 'wymeditor':
-                $input = qeyNode('textarea')->attr($record->input->getRaw())->text(empty($value) ? "" : $value);
+                $input = qeyNode('textarea')->attr($model->input->getRaw())->text(empty($value) ? "" : $value);
                 break;
         
             case 'varchar':
             case 'date':
-                $record->input->type = 'text';
-                $record->input->value = $value;
-                $input = qeyNode('input')->attr($record->input->getRaw());
+                $model->input->type = 'text';
+                $model->input->value = $value;
+                $input = qeyNode('input')->attr($model->input->getRaw());
                 break;
         
             case 'password':
-                $record->input->type = 'password';
-                $record->input->value = $value;
-                $input = qeyNode('input')->attr($record->input->getRaw());
+                $model->input->type = 'password';
+                $model->input->value = $value;
+                $input = qeyNode('input')->attr($model->input->getRaw());
                 break;
         
             case 'select':
-                $input = qeyNode('select')->attr($record->input->getRaw());
+                $input = qeyNode('select')->attr($model->input->getRaw());
                 
-                if (isset($record['add-empty-field'])) {
-                    $record->add_empty_field = $record['add-empty-field'];
+                if (isset($model['add-empty-field'])) {
+                    $model->add_empty_field = $model['add-empty-field'];
                 }
-                if (isset($record->add_empty_field) && $record->add_empty_field) {
+                if (isset($model->add_empty_field) && $model->add_empty_field) {
                     $input->append(qeyNode('option')->val(''));
                 }
         
-                if (isset($record['datasource'])) {
+                if (isset($model['datasource'])) {
                     $options = FormUtils::getDataForSelect(
-                            $record['datasource']['source'],
-                            $record['datasource']['model'],
-                            $record['datasource']['key'],
-                            $record['datasource']['value']);
-                } else if (isset($record['options'])) {
-                    $options = $record['options'];
+                            $model['datasource']['source'],
+                            $model['datasource']['model'],
+                            $model['datasource']['key'],
+                            $model['datasource']['value']);
+                } else if (isset($model['options'])) {
+                    $options = $model['options'];
                 } else {
                     $options = array(); //empty array
                 }
@@ -165,20 +165,20 @@ class FormUtils {
                 
             case 'model-connector':
                 $visual = new BasicInputVisual();
-                $data = $record['datasource'];
+                $data = $model['datasource'];
                 $options = FormUtils::getDataForModelConnector($data['type'], $data);
                 $input = $visual->modelConnector(
-                    $record->input->token,
+                    $model->input->token,
                     $options['selected'],
                     $options['source'],
-                    $record->input->getRaw()
+                    $model->input->getRaw()
                 );
                 break;
             case 'radio':
                 $first = true;
-                $record->input->type = 'radio';
-                foreach ($record['options'] as $optionKey => $optionValue) {
-                    $radioNode = qeyNode('input')->attr($record->input->getRaw())->val($optionKey);
+                $model->input->type = 'radio';
+                foreach ($model['options'] as $optionKey => $optionValue) {
+                    $radioNode = qeyNode('input')->attr($model->input->getRaw())->val($optionKey);
         
                     if ((string)$value === (string)$optionKey || $first && empty($value)) {
                         //set value or set first item as selected
@@ -191,10 +191,10 @@ class FormUtils {
                 break;
         
             case 'checkbox':
-                $record->input->type = 'checkbox';
-                $record->input->token .= '[]';
-                foreach ($record['options'] as $optionKey => $optionValue) {
-                    $checkboxNode = qeyNode('input')->attr($record->input->getRaw())->val($optionKey);
+                $model->input->type = 'checkbox';
+                $model->input->token .= '[]';
+                foreach ($model['options'] as $optionKey => $optionValue) {
+                    $checkboxNode = qeyNode('input')->attr($model->input->getRaw())->val($optionKey);
         
                     if (! empty($value) &&
                             array_search((string)$optionKey, $value) !== false ) {
@@ -206,11 +206,11 @@ class FormUtils {
                 break;
         
             case 'file':
-                $record->input->id = $key;
-                $record->input->type = 'file';
-                $record->input->value = $value;
-                if (!empty($value)) $record->input->style = "display:none; $record->input->style";
-                $input = qeyNode('input')->attr($record->input->getRaw());
+                $model->input->id = $key;
+                $model->input->type = 'file';
+                $model->input->value = $value;
+                if (!empty($value)) $model->input->style = "display:none; $model->input->style";
+                $input = qeyNode('input')->attr($model->input->getRaw());
                 if (!empty($value)) {
                     $deleteLink =
                     qeyNode('a')->attr(array(
@@ -222,15 +222,15 @@ class FormUtils {
                 break;
         
             case 'file-list':
-                $record->input->type = 'file';
-                $record->input->multiple = 'true';
-                $record->input->token .= '[]';
-                for ($i = 0; $i < $record['count']; $i++)
-                    $input .= qeyNode('input')->attr($record->input->getRaw());
+                $model->input->type = 'file';
+                $model->input->multiple = 'true';
+                $model->input->token .= '[]';
+                for ($i = 0; $i < $model['count']; $i++)
+                    $input .= qeyNode('input')->attr($model->input->getRaw());
                 break;
         }
         
-        if (isset($record['readonly']) && $record['readonly'] == true) {
+        if (isset($model['readonly']) && $model['readonly'] == true) {
             $input->readonly("true");
         }
         

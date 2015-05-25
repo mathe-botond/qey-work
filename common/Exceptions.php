@@ -27,6 +27,11 @@ class ArgumentException extends \Exception {}
 class ResourceException extends \Exception {}
 
 /**
+ * Used when there is a problem with routing
+ */
+class RouteException extends \Exception {}
+
+/**
  * Used when a problem is detected with client side data 
  * (GET or POST data, cookies etc.).
  * ValidationException should be used for validations 

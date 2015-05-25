@@ -6,18 +6,16 @@ class ModelListView {
     protected $visual;
     protected $display;
 
-    public function __construct(ModelList $modelList, ModelDisplay $display, IModelListViewVisual $visual = null) {
-        if ($visual == null) {
-            $visual = new ModelListViewVisual();
-        }
-        
-        $this->modelList = $modelList;
+    public function __construct(ModelDisplay $display, IModelListViewVisual $visual) {
         $this->visual = $visual;
         $this->display = $display;
-        
+    }
+    
+    public function setModelList(ModelList $modelList) {
+        $this->modelList = $modelList;
         $type = $this->modelList->getModelType();
         try {
-            $display->injectModel($type);
+            $this->display->injectModel($type);
         } catch(q\TypeException $e) {
             throw new ArgumentException('ModelList type incompatible with modelDisplay type: ' . $e->getMessage());
         }

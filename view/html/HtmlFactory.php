@@ -66,6 +66,7 @@ namespace qeywork;
  * @method HtmlNode select() Creates a node of select
  * @method HtmlNode small() Creates a node of small
  * @method HtmlNode span() Creates a node of span
+ * @method HtmlNode source() Creates a node of ul
  * @method HtmlNode strike() Creates a node of strike
  * @method HtmlNode strong() Creates a node of strong
  * @method HtmlNode style() Creates a node of style
@@ -82,9 +83,10 @@ namespace qeywork;
  * @method HtmlNode tr() Creates a node of tr
  * @method HtmlNode u() Creates a node of u
  * @method HtmlNode ul() Creates a node of ul
+ * @method HtmlNode video() Creates a node of ul
  */
 class HtmlFactory {
-    private static $selfClosedTags = array('br', 'hr', 'meta', 'link', 'input', 'img');
+    private static $selfClosedTags = array('br', 'hr', 'meta', 'link', 'input', 'img', 'source');
     /**
      * @param string $tag
      * @param HtmlContainer $content

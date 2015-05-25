@@ -6,5 +6,5 @@ namespace qeywork;
  */
 interface IPersistentData {
     public function getPersistannceName();
-    public function getNameOfPersistanceObject();
+    public function getNameOfPersistenceObject();
 }

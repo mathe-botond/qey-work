@@ -27,13 +27,6 @@ class HtmlNode implements IHtmlEntity
         $this->children = new HtmlEntityList();
     }
     
-    protected function cleanType($value) {
-        if ($value instanceof Field) {
-            return $value->value();
-        }
-        return $value;
-    }
-    
     /**
      * Add an attrivute to yourt element
      * @param string $mixed
@@ -52,14 +45,12 @@ class HtmlNode implements IHtmlEntity
             $mixed .= ''; //convert to string if possible
         }
         
-        if (is_string($mixed)) {
-            $cleanValue = $this->cleanType($value);
-            $this->attributes[$mixed] = $cleanValue;
-        } else {
+        if (is_array($mixed)) {
             foreach ($mixed as $key => $value) {
-                $cleanValue = $this->cleanType($value);
-                $this->attributes[$key] = $cleanValue;
+                $this->attributes[$key] = $value;
             }
+        } else {
+            $this->attributes[$mixed] = $value . '';
         }
         return $this;
     }
@@ -92,8 +83,7 @@ class HtmlNode implements IHtmlEntity
      */
     public function cls($class)
     {
-        $cleanClass = $this->cleanType($class);
-        $classes = explode(' ', trim($cleanClass));
+        $classes = explode(' ', trim($class));
         foreach ($classes as $class) {
             if (!empty($class)) {
                 $this->classes[$class] = $class;
@@ -108,7 +98,6 @@ class HtmlNode implements IHtmlEntity
     }
     
     public function text($text) {
-        $text = $this->cleanType($text);
         $this->content(new TextNode(htmlspecialchars($text)));
         return $this;
     }
@@ -124,27 +113,32 @@ class HtmlNode implements IHtmlEntity
         return $this;
     }
     
-    public function append($mixed)
-    {
-        if ($mixed == NULL) {
+    public function htmlContent($html) {
+        $this->clean();
+        $this->children[] = new HtmlWrapperNode($html);
+        return $this;
+    }
+    
+    public function append(IHtmlEntity $item) {
+        if ($item == NULL) {
             return $this;
         }
         
-        $mixed = $this->cleanType($mixed);
-        
-        if ($mixed instanceof HtmlEntityList) {        
-            foreach ($mixed as $item) {
+        if ($item instanceof HtmlEntityList) {        
+            foreach ($item as $item) {
                 $this->children[] = $item;
             }
-        } else if ($mixed instanceof IHtmlEntity) {
-            $this->children[] = $mixed;
-        } else if (is_string($mixed)) {
-            $this->children[] = new TextNode($mixed);
+        } else if ($item instanceof IHtmlEntity) {
+            $this->children[] = $item;
         } else {
-            throw new ArgumentException('$mixed must be an IHtmlEntity, ' . gettype($mixed) . ' given.');
+            throw new ArgumentException('$mixed must be an IHtmlEntity, ' . gettype($item) . ' given: ' . var_export($item)); 
         }
             
         return $this;
+    }
+    
+    public function add(IHtmlEntity $item) {
+        $this->append($item);
     }
     
     public function __call($func, $attrs) {
@@ -164,11 +158,11 @@ class HtmlNode implements IHtmlEntity
         return clone $this;
     }
     
-     public function render() {
+    public function render() {
         return $this;
     }
     
-    public function __toString() {
+    public function toString() {    
         $html = '<' . $this->tag;
         
         if ($this->idAttr !== null) {
@@ -193,5 +187,9 @@ class HtmlNode implements IHtmlEntity
         }
         
         return $html;
+    }
+    
+    public function __toString() {
+        return $this->toString();
     }
 }

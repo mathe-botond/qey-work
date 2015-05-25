@@ -2,10 +2,18 @@
 namespace qeywork;
 
 class Params 
-{ 
+{
+
+    /**
+     * @var Globals
+     */
+    private $globals;
+
     const ALL      = 0;
     const GET      = 1;
     const POST     = 2;
+    const COSTUM   = 3;
+    
     
     private $alias;
     private $method;
@@ -15,22 +23,10 @@ class Params
     protected $args = array();
     protected $target = null;
     
-    public function shiftTarget() {
-        if (count($this->args) >= 1) {
-            $this->target = array_shift($this->args);
-        } else {
-            $this->target = null;
-        }
-    }
-    
-    public function __construct()
+    public function __construct(Globals $globals, $method = self::ALL)
     {
-        $this->method = Params::ALL;
-        $this->alias = $_REQUEST;
-        
-        $this->args = explode('/', trim( $_GET['_target'] , '/'));
-        
-        $this->shiftTarget();
+        $this->globals = $globals;        
+        $this->setMethod($method);
     }
     
     public function getMethod()
@@ -38,21 +34,25 @@ class Params
         return $this->method;
     }
     
-    public function setMethod($method)
+    public function setMethod($method, array $alias = array())
     {
         $this->method = $method;
         switch ($this->method)
         {
             case Params::GET:
-                $this->alias = $_GET;
+                $this->alias = $this->globals->getGlobal(Globals::KEY_GET);
                 break;
             
             case Params::POST:
-                $this->alias = $_POST;
+                $this->alias = $this->globals->getGlobal(Globals::KEY_POST);
                 break;
             
             case Params::ALL:
-                $this->alias = $_REQUEST;
+                $this->alias = $this->globals->getGlobal(Globals::KEY_REQUEST);
+                break;
+            
+            case Params::COSTUM:
+                $this->alias = $alias;
                 break;
             
             default:
@@ -64,7 +64,12 @@ class Params
     {
         return isset($this->alias[$name]);
     }
-    
+
+    /**
+     * @param string $name
+     * @throws ClientDataException
+     * @return string
+     */
     public function get($name)
     {
         $converter = new CaseConverter($name, CaseConverter::CASE_CAMEL);
@@ -83,11 +88,6 @@ class Params
     public function __get($name) {
         return $this->get($name);
     }
-	
-    public function getRequestedTarget()
-    {
-        return $this->target;
-    }
     
     public function getArgs()
     {
@@ -104,5 +104,9 @@ class Params
                 }
             }
         }
+    }
+
+    public function isPosted() {
+        return $_SERVER['REQUEST_METHOD'] == 'POST';
     }
 }

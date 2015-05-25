@@ -32,12 +32,16 @@ class HtmlEntityList extends SmartArray implements IHtmlEntity {
         return parent::__set($index, $newval);
     }
     
-    public function __toString() {
+    public function toString() {
         $return = '';
         foreach ($this->getArray() as $items) {
             $return .= $items->__toString();
         }
         return $return;
+    }
+    
+    public function __toString() {
+        return $this->toString();
     }
     
     public function add(IHtmlEntity $value) {

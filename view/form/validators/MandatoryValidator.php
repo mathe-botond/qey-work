@@ -6,10 +6,10 @@ namespace qeywork;
  */
 class MandatoryValidator extends Validator {
     const VALIDATOR_NAME = 'mandatory';
-    const VALIDATOR_MESSAGE = 'This field is mandatory';
+    const DEFAULT_MESSAGE = 'This field is mandatory';
     
-    public function __construct() {
-        $this->message = self::VALIDATOR_MESSAGE;
+    public function __construct($message = self::DEFAULT_MESSAGE) {
+        $this->setMessage($message);
     }
     
     public function validate($value) {

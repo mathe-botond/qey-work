@@ -11,6 +11,7 @@ class Url extends AbstractPath
 {
     public $domain;
     public $fields;
+    public $hash;
     
     /**
      * Constructor of this class
@@ -57,12 +58,12 @@ class Url extends AbstractPath
         }
     }
     
-    public static function getCurrentDomain()
+    public static function getCurrentDomain(array $serverVar)
     {
-        if ($_SERVER["SERVER_PORT"] != 80) {
-            return "http://" . $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"];
+        if (isset($serverVar["SERVER_PORT"]) && $serverVar["SERVER_PORT"] != 80) {
+            return "http://" . $serverVar["SERVER_NAME"] . ":" . $serverVar["SERVER_PORT"];
         } else {
-            return "http://" . $_SERVER["SERVER_NAME"];
+            return "http://" . $serverVar["SERVER_NAME"];
         }
     }
     
@@ -115,6 +116,13 @@ class Url extends AbstractPath
         return $this->fields;
     }
     
+    public function setHash($hash) {
+        $copy = $this->getCopy();
+        $copy->hash = trim($hash, '#');
+        return $copy;
+    }
+
+
     /**
      * Generates a string representing this path
      */
@@ -138,6 +146,11 @@ class Url extends AbstractPath
             }
             $path .= implode('&', $query);
         }
+        
+        if (!empty($this->hash)) {
+            $path .= '#' . $this->hash;
+        }
+        
         return $path;
     }
     

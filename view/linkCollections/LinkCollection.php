@@ -9,7 +9,7 @@ abstract class LinkCollection implements ILinkCollection
         $this->files = array();
     }
     
-    protected function addSingle(Url $file) {
+    protected function addSingle($file) {
         $this->files[] = $file;
     }
     

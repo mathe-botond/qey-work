@@ -18,7 +18,7 @@ class FormDropDownField extends FormField {
         $this->label = $label;
     }
     
-    public function setOptionList(SmartArray $options) {
+    public function setOptionList(array $options) {
         $this->options = $options;
     }
 
@@ -31,9 +31,11 @@ class FormDropDownField extends FormField {
         /* @var $input HtmlNode */
         $input = $h->select()->name($this->getName());
         foreach ($this->options as $id => $option) {
-            $input->append(
-                $h->option()->value($id)->content($option)
-            );
+            $item = $h->option()->value($id)->text($option);
+            if ($this->field->value() == $id) {
+                $item->selected();
+            }
+            $input->append($item);
         }
         return $input;
     }

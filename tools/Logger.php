@@ -37,7 +37,7 @@ class Logger
 
     private $file_handle;
 
-    public function __construct($logFilePath, $priority = Logger::DEBUG )
+    public function __construct($logFilePath, $priority = Logger::WARN )
     {
         if ( $priority == Logger::OFF ) return;
 

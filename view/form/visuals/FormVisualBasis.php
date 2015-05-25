@@ -7,33 +7,35 @@ namespace qeywork;
  * @author Dexx
  */
 abstract class FormVisualBasis implements IFormVisual {
+
+    /** @var HtmlFactory */
+    private $h;
+    
     protected $submitLabel;
     
-    public function __construct($submitLabel = null) {
+    public function __construct(HtmlFactory $h, $submitLabel = null) {
         $this->submitLabel = $submitLabel;
+        $this->h = $h;
     }
     
     public function message($id, $class, $messages) {
-        $h = new HtmlFactory();
-        $messageContainer = $h->ul()->id($id)->cls($class);
+        $messageContainer = $this->h->ul()->id($id)->cls($class);
         foreach ($messages as $key => $message) {
-            $messageContainer->append($h->li()->cls($key)->text($message));
+            $messageContainer->append($this->h->li()->cls($key)->text($message));
         }
         return $messageContainer;
     }
     
     public  function submit() {
         $submit = ($this->submitLabel == '') ? 'Submit' : $this->submitLabel;
-        $h = new HtmlFactory();
-        return $h->tr()->cls('submit')->content(
-            $h->td()->attr('colspan', '2')->content(
-                 $h->input()->type('submit')->cls('button')->value($submit)
+        return $this->h->tr()->cls('submit')->content(
+            $this->h->td()->attr('colspan', '2')->content(
+                $this->h->input()->type('submit')->cls('button')->value($submit)
             )
         );
     }
     
     public function hiddenSubmitData($name, $value) {
-        $h = new HtmlFactory();
-        return $h->input()->type('hidden')->name($name)->value($value);
+        return $this->h->input()->type('hidden')->name($name)->value($value);
     }
 }

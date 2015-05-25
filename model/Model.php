@@ -4,7 +4,12 @@ namespace qeywork;
 /**
  * @author Dexx
  */
-class Model implements IModelEntity {
+class Model extends Friendly {
+    const FIELD = 'field';
+    
+    /** @var IPersistentData */
+    private $persistenceData;
+
     const ID_FIELD_NAME = 'id';
     protected $id;
     protected $idField;
@@ -15,28 +20,35 @@ class Model implements IModelEntity {
         if ($this->fields == null) {
             $this->fields = new SmartArray();
         }
-        
-        foreach ($this as $field) {
-            if ($field instanceof Field && $field->getName() != self::ID_FIELD_NAME) {
-                $this->add($field);
+
+        foreach ($this as $key => $field) {
+            if (in_array($key, array('id', 'fields'))) {
+                continue;
+            }
+            
+            if ($field == null) {
+                $converter = new CaseConverter($key, CaseConverter::CASE_CAMEL);
+                $this->$key = new Field($converter->toUnderscoredCase());
+            }
+                
+            if ($this->$key instanceof Field && $this->$key->getName() != self::ID_FIELD_NAME) {
+                $this->add($this->$key);
             }
         }
     }
     
-    public function __construct() {
-        $this->addClassPropertiesAsFields();
+    public function __construct(IPersistentData $persistenceData) {
+        parent::__construct(array('WrapperField'));
+        
         $this->idField = new Field(self::ID_FIELD_NAME);
+        
+        $this->persistenceData = $persistenceData;
+        
+        $this->addClassPropertiesAsFields();
     }
     
     public function add(Field $field) {
         $this->fields[ $field->getName() ] = $field;
-    }
-    
-    /** @var IPersistentData $persistanceData Data concerning persistance */
-    public $persistanceData; 
-    
-    public function setPersistanceData(IPersistentData $persistanceData) {
-        $this->persistanceData = $persistanceData;
     }
     
     public function getId() {
@@ -66,5 +78,9 @@ class Model implements IModelEntity {
                     ' (you forgot to call the constructor or Model::addClassPropertiesAsFields() )');
         }
         return $this->fields;
+    }
+    
+    public function getPersistenceData() {
+        return $this->persistenceData;
     }
 }

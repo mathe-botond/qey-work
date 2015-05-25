@@ -6,7 +6,7 @@ namespace qeywork;
  *
  * @author Dexx
  */
-class Field implements IModelEntity{
+class Field implements IModelEntity, IHtmlEntity {
     protected $name;
     protected $value;
     
@@ -28,10 +28,19 @@ class Field implements IModelEntity{
     }
     
     public function isEmpty() {
-        return empty($this->value);
+        $value = $this->value();
+        return empty($value);
     }
 
     public function __toString() {
+        return $this->toString();
+    }
+
+    public function render() {
+        return $this;
+    }
+
+    public function toString() {
         return $this->value() . '';
     }
 }

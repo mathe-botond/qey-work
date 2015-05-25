@@ -19,7 +19,7 @@ class DbExpression {
         return $this->params;
     }
     
-    public function __toString() {
+    public function toString() {
         return $this->expression;
     }
 }

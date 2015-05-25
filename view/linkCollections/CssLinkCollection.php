@@ -11,6 +11,12 @@ class CssLinkCollection extends LinkCollection implements ICssLinkCollection
     /** @var Url */
     protected $cssLocation;
     
+    public function __construct(Locations $loc) {
+        $this->cssLocation = $loc->css;
+        
+        parent::__construct();
+    }
+    
     public function setCssLocation(Url $cssLocation) {
         $this->cssLocation = $cssLocation;
     }

@@ -67,9 +67,9 @@ class EditableModelListView {
         
         $keys = $this->modelType->keys();
         foreach ($keys as $key) {
-            $record = $this->modelType->getFullFieldRecord($key);
-            if (isset($record['show']) && $record['show'] === true || isset($record['label'])) {
-                $label = isset($record['label']) ? $record['label'] : '';
+            $model = $this->modelType->getFullFieldModel($key);
+            if (isset($model['show']) && $model['show'] === true || isset($model['label'])) {
+                $label = isset($model['label']) ? $model['label'] : '';
                 
                 $view->headerCell($label);
                 $headerCells[] = Buffer::flush(false);
@@ -94,22 +94,22 @@ class EditableModelListView {
         foreach ($modelList as $model) {
             $cells = array();
             foreach ($displayedKeys as $key) {
-                $record = $model->getFullFieldRecord($key);
+                $model = $model->getFullFieldModel($key);
                 
-                $value = isset($record['value']) ? $record['value'] : '';
+                $value = isset($model['value']) ? $model['value'] : '';
 
-                if (isset($record['input'])) {
-                    switch ($record['input']) {
+                if (isset($model['input'])) {
+                    switch ($model['input']) {
                         case 'select':
-                            if (isset($record['options'])) {
-                                $value = $record['options'][$value];
+                            if (isset($model['options'])) {
+                                $value = $model['options'][$value];
                             } 
-                            else if (isset($record['datasource'])) {
+                            else if (isset($model['datasource'])) {
                                 $options = FormUtils::getDataForSelect(
-                                    $record['datasource']['source'],
-                                    $record['datasource']['model'],
-                                    $record['datasource']['key'],
-                                    $record['datasource']['value']);
+                                    $model['datasource']['source'],
+                                    $model['datasource']['model'],
+                                    $model['datasource']['key'],
+                                    $model['datasource']['value']);
                                 //TODO: default value ^
                                 $value = (isset($options[$value])) ? $options[$value] : ' - ';
                             }
@@ -117,7 +117,7 @@ class EditableModelListView {
 
                         case 'radio':
                         case 'checkbox':
-                            $value = $record['options'][$value];
+                            $value = $model['options'][$value];
                             break;
 
                         case 'file':

@@ -16,6 +16,27 @@ class MenuVisualUsingLists implements IMenuVisual {
         return $menu;
     }
     
+    protected function createLabel($label, $name) {
+        $h = new HtmlFactory();
+        return $h->span()->cls($name . 'label menu-item-label')->text($label);
+    }
+    
+    protected function createIcon($iconImage, $name) {
+        $h = new HtmlFactory();
+        if ($iconImage != null) {
+            return $h->img()->cls($name . 'icon menu-item-icon')->attr('src', $iconImage);
+        }
+        return new NullHtml();
+    }
+    
+    protected function createLink($label, Url $target, $name, $iconImage) {
+        $h = new HtmlFactory();
+        return $h->a()->cls($name . 'link menu-item-link')->href($target)->content (
+            $this->createLabel($label, $name),
+            $this->createIcon($iconImage, $name)
+        );
+    }
+    
     public function item(
             $label,
             Url $target,
@@ -30,16 +51,9 @@ class MenuVisualUsingLists implements IMenuVisual {
         }
         
         $h = new HtmlFactory();
-        $icon = '';
-        if ($iconImage != null) {
-            $icon = $h->img()->cls($name . 'icon')->attr('src', $iconImage);
-        }
         
         $item = $h->li()->content(
-            $h->a()->cls($name . 'link')->href($target)->content(
-                $h->span()->cls($name . 'label')->text($label),
-                $icon
-            )
+            $this->createLink($label, $target, $name, $iconImage)
         );
         
         if ($class != null) {
