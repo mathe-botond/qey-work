@@ -2,11 +2,16 @@
 namespace qeywork;
 
 class MenuVisualUsingLists implements IMenuVisual {
-    /** @var HtmlFactory */
+    /** @var HtmlBuilder */
+    private $h;
+
+    public function __construct(HtmlBuilder $h) {
+        $this->h = $h;
+    }
 
     public function menu($content, $id = null, $class = null) {
-        $h = new HtmlFactory();
-        $menu = $h->nav()->content($content);
+
+        $menu = $this->h->nav()->content($content);
         if ($class !== null) {
             $menu->cls($class);
         }
@@ -17,21 +22,20 @@ class MenuVisualUsingLists implements IMenuVisual {
     }
     
     protected function createLabel($label, $name) {
-        $h = new HtmlFactory();
-        return $h->span()->cls($name . 'label menu-item-label')->text($label);
+        return $this->h->span()->cls($name . 'label menu-item-label')->text($label);
     }
     
     protected function createIcon($iconImage, $name) {
-        $h = new HtmlFactory();
+
         if ($iconImage != null) {
-            return $h->img()->cls($name . 'icon menu-item-icon')->attr('src', $iconImage);
+            return $this->h->img()->cls($name . 'icon menu-item-icon')->attr('src', $iconImage);
         }
         return new NullHtml();
     }
     
     protected function createLink($label, Url $target, $name, $iconImage) {
-        $h = new HtmlFactory();
-        return $h->a()->cls($name . 'link menu-item-link')->href($target)->content (
+        $name = str_replace('/', '-', $name);
+        return $this->h->a()->cls($name . 'link menu-item-link')->href($target)->content (
             $this->createLabel($label, $name),
             $this->createIcon($iconImage, $name)
         );
@@ -50,9 +54,9 @@ class MenuVisualUsingLists implements IMenuVisual {
             $name .= '-';
         }
         
-        $h = new HtmlFactory();
+
         
-        $item = $h->li()->content(
+        $item = $this->h->li()->content(
             $this->createLink($label, $target, $name, $iconImage)
         );
         
@@ -65,15 +69,15 @@ class MenuVisualUsingLists implements IMenuVisual {
         }
         
         if ($submenu != null) {
-            $item->append($submenu->render());
+            $item->append($submenu->render($h));
         }
         
         return $item;
     }
     
     public function itemGroup($items, $class = null) {
-        $h = new HtmlFactory();
-        $group = $h->ul()->content($items);
+
+        $group = $this->h->ul()->content($items);
         if ($class !== null) {
             $group->cls($class);
         }

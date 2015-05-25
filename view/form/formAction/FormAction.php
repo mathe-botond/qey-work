@@ -35,7 +35,7 @@ abstract class FormAction implements IAction {
             $result = $this->validate($this->form);
         }
         if ($result === true) { //no validation error occured
-            $result = $this->executeOnModel($this->form->getModel());
+            $result = $this->executeOnEntity($this->form->getEntity());
         
             $this->formHandler->removeSubmittedForm();
         
@@ -59,7 +59,7 @@ abstract class FormAction implements IAction {
     }
     
     /**
-     * Use this function to modify your model before validating it
+     * Use this function to modify your entity before validating it
      *   (e.g. remove a validator)
      */
     protected function beforeValidate(FormData $form) {
@@ -69,5 +69,5 @@ abstract class FormAction implements IAction {
         return true;
     }
     
-    public abstract function executeOnModel(Model $model);
+    public abstract function executeOnEntity(Entity $entity);
 }

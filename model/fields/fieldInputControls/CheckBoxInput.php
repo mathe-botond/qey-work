@@ -7,12 +7,10 @@ namespace qeywork;
 class CheckBoxInput extends TextInput {
     protected $label;
     
-    public function render() {
-        $h = new HtmlFactory();
+    public function render(HtmlBuilder $h) {
+        $labeledInput = new HtmlObjectList();
         
-        $labeledInput = new HtmlEntityList();
-        
-        /* @var $input IHtmlEntity */
+        /* @var $input IHtmlObject */
         $input = $h->input()
             ->type('checkbox')
             ->cls($this->class)

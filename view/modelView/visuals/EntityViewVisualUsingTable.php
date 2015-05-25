@@ -1,15 +1,15 @@
 <?php
 namespace qeywork;
 
-class ModelViewVisualUsingTable implements IModelViewVisual{
+class EntityViewVisualUsingTable implements IEntityViewVisual{
     protected $h;
     
     public function __construct() {
-        $this->h = new HtmlFactory();
+        $this->h = new HtmlBuilder();
     }
     
     public function base($entries) {
-        return $this->h->table($entries)->cls('model-view');
+        return $this->h->table($entries)->cls('entity-view');
     }
     
     public function entry($label, $value) {

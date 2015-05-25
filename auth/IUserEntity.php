@@ -4,6 +4,6 @@ namespace qeywork;
 /**
  * @author Dexx
  */
-interface IUserModel {
+interface IUserEntity {
     public function isAdmin();
 }

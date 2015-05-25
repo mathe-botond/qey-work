@@ -6,5 +6,5 @@ namespace qeywork;
  * @author Dexx
  */
 interface IRenderable {
-    public function render();
+    public function render(HtmlBuilder $h);
 }

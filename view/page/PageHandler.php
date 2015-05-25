@@ -25,7 +25,7 @@ class PageHandler {
     }
     
     public function postProcess(IPage $page) {
-        if ($this->token->toString() == PageRouteCollection::INDEX_TOKEN) {
+        if ($this->token->isFrontPage()) {
             $page->setType(Page::FRONT_PAGE);
         }
             

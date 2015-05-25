@@ -11,8 +11,8 @@ class FormRichTextField extends FormTextField {
         //but this time don't do anything
     }
 
-    public function render() {
-        $input = parent::render();
+    public function render(HtmlBuilder $h) {
+        $input = parent::render($h);
         $input->cls('rich-text-editor');
         return $input;
     }

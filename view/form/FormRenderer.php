@@ -2,7 +2,7 @@
 namespace qeywork;
 
 /**
- * Renders a form, based on a model and a form visual 
+ * Renders a form, based on a entity and a form visual
  */
 class FormRenderer {
     protected $attributes = array(
@@ -47,10 +47,10 @@ class FormRenderer {
     
     protected function createHiddenData() {
         $hidden = $this->formData->getHiddenFields();
-        $rendered = new HtmlEntityList();
+        $rendered = new HtmlObjectList();
         foreach ($hidden as $field) {
             /* @var $field FormHiddenField */
-            $rendered->add($field->render());
+            $rendered->add($field->render($h));
         }
         return $rendered;
     }
@@ -58,7 +58,7 @@ class FormRenderer {
     /**
      * Builds form
      */
-    public function render()
+    public function render(HtmlBuilder $h)
     {
         $formData = $this->formData;
         
@@ -74,14 +74,14 @@ class FormRenderer {
         //create hidden input
         $hiddenData = $this->createHiddenData();
         
-        $entryList = new HtmlEntityList();
+        $entryList = new HtmlObjectList();
         $fields = $formData->getFields();
         foreach ($fields as $field) {
             if (! $field instanceof FormField) {
                 continue;
             }
             
-            $input = $field->render();
+            $input = $field->render($h);
             
             $key = $field->getName();
             if (! $field->isValid()) {
@@ -106,7 +106,7 @@ class FormRenderer {
             );
         }
         
-        $submit = $formData->getSubmit()->render();
+        $submit = $formData->getSubmit()->render($h);
         
         $form = $this->formVisual->base(
             $this->attributes,

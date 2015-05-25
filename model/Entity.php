@@ -4,7 +4,7 @@ namespace qeywork;
 /**
  * @author Dexx
  */
-class Model extends Friendly {
+class Entity extends Friendly {
     const FIELD = 'field';
     
     /** @var IPersistentData */
@@ -75,7 +75,7 @@ class Model extends Friendly {
     public function getFields() {
         if ($this->fields == null) {
             throw new \BadMethodCallException('Field array is undefined on ' . get_class($this) .
-                    ' (you forgot to call the constructor or Model::addClassPropertiesAsFields() )');
+                    ' (you forgot to call the constructor or Entity::addClassPropertiesAsFields() )');
         }
         return $this->fields;
     }

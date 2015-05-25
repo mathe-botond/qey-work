@@ -16,7 +16,12 @@ class ActionRouteCollection {
     public function addRouter(IActionRouter $router) {
         $this->routers[] = $router;
     }
-    
+
+    /**
+     * @param Arguments $target
+     * @return IAction
+     * @throws RouteException
+     */
     public function getCurrentAction(Arguments $target) {
         $action = $this->defaultRouter->getAction($target);
         if ($action != null) {

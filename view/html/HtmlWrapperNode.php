@@ -4,14 +4,18 @@ namespace qeywork;
 /**
  * @author Dexx
  */
-class HtmlWrapperNode extends HtmlEntity {
+class HtmlWrapperNode implements IHtmlObject {
     protected $content;
     
     public function __construct($content) {
         $this->content = $content . '';
     }
 
-    public function render() {
+    public function toString() {
         return $this->content;
+    }
+
+    public function __toString() {
+        return $this->toString();
     }
 }

@@ -125,7 +125,7 @@ abstract class AbstractPath implements IRenderable {
     public abstract function toString();
     public abstract function __toString();
     
-    public function render() {
+    public function render(HtmlBuilder $h) {
         return $this->toString();
     }
 }

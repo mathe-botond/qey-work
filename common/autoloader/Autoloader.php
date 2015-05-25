@@ -87,9 +87,11 @@ class Autoloader {
             unlink($this->file);
         }
         $this->init();
+        $this->status = 1;
     }
     
     protected function gatherClassFiles() {
+        clearstatcache();
         $dirIt = new \RecursiveDirectoryIterator($this->path);
 		$filterIterator = new CustomFilterIterator($dirIt, array_merge(SvnFilterIterator::$filters, array('js')));
         $it = new \RecursiveIteratorIterator($filterIterator, \RecursiveIteratorIterator::SELF_FIRST);
@@ -129,10 +131,9 @@ class Autoloader {
         
         if ($status === 0) { //all loaders failed to find missing class
             foreach (self::$instances as $loader) {
-                echo "Can't find '$class'. Reset.</br>";
                 if (self::$firstError) {
                     self::$firstError = false;
-                    echo 'error';
+                    echo "Can't find '$class'. Reset.</br>";
                     $e = new \Exception();
                     echo($e->getTraceAsString());
                 }

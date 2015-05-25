@@ -1,7 +1,7 @@
 <?php
 namespace qeywork;
 
-interface IEditableModelListViewVisual extends IVisual {
+interface IEditableEntityListViewVisual extends IVisual {
     /**
      * The skeleton of the view, it must use the given parameters
      * @param string $sort A &lt;div&gt that holds the sorting functionality
@@ -26,7 +26,7 @@ interface IEditableModelListViewVisual extends IVisual {
     public function filterDiv($filterOptions, $listViewState);
     
     /**
-     * Header of the modelListView
+     * Header of the entityListView
      * @param string $headerCellList
      */
     public function header($headerCellList);
@@ -38,7 +38,7 @@ interface IEditableModelListViewVisual extends IVisual {
     public function headerCell($label);
     
     /**
-     * A line in the modelListView
+     * A line in the entityListView
      * @param mixed $id of entry
      * @param string $cells
      */

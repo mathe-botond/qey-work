@@ -8,7 +8,7 @@ namespace qeywork;
  * @return \HtmlNode 
  */
 
-class HtmlNode implements IHtmlEntity
+class HtmlNode implements IHtmlObject
 {
     protected $tag;
     protected $idAttr;
@@ -24,7 +24,7 @@ class HtmlNode implements IHtmlEntity
         $this->selfClosed = $selfClosed;
         $this->classes = array();
         $this->id = null;
-        $this->children = new HtmlEntityList();
+        $this->children = new HtmlObjectList();
     }
     
     /**
@@ -93,7 +93,7 @@ class HtmlNode implements IHtmlEntity
     }
     
     public function clean() {
-        $this->children = new HtmlEntityList();
+        $this->children = new HtmlObjectList();
         return $this;
     }
     
@@ -103,7 +103,7 @@ class HtmlNode implements IHtmlEntity
     }
     
     /**
-     * @param HtmlEntity $child,... list childrens
+     * @param IHtmlObject $child,... list childrens
      */
     public function content() {
         $this->clean();
@@ -119,16 +119,16 @@ class HtmlNode implements IHtmlEntity
         return $this;
     }
     
-    public function append(IHtmlEntity $item) {
+    public function append(IHtmlObject $item) {
         if ($item == NULL) {
             return $this;
         }
         
-        if ($item instanceof HtmlEntityList) {        
+        if ($item instanceof HtmlObjectList) {
             foreach ($item as $item) {
                 $this->children[] = $item;
             }
-        } else if ($item instanceof IHtmlEntity) {
+        } else if ($item instanceof IHtmlObject) {
             $this->children[] = $item;
         } else {
             throw new ArgumentException('$mixed must be an IHtmlEntity, ' . gettype($item) . ' given: ' . var_export($item)); 
@@ -137,7 +137,7 @@ class HtmlNode implements IHtmlEntity
         return $this;
     }
     
-    public function add(IHtmlEntity $item) {
+    public function add(IHtmlObject $item) {
         $this->append($item);
     }
     
@@ -158,7 +158,7 @@ class HtmlNode implements IHtmlEntity
         return clone $this;
     }
     
-    public function render() {
+    public function render(HtmlBuilder $h) {
         return $this;
     }
     

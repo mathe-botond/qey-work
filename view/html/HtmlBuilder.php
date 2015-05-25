@@ -85,15 +85,14 @@ namespace qeywork;
  * @method HtmlNode ul() Creates a node of ul
  * @method HtmlNode video() Creates a node of ul
  */
-class HtmlFactory {
+class HtmlBuilder {
     private static $selfClosedTags = array('br', 'hr', 'meta', 'link', 'input', 'img', 'source');
     /**
      * @param string $tag
-     * @param HtmlContainer $content
-     * @return HtmlNode Description
+     * @param array $params
+     * @return HtmlNode
      */
     public function __call($tag, $params) {
-        $selfClosed = false;
         if (in_array($tag, self::$selfClosedTags)) {
             $selfClosed = true;
         } else {

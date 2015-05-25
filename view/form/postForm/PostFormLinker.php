@@ -30,7 +30,7 @@ class PostFormLinker {
             $jsDir->file("jquery.validator.js"),
             $jsDir->file("qey.form.js"),
             $this->locations->getUrlOfAction(
-                    ModelDispacherForExternalCall::NAME
+                    EntityDispacherForExternalCall::NAME
                 )->field('form-id', $formId)
         );
     }

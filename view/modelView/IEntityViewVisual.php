@@ -1,7 +1,7 @@
 <?php
 namespace qeywork;
 
-interface IModelViewVisual extends IVisual {
+interface IEntityViewVisual extends IVisual {
     /**
      * The skeleton of the view
      * @param string $entries of the view, result of several entry() calls chaimed

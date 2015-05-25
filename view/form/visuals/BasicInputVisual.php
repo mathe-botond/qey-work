@@ -2,10 +2,10 @@
 namespace qeywork;
 
 class BasicInputVisual implements IInputVisual {
-    public function modelConnector($name, $selectedItems, $sourceItems, $attr) {
+    public function entityConnector($name, $selectedItems, $sourceItems, $attr) {
         $selector = qeyNode('div')->attr($attr)
-                ->cls('model-connector')
-                ->attr('data-qey-input-type', 'model-connector');
+                ->cls('entity-connector')
+                ->attr('data-qey-input-type', 'entity-connector');
         $selectedList = qeyNode('select')->multiple('multiple')
                 ->cls('selected-items')->name($name . '[]')->size(5);
         foreach ($selectedItems as $key => $item) {

@@ -4,7 +4,7 @@ namespace qeywork;
 throw new Exception('Not implemented');
 
 /**
- * A Field is a member of a Model.
+ * A Field is a member of a Entity.
  *
  * @author Dexx
  */
@@ -117,29 +117,29 @@ class ViewField {
         $this->errors = null;
     }
     
-    public function toClientModel() {
+    public function toClientEntity() {
         $clientValidatorData = array();
         foreach ($this->validators as $validator) {
             /* @var $validator Validator */
             $clientValidatorData[$validator->getName()] = $validator->getMessage();
         }
         
-        $clientModel = array(
+        $clientEntity = array(
             'label' => $this->label,
             'readonly' => $this->isReadOnly(),
         );
         
         if ($this->inputControl != null) {
-            $clientModel['input'] = $this->inputControl->getName();
+            $clientEntity['input'] = $this->inputControl->getName();
         }
         
         if ($this->class != null) {
-            $clientModel['class'] = $this->class;
+            $clientEntity['class'] = $this->class;
         }
         
-        $clientModel['validators'] = $clientValidatorData;
+        $clientEntity['validators'] = $clientValidatorData;
         
-        return $clientModel;
+        return $clientEntity;
     }
     
     public function __toString() {

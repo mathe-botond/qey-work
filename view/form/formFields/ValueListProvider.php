@@ -10,7 +10,7 @@ class ValueListProvider {
     private $nameField;
     private $valueField;
 
-    public function __construct(DB $db, Model $type, Field $valueField, Field $nameField = null) {
+    public function __construct(DB $db, Entity $type, Field $valueField, Field $nameField = null) {
         $this->db = $db;
         $this->type = $type;
         $this->valueField = $valueField;
@@ -21,7 +21,7 @@ class ValueListProvider {
         $result = $this->db->search($this->type);
         $list = new SmartArray();
         foreach ($result as $entry) {
-            /* @var $entry Model */
+            /* @var $entry Entity */
             $fields = $entry->getFields();
             $value = $fields[ $this->valueField->getName() ]->value();
             

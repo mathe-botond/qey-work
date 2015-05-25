@@ -22,9 +22,16 @@ abstract class AbstractTemplatedLayout extends AbstractTemplatedBlock implements
     public function getMeta() {
         return $this->meta;
     }
-    
-    protected function setTitle() {
-        $this->meta->setTitle($this->content->getTitle());
+
+    protected abstract function getAppName();
+
+    private function setTitle() {
+        $title = $this->getAppName();
+        if (($subTitle = $this->content->getTitle()) != null) {
+            $title .= ' - ' . $subTitle;
+        }
+
+        $this->meta->setTitle($title);
     }
     
     public function setContent(IPage $content) {
@@ -33,8 +40,8 @@ abstract class AbstractTemplatedLayout extends AbstractTemplatedBlock implements
         $this->setTitle();
     }
     
-    public function render() {
+    public function render(HtmlBuilder $h) {
         $this->add(QeyMeta::NAME, $this->meta);
-        return parent::render();
+        return parent::render($h);
     }
 }

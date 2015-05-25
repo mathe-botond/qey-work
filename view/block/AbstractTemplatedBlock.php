@@ -20,11 +20,11 @@ abstract class AbstractTemplatedBlock extends Container {
     
     protected function beforeChildRender(IRenderable $child) {}
     
-    protected function processTemplates($template) {
+    protected function processTemplates(HtmlBuilder $h, $template) {
         foreach ($this->getChildren() as $key => $child) {
             if ($child instanceof IRenderable) {
-                $child = $child->render();
-                if ($child instanceof IHtmlEntity) {
+                $child = $child->render($h);
+                if ($child instanceof IHtmlObject) {
                     $child .= '';
                 }
             }
@@ -34,7 +34,7 @@ abstract class AbstractTemplatedBlock extends Container {
         return $template;
     }
 
-    public function render() {
+    public function render(HtmlBuilder $h) {
         $this->beforeRender();
         $templateFile = $this->provideTemplateFile();
         if (! $templateFile instanceof Path) {
@@ -50,7 +50,7 @@ abstract class AbstractTemplatedBlock extends Container {
         }
         
         $template = file_get_contents($templateFile);
-        $processed = $this->processTemplates($template);
+        $processed = $this->processTemplates($h, $template);
         
         $newTemplate = $this->afterRender($processed);
         return new HtmlWrapperNode($newTemplate);

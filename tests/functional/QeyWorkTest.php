@@ -12,7 +12,7 @@ class TestPage extends q\Page {
         return 'Test Page';
     }
 
-    public function render() {
+    public function render(q\HtmlBuilder $h) {
         return new q\TextNode('Hello World');
     }
 }

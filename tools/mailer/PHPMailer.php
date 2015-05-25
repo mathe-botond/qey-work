@@ -277,33 +277,33 @@ class PHPMailer {
     public $LE = "\n";
 
     /**
-     * Used with DKIM DNS Resource Model
+     * Used with DKIM DNS Resource Entity
      * @var string
      */
     public $DKIM_selector = 'phpmailer';
 
     /**
-     * Used with DKIM DNS Resource Model
+     * Used with DKIM DNS Resource Entity
      * optional, in format of email address 'you@yourdomain.com'
      * @var string
      */
     public $DKIM_identity = '';
 
     /**
-     * Used with DKIM DNS Resource Model
+     * Used with DKIM DNS Resource Entity
      * @var string
      */
     public $DKIM_passphrase = '';
 
     /**
-     * Used with DKIM DNS Resource Model
+     * Used with DKIM DNS Resource Entity
      * optional, in format of email address 'you@yourdomain.com'
      * @var string
      */
     public $DKIM_domain = '';
 
     /**
-     * Used with DKIM DNS Resource Model
+     * Used with DKIM DNS Resource Entity
      * optional, in format of email address 'you@yourdomain.com'
      * @var string
      */
@@ -1933,7 +1933,7 @@ class PHPMailer {
     /**
      * Adds a string or binary attachment (non-filesystem) to the list.
      * This method can be used to attach ascii or binary data,
-     * such as a BLOB model from a database.
+     * such as a BLOB entity from a database.
      * @param string $string String attachment data.
      * @param string $filename Name of the attachment.
      * @param string $encoding File encoding (see $Encoding).

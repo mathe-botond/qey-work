@@ -2,6 +2,8 @@
 namespace qeyworktest;
 use qeywork as q;
 
+session_start();
+
 include __DIR__ . '\\..\\boot.php';
 
 class TestGlobals extends \qeywork\Globals {

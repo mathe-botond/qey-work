@@ -1,7 +1,7 @@
 <?php
 namespace qeywork;
 
-interface IModelListViewVisual extends IVisual {
+interface IEntityListViewVisual extends IVisual {
     /**
      * The skeleton of the view, it must use the given parameters
      * @param string $sort A &lt;div&gt that holds the sorting functionality
@@ -9,13 +9,13 @@ interface IModelListViewVisual extends IVisual {
      * @param string $header The list of table header cells
      * @param string $rows The list of rows of the table
      */
-    public function base(IHtmlEntity $header, IHtmlEntity $rows);
+    public function base(IHtmlObject $header, IHtmlObject $rows);
     
     /**
-     * Header of the modelListView
+     * Header of the entityListView
      * @param string $headerCellList
      */
-    public function header(IHtmlEntity $headerCellList);
+    public function header(IHtmlObject $headerCellList);
     
     /**
      * A header cell
@@ -24,11 +24,11 @@ interface IModelListViewVisual extends IVisual {
     public function headerCell($label);
     
     /**
-     * A line in the modelListView
+     * A line in the entityListView
      * @param mixed $id of entry
      * @param string $cells
      */
-    public function entry($id, IHtmlEntity $cells);
+    public function entry($id, IHtmlObject $cells);
     
     /**
      * A cell in list

@@ -12,7 +12,7 @@ class Arguments {
     
     private function getRequestedTarget() {
         $target = $this->getArgument(0);
-        return !empty($target) ? $target : PageRouteCollection::INDEX_TOKEN;
+        return !empty($target) ? $target : '';
     }  
 
     public function __construct(Params $params) {
@@ -21,7 +21,7 @@ class Arguments {
     }
     
     public function isFrontPage() {
-        return $this->token == PageRouteCollection::INDEX_TOKEN;
+        return empty($this->token);
     }
     
     public function getArgument($number) {

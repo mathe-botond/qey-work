@@ -2,14 +2,13 @@
 namespace qeywork;
 
 class PageRouteCollection {
-    const INDEX_TOKEN = 'index';
-    
     private $defaultRouter;
     private $routers = array();
+    private $indexToken;
 
-    public function __construct($indexPageClass) {
+    public function __construct($indexToken) {
         $this->defaultRouter = new PageRouter();
-        $this->defaultRouter->addPageClass(self::INDEX_TOKEN, $indexPageClass);
+        $this->indexToken = $indexToken;
     }
     
     public function addPageClass($token, $className) {
@@ -27,14 +26,14 @@ class PageRouteCollection {
      */
     public function getCurrentPage(Arguments $target) {
         if (trim($target->toString()) == '') {
-            $target->forceOtherToken(self::INDEX_TOKEN);
+            $target->forceOtherToken($this->indexToken);
         }
         
         $page = $this->defaultRouter->getPage($target);
         if ($page != null) {
             return $page;
         }
-        
+
         foreach ($this->routers as $router) {
             $page = $router->getPage($target);
             if ($page != null) {

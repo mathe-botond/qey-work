@@ -11,8 +11,8 @@ class FileInput extends FieldInput {
         return self::NAME;
     }
     
-    public function render() {
-        $h = new HtmlFactory();
+    public function render(HtmlBuilder $h) {
+
         return $h->input->type('file')->name($this->name);
     }
 }

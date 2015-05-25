@@ -4,10 +4,10 @@ namespace qeywork;
 /**
  * @author Dexx
  */
-class ModelDbChecker {
+class EntityDbChecker {
     const CHECK_TABLE = 'SHOW TABLES LIKE :table_name';
     const LIST_COLUMN = 'SHOW COLUMNS FROM :table_name';
-    const EXCEPTION = 'Call ModelDbChecker::check first';
+    const EXCEPTION = 'Call EntityDbChecker::check first';
     protected $db;
     
     protected $table;
@@ -40,12 +40,12 @@ class ModelDbChecker {
         return $return;
     }
     
-    public function check(Model $model) {
-        if ($model->getPersistenceData()->getPersistannceName() != DB::PERSISTANCE_NAME) {
-            throw new ModelException('Model persistance is not of a relational database');
+    public function check(Entity $entity) {
+        if ($entity->getPersistenceData()->getPersistannceName() != DB::PERSISTANCE_NAME) {
+            throw new EntityException('Entity persistance is not of a relational database');
         }
         
-        $tableName = $model->getPersistenceData()->getNameOfPersistenceObject();
+        $tableName = $entity->getPersistenceData()->getNameOfPersistenceObject();
         
         $params = array('table_name' => $tableName);
         $tableResult = $this->db->query(self::CHECK_TABLE, $params);
@@ -61,7 +61,7 @@ class ModelDbChecker {
                 $columns[$value['Field']] = true;
             }
             
-            foreach ($model as $field) {
+            foreach ($entity as $field) {
                 if ($field instanceof Field) {
                     $this->fields[$field->getName()] = ! array_key_exists($field->getName(), $columns) ;
                 }

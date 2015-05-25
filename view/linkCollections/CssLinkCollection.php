@@ -32,8 +32,7 @@ class CssLinkCollection extends LinkCollection implements ICssLinkCollection
         return $this->cssLocation;
     }
     
-    protected function createEntry($file) {
-        $h = new HtmlFactory();
+    protected function createEntry(HtmlBuilder $h, $file) {
         return $h->link()->rel('stylesheet')->href($file)->type('text/css')->media('all');
     }
 }

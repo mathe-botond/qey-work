@@ -183,11 +183,11 @@ function createRandomHash() {
     return md5(uniqid(rand(), true));
 }
 
-/** special get_class to support model proxies **/
-function getModelClass($model) {
-    if (is_object($model) && is_callable(array($model, '__tell_class'))) {
-        return $model->__tell_class();
+/** special get_class to support entity proxies **/
+function getEntityClass($entity) {
+    if (is_object($entity) && is_callable(array($entity, '__tell_class'))) {
+        return $entity->__tell_class();
     } else {
-        return get_class($model);
+        return get_class($entity);
     }
 }

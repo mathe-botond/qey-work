@@ -6,7 +6,7 @@ class QeyMeta implements IRenderable
     const NAME = 'meta';
     
     protected $title = null;
-    /** @var HtmlEntityList */
+    /** @var HtmlObjectList */
     protected $meta;
     
     /** @var ILinkCollection */
@@ -16,13 +16,14 @@ class QeyMeta implements IRenderable
     
     public function __construct(
             ICssLinkCollection $css,
-            JsLinkCollection $js) {
+            JsLinkCollection $js,
+            HtmlBuilder $h) {
         
         $this->cssLinks = $css;
         $this->jsLinks = $js;
         
-        $this->meta = new HtmlEntityList();
-        $h = new HtmlFactory();
+        $this->meta = new HtmlObjectList();
+
 
         $this->addHeaderEntry('encoding', $h->meta()
                 ->attr('http-equiv', 'Content-Type')
@@ -67,11 +68,11 @@ class QeyMeta implements IRenderable
         return $this->jsLinks;
     }
     
-    public function render()
+    public function render(HtmlBuilder $h)
     {
-        $h = new HtmlFactory();
-        $css = $this->cssLinks->render();
-        $js = $this->jsLinks->render();
+
+        $css = $this->cssLinks->render($h);
+        $js = $this->jsLinks->render($h);
         
         $headerStrings = $this->meta;
         $headerStrings->append($h->title()->htmlContent($this->title));

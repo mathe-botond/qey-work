@@ -24,12 +24,12 @@ abstract class LinkCollection implements ILinkCollection
         }
     }
     
-    protected abstract function createEntry($file);
+    protected abstract function createEntry(HtmlBuilder $h, $file);
 
-    public function render() {
-        $output = new HtmlEntityList();
+    public function render(HtmlBuilder $h) {
+        $output = new HtmlObjectList();
         foreach ($this->files as $file) {
-            $output[] = $this->createEntry($file);
+            $output[] = $this->createEntry($h, $file);
         }
         return $output;
     }

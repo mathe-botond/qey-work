@@ -8,7 +8,7 @@ namespace qeywork;
  *
  * @author Dexx
  */
-class TextNode implements IHtmlEntity {
+class TextNode implements IHtmlObject {
     protected $text;
     
     /**
@@ -23,7 +23,7 @@ class TextNode implements IHtmlEntity {
         return $this->text;
     }
     
-    public function render() {
+    public function render(HtmlBuilder $h) {
         return $this;
     }
 

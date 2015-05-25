@@ -5,7 +5,7 @@ namespace qeywork;
  * @author klara
  */
 interface IPersistence {
-    public function setModel(Model $model);
+    public function setEntity(Entity $entity);
     public function load($id);
     public function insert();
     public function update();

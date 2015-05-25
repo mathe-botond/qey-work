@@ -6,7 +6,7 @@ namespace qeywork;
  */
 class Pager implements IRenderable {
 
-    /** @var q\Url */
+    /** @var Url */
     private $url;
     
     private $pageCount;
@@ -17,22 +17,37 @@ class Pager implements IRenderable {
         $this->pageCount = $pageCount;
         $this->url = $baseUrl;
     }
-    
-    function render() {
+
+    public function getCurrentPageNumber() {
+        return $this->currentPage;
+    }
+
+    /**
+     * TODO: Refactor code
+     * @param HtmlBuilder $h
+     * @return NullHtml
+     */
+    public function render(HtmlBuilder $h) {
         $numberOfPages = ceil($this->pageCount);
+
+        if ($numberOfPages < 2) {
+            return new NullHtml();
+        }
+
         $prevPageNumber = $this->currentPage - 1;
         $nextPageNumber = $this->currentPage + 1;
-        $h = new HtmlFactory();
 
-        $paginator = $h->nav()->cls('pagination');
+
+        $pagination = $h->nav()->cls('pagination');
         if ($this->currentPage > 1) {
-            $paginator->append(
+            $pagination->append(
                 $h->a()->cls('pagination-item')
                     ->href($this->url->param($prevPageNumber))
                     ->htmlContent('&lt;')
             );
         }
 
+        $pages = array();
         for ($i = 1; $i <= $numberOfPages; $i++) {
             if ($i != $this->currentPage) {
                 $pages[$i] = $h->a()->cls('pagination-item')
@@ -51,21 +66,21 @@ class Pager implements IRenderable {
 
         for ($i = 1; $i <= $numberOfPages; $i++) {
             if (isset($pages[$i])) {
-                $paginator->append($pages[$i]);
+                $pagination->append($pages[$i]);
                 if ($i < $numberOfPages - 1 && !isset($pages[$i + 1])) {
-                    $paginator->append(new TextNode("..."));
+                    $pagination->append(new TextNode("..."));
                 }
             }
         }
 
         if ($this->currentPage < $numberOfPages) {
-            $paginator->append(
+            $pagination->append(
                 $h->a()->cls('pagination-item')
                     ->href($this->url->param($nextPageNumber))
                     ->htmlContent('&gt;')
             );
         }
 
-        return $paginator;
+        return $pagination;
     }
 }

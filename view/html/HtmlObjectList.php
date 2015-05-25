@@ -7,14 +7,14 @@ namespace qeywork;
  *
  * @author Dexx
  */
-class HtmlEntityList extends SmartArray implements IHtmlEntity {
+class HtmlObjectList extends SmartArray implements IHtmlObject {
     /**
      * @param mixed $index
-     * @param IHtmlEntity $newval
-     * @return IHtmlEntity
+     * @param IHtmlObject $newval
+     * @return IHtmlObject
      */
     public function offsetSet($index, $newval) {
-        if (! $newval instanceof IHtmlEntity) {
+        if (! $newval instanceof IHtmlObject) {
             throw new TypeException('Parameter $newval', 'IHtmlEntity');
         }
         return parent::offsetSet($index, $newval);
@@ -22,11 +22,11 @@ class HtmlEntityList extends SmartArray implements IHtmlEntity {
     
     /**
      * @param type $index
-     * @param IHtmlEntity $newval
-     * @return IHtmlEntity
+     * @param IHtmlObject $newval
+     * @return IHtmlObject
      */
     public function __set($index, $newval) {
-        if (! $newval instanceof IHtmlEntity) {
+        if (! $newval instanceof IHtmlObject) {
             throw new TypeException('Parameter $newval', 'IHtmlEntity');
         }
         return parent::__set($index, $newval);
@@ -44,12 +44,12 @@ class HtmlEntityList extends SmartArray implements IHtmlEntity {
         return $this->toString();
     }
     
-    public function add(IHtmlEntity $value) {
+    public function add(IHtmlObject $value) {
         $this->append($value);
     }
 
     public function append($value) {
-        if ($value instanceof HtmlEntityList) {
+        if ($value instanceof HtmlObjectList) {
             foreach ($value as $key => $item) {
                 if ($this->exists($key)) {
                     $this[] = $item;
@@ -62,7 +62,7 @@ class HtmlEntityList extends SmartArray implements IHtmlEntity {
         }
     }
     
-    public function render() {
+    public function render(HtmlBuilder $h) {
         return $this;
     }
 }

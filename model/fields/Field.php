@@ -2,11 +2,11 @@
 namespace qeywork;
 
 /**
- * A Field is a member of a Model.
+ * A Field is a member of a Entity.
  *
  * @author Dexx
  */
-class Field implements IModelEntity, IHtmlEntity {
+class Field implements IEntityType, IHtmlObject {
     protected $name;
     protected $value;
     
@@ -36,7 +36,7 @@ class Field implements IModelEntity, IHtmlEntity {
         return $this->toString();
     }
 
-    public function render() {
+    public function render(HtmlBuilder $h) {
         return $this;
     }
 

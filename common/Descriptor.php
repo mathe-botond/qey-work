@@ -2,7 +2,7 @@
 namespace qeywork;
 
 /**
- * Descriptor is a JSON representation of an object: e.g. a menu or a model.
+ * Descriptor is a JSON representation of an object: e.g. a menu or a entity.
  * This class provides basic descriptor functionality, like extending, and acessing
  *
  * @author Dexx
@@ -18,7 +18,7 @@ class Descriptor extends SmartArray {
             $descriptor = json_decode($descriptor, true);
             if ($descriptor == null)
             {
-                throw new ModelException('Model descriptor malformed, json_decode error: ' . getJsonLastErrorString());
+                throw new EntityException('Entity descriptor malformed, json_decode error: ' . getJsonLastErrorString());
                 return ;
             }
         } 

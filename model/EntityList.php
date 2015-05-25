@@ -7,22 +7,22 @@ namespace qeywork;
  *
  * @author Dexx
  */
-class ModelList extends SmartArray implements IModelEntity {
-    /** @var Model */
+class EntityList extends SmartArray implements IEntityType {
+    /** @var Entity */
     protected $type;
     
-    public function __construct(Model $type, $array = array()) {
+    public function __construct(Entity $type, $array = array()) {
         parent::__construct($array);
         $this->type = $type;
     }
     
-    public function add(Model $model) {
-        $this[] = $model;
+    public function add(Entity $entity) {
+        $this[] = $entity;
     }
     
     public function append($value) {
-        if (! $value instanceof ModelList) {
-            throw new TypeException($value, 'ModelList');
+        if (! $value instanceof EntityList) {
+            throw new TypeException($value, 'EntityList');
         }
         foreach ($value as $key => $item) {
             if ($this->array->offsetExists($key)) {
@@ -33,7 +33,7 @@ class ModelList extends SmartArray implements IModelEntity {
         }
     }
     
-    public function getModelType() {
+    public function getEntityType() {
         return $this->type;
     }
 }

@@ -39,8 +39,8 @@ class Menu  implements IMenuEntity, IRenderable {
         return $this->menuItems;
     }
     
-    public function render() {
-        $items = $this->menuItems->render();
+    public function render(HtmlBuilder $h) {
+        $items = $this->menuItems->render($h);
         return $this->visual->menu($items, $this->id, $this->class);
     }
     

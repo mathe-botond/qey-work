@@ -34,5 +34,5 @@ abstract class FieldDisplay implements IRenderable {
         return $this->field->getName();
     }
     
-    public abstract function render();
+    public abstract function render(HtmlBuilder $h);
 }

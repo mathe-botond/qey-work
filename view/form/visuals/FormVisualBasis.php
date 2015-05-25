@@ -8,12 +8,12 @@ namespace qeywork;
  */
 abstract class FormVisualBasis implements IFormVisual {
 
-    /** @var HtmlFactory */
+    /** @var HtmlBuilder */
     private $h;
     
     protected $submitLabel;
     
-    public function __construct(HtmlFactory $h, $submitLabel = null) {
+    public function __construct(HtmlBuilder $h, $submitLabel = null) {
         $this->submitLabel = $submitLabel;
         $this->h = $h;
     }

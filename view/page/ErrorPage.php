@@ -9,7 +9,7 @@
 namespace qeywork;
 
 class ErrorPage extends Page {
-    protected $id;
+    protected $code;
     protected $title;
     protected $message;
 
@@ -32,7 +32,7 @@ class ErrorPage extends Page {
         ),
         '500' => array(
             'title' => 'Internal Server Error',
-            'description' => 'Generic error message, no more specific information is suitable'
+            'description' => 'Something went wrong in the rendering of this page'
         ),
         '501' => array(
             'title' => 'Not Implemented',
@@ -48,23 +48,23 @@ class ErrorPage extends Page {
      */
     private $e;
 
-    public function __construct($id = 500, \Exception $e = null) {
-        if (! array_key_exists($id, $this->errorCodes) ) {
+    public function __construct($code = 500, \Exception $e = null) {
+        if (! array_key_exists($code, $this->errorCodes) ) {
             return ;
         }
 
-        $this->id = $id;
-        $this->message = $this->errorCodes[$this->id]['description'];
-        $this->title = $this->errorCodes[$this->id]['title'];
+        $this->code = $code;
+        $this->message = $this->errorCodes[$this->code]['description'];
+        $this->title = $this->errorCodes[$this->code]['title'];
         $this->e = $e;
     }
 
     public function getTitle() {
-        return $this->title;
+        return $this->code . ' - ' . $this->title;
     }
 
-    public function render() {
-        $h = new HtmlFactory();
+    public function render(HtmlBuilder $h) {
+
         $e = ($this->e != null) ?
             $h->div()->cls('details')->content(
                 $h->h5()->text($this->e->getMessage()),
@@ -72,7 +72,7 @@ class ErrorPage extends Page {
             : new NullHtml();
 
         return $h->article()->content(
-            $h->h2()->text($this->id),
+            $h->h2()->text($this->code),
             $h->p()->text($this->message),
             $e
         );

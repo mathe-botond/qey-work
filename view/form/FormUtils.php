@@ -5,25 +5,25 @@ class FormUtils {
     /**
      * Get an array to fill select
      * @param string $source
-     * @param ModelEntity $model
+     * @param EntityEntity $entity
      * @param string $key
      * @param string $value
-     * @throws ModelException
+     * @throws EntityException
      * @return array data for select
      */
-    public static function getDataForSelect($source, $model, $key, $value) {
+    public static function getDataForSelect($source, $entity, $key, $value) {
         $db = getDb();
             $options = array();
             if ($source == 'db') {
-                $result = $db->search($model); //retrieve all rows from table
+                $result = $db->search($entity); //retrieve all rows from table
                 if (count($result) > 0 && 
                         (! $result[0]->hasKey($key)
                         || ! $result[0]->hasKey($value))) {
-                    throw new ModelException($model . ' has no row ' . $key . ' or ' . $value);
+                    throw new EntityException($entity . ' has no row ' . $key . ' or ' . $value);
                 }
-                foreach ($result as $resultModel) {
-                    $tkey = ($key == 'id') ? $resultModel->getId() : $resultModel->$key;
-                    $options[ $tkey ] = $resultModel->$value;
+                foreach ($result as $resultEntity) {
+                    $tkey = ($key == 'id') ? $resultEntity->getId() : $resultEntity->$key;
+                    $options[ $tkey ] = $resultEntity->$value;
                 }
             } else {
                 throw new NotImplementedException('Only database datasource supported');
@@ -31,24 +31,24 @@ class FormUtils {
             return $options;
     }
     
-    public static function getDataForModelConnector($type, $params) {
+    public static function getDataForEntityConnector($type, $params) {
         if ($type == 'db') {
             $conditions = isset($params['source-filter-by']) ?
                 $params['source-filter-by']->getArray() : array();
-            $sourceModels = getDb()->search($params['source-table'], $conditions);
-            $conditions = array($params['left-id-field'] => $params['current-model-id']);            
-            $selectedModels = getDb()->search($params['link-table'], $conditions);
+            $sourceEntitys = getDb()->search($params['source-table'], $conditions);
+            $conditions = array($params['left-id-field'] => $params['current-entity-id']);
+            $selectedEntitys = getDb()->search($params['link-table'], $conditions);
             
             $field = $params['source-displayed-field'];
             $source = array();
-            foreach ($sourceModels as $model) {
-                $source[$model->getId()] = $model->$field;
+            foreach ($sourceEntitys as $entity) {
+                $source[$entity->getId()] = $entity->$field;
             }
             
             $idField = $params['right-id-field'];
             $selected = array();
-            foreach ($selectedModels as $model) {
-                $id = $model->$idField;
+            foreach ($selectedEntitys as $entity) {
+                $id = $entity->$idField;
                 $selected[$id] = $source[$id];
                 unset($source[$id]);
             }
@@ -65,13 +65,13 @@ class FormUtils {
     public static function getDataForMultiInputs($type, $params) {
         if ($type == 'db') {
             $conditions = array( 
-                $params['foreign-id-field'] => $params['current-model-id']
+                $params['foreign-id-field'] => $params['current-entity-id']
             );
-            $valueModels = getDb()->search($params['value-table'], $conditions);
+            $valueEntitys = getDb()->search($params['value-table'], $conditions);
             $valueField = $params['value-field'];
             $values = array();
-            foreach ($valueModels as $model) {
-                $values[] = $model->$valueField;
+            foreach ($valueEntitys as $entity) {
+                $values[] = $entity->$valueField;
             }
             return $values;
         } else {
@@ -79,36 +79,36 @@ class FormUtils {
         }
     }
     
-    public static function buildMultiField($model, $key) {
+    public static function buildMultiField($entity, $key) {
         
         $visual = new BasicInputVisual();
-        $data = $model['datasource'];
+        $data = $entity['datasource'];
         $values = FormUtils::getDataForMultiInputs($data['type'], $data);
         $inputList = array();
         foreach ($values as $value) {
-            $modelCopy = clone($model);
-            $inputList[] = self::buildInputField($modelCopy, $key, $value);
+            $entityCopy = clone($entity);
+            $inputList[] = self::buildInputField($entityCopy, $key, $value);
         }
         
-        $inputList['empty'] = self::buildInputField($model, $key);
+        $inputList['empty'] = self::buildInputField($entity, $key);
         return $visual->multiInput($inputList);
     }
 
-    public static function buildInputField($model, $key, $value = null) {
-        if (is_string($model->input)) {
-            $inputType = $model->input;
-            $model->input = new Descriptor();
+    public static function buildInputField($entity, $key, $value = null) {
+        if (is_string($entity->input)) {
+            $inputType = $entity->input;
+            $entity->input = new Descriptor();
         } else {
-            $inputType = $model->input->type;
-            unset($model->input->type);
+            $inputType = $entity->input->type;
+            unset($entity->input->type);
         }
         
-        if (isset($model->class)) $model->input->class .= " " . $model->class;
-        if (isset($model->style)) $model->input->style .= " " . $model->style;
-        $model->input->token = $key;
+        if (isset($entity->class)) $entity->input->class .= " " . $entity->class;
+        if (isset($entity->style)) $entity->input->style .= " " . $entity->style;
+        $entity->input->token = $key;
         
-        if (isset($model['multiple']) && $model['multiple'] == true) {
-            $model->input->token .= '[]';
+        if (isset($entity['multiple']) && $entity['multiple'] == true) {
+            $entity->input->token .= '[]';
         }
         
         $input = '';
@@ -116,40 +116,40 @@ class FormUtils {
         switch ($inputType) {
             case 'text':
             case 'wymeditor':
-                $input = qeyNode('textarea')->attr($model->input->getRaw())->text(empty($value) ? "" : $value);
+                $input = qeyNode('textarea')->attr($entity->input->getRaw())->text(empty($value) ? "" : $value);
                 break;
         
             case 'varchar':
             case 'date':
-                $model->input->type = 'text';
-                $model->input->value = $value;
-                $input = qeyNode('input')->attr($model->input->getRaw());
+                $entity->input->type = 'text';
+                $entity->input->value = $value;
+                $input = qeyNode('input')->attr($entity->input->getRaw());
                 break;
         
             case 'password':
-                $model->input->type = 'password';
-                $model->input->value = $value;
-                $input = qeyNode('input')->attr($model->input->getRaw());
+                $entity->input->type = 'password';
+                $entity->input->value = $value;
+                $input = qeyNode('input')->attr($entity->input->getRaw());
                 break;
         
             case 'select':
-                $input = qeyNode('select')->attr($model->input->getRaw());
+                $input = qeyNode('select')->attr($entity->input->getRaw());
                 
-                if (isset($model['add-empty-field'])) {
-                    $model->add_empty_field = $model['add-empty-field'];
+                if (isset($entity['add-empty-field'])) {
+                    $entity->add_empty_field = $entity['add-empty-field'];
                 }
-                if (isset($model->add_empty_field) && $model->add_empty_field) {
+                if (isset($entity->add_empty_field) && $entity->add_empty_field) {
                     $input->append(qeyNode('option')->val(''));
                 }
         
-                if (isset($model['datasource'])) {
+                if (isset($entity['datasource'])) {
                     $options = FormUtils::getDataForSelect(
-                            $model['datasource']['source'],
-                            $model['datasource']['model'],
-                            $model['datasource']['key'],
-                            $model['datasource']['value']);
-                } else if (isset($model['options'])) {
-                    $options = $model['options'];
+                            $entity['datasource']['source'],
+                            $entity['datasource']['entity'],
+                            $entity['datasource']['key'],
+                            $entity['datasource']['value']);
+                } else if (isset($entity['options'])) {
+                    $options = $entity['options'];
                 } else {
                     $options = array(); //empty array
                 }
@@ -163,22 +163,22 @@ class FormUtils {
                 }
                 break;
                 
-            case 'model-connector':
+            case 'entity-connector':
                 $visual = new BasicInputVisual();
-                $data = $model['datasource'];
-                $options = FormUtils::getDataForModelConnector($data['type'], $data);
-                $input = $visual->modelConnector(
-                    $model->input->token,
+                $data = $entity['datasource'];
+                $options = FormUtils::getDataForEntityConnector($data['type'], $data);
+                $input = $visual->entityConnector(
+                    $entity->input->token,
                     $options['selected'],
                     $options['source'],
-                    $model->input->getRaw()
+                    $entity->input->getRaw()
                 );
                 break;
             case 'radio':
                 $first = true;
-                $model->input->type = 'radio';
-                foreach ($model['options'] as $optionKey => $optionValue) {
-                    $radioNode = qeyNode('input')->attr($model->input->getRaw())->val($optionKey);
+                $entity->input->type = 'radio';
+                foreach ($entity['options'] as $optionKey => $optionValue) {
+                    $radioNode = qeyNode('input')->attr($entity->input->getRaw())->val($optionKey);
         
                     if ((string)$value === (string)$optionKey || $first && empty($value)) {
                         //set value or set first item as selected
@@ -191,10 +191,10 @@ class FormUtils {
                 break;
         
             case 'checkbox':
-                $model->input->type = 'checkbox';
-                $model->input->token .= '[]';
-                foreach ($model['options'] as $optionKey => $optionValue) {
-                    $checkboxNode = qeyNode('input')->attr($model->input->getRaw())->val($optionKey);
+                $entity->input->type = 'checkbox';
+                $entity->input->token .= '[]';
+                foreach ($entity['options'] as $optionKey => $optionValue) {
+                    $checkboxNode = qeyNode('input')->attr($entity->input->getRaw())->val($optionKey);
         
                     if (! empty($value) &&
                             array_search((string)$optionKey, $value) !== false ) {
@@ -206,11 +206,11 @@ class FormUtils {
                 break;
         
             case 'file':
-                $model->input->id = $key;
-                $model->input->type = 'file';
-                $model->input->value = $value;
-                if (!empty($value)) $model->input->style = "display:none; $model->input->style";
-                $input = qeyNode('input')->attr($model->input->getRaw());
+                $entity->input->id = $key;
+                $entity->input->type = 'file';
+                $entity->input->value = $value;
+                if (!empty($value)) $entity->input->style = "display:none; $entity->input->style";
+                $input = qeyNode('input')->attr($entity->input->getRaw());
                 if (!empty($value)) {
                     $deleteLink =
                     qeyNode('a')->attr(array(
@@ -222,15 +222,15 @@ class FormUtils {
                 break;
         
             case 'file-list':
-                $model->input->type = 'file';
-                $model->input->multiple = 'true';
-                $model->input->token .= '[]';
-                for ($i = 0; $i < $model['count']; $i++)
-                    $input .= qeyNode('input')->attr($model->input->getRaw());
+                $entity->input->type = 'file';
+                $entity->input->multiple = 'true';
+                $entity->input->token .= '[]';
+                for ($i = 0; $i < $entity['count']; $i++)
+                    $input .= qeyNode('input')->attr($entity->input->getRaw());
                 break;
         }
         
-        if (isset($model['readonly']) && $model['readonly'] == true) {
+        if (isset($entity['readonly']) && $entity['readonly'] == true) {
             $input->readonly("true");
         }
         

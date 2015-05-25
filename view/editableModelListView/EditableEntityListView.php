@@ -1,43 +1,43 @@
 <?php
 namespace qeywork;
 
-class EditableModelListView {
+class EditableEntityListView {
     protected $name;
-    protected $modelList;
-    protected $modelType;
-    protected $modelManager;
+    protected $entityList;
+    protected $entityType;
+    protected $entityManager;
     
     /**
      * Constructor of this class
      * @param string $name
-     * @param ModelEntity $model 
-     * @param CModelManager $modelManager
+     * @param EntityEntity $entity
+     * @param CEntityManager $entityManager
      */
-    public function __construct($name, $modelType, $modelManager=null, $modelList=null) {
-        $this->modelType = is_string($modelType) ? 
-                new $modelType() : $modelType;
-        if (! $this->modelType instanceof IModel) {
-            throw new ArgumentException('$modelType must be an IModel');
+    public function __construct($name, $entityType, $entityManager=null, $entityList=null) {
+        $this->entityType = is_string($entityType) ?
+                new $entityType() : $entityType;
+        if (! $this->entityType instanceof IEntity) {
+            throw new ArgumentException('$entityType must be an IEntity');
     }
         $this->name = $name;
-        $this->modelList = $modelList;
-        $this->modelManager = $modelManager === null ? new CModelManager($this->modelType) : $modelManager;
+        $this->entityList = $entityList;
+        $this->entityManager = $entityManager === null ? new CEntityManager($this->entityType) : $entityManager;
     }
     
     /**
-     * @param IModelListViewVisual $view
+     * @param IEntityListViewVisual $view
      * @return string 
      * TODO: chain together with listview->build to build a single row
      */
-    public function build($view = 'BasicModelListViewVisual')
+    public function build($view = 'BasicEntityListViewVisual')
     {
         Buffer::start();
         
         if (is_string($view)) {
             $view = new $view();
         }
-        if (! $view instanceof IModelListViewVisual) {
-            throw new ArgumentException('viewVisual must be an instance of IModelListViewVisual');
+        if (! $view instanceof IEntityListViewVisual) {
+            throw new ArgumentException('viewVisual must be an instance of IEntityListViewVisual');
         }
         
         $listViewState = getListViewStateCollection()->get($this->name);
@@ -56,20 +56,20 @@ class EditableModelListView {
         
         getListViewStateCollection()->add($listViewState);
 
-        $modelProxy = new SortableFilterableModelProxy($this->modelType);
-        $sortOptions = $modelProxy->getSortOptions();
+        $entityProxy = new SortableFilterableEntityProxy($this->entityType);
+        $sortOptions = $entityProxy->getSortOptions();
         $sortOption = $view->sortDiv($sortOptions, $listViewState);
-        $filterOptions = $modelProxy->getFilterOptions();
+        $filterOptions = $entityProxy->getFilterOptions();
         $filterOption = $view->filterDiv($filterOptions, $listViewState); 
         
         $headerCells = array();
         $displayedKeys = array();
         
-        $keys = $this->modelType->keys();
+        $keys = $this->entityType->keys();
         foreach ($keys as $key) {
-            $model = $this->modelType->getFullFieldModel($key);
-            if (isset($model['show']) && $model['show'] === true || isset($model['label'])) {
-                $label = isset($model['label']) ? $model['label'] : '';
+            $entity = $this->entityType->getFullFieldEntity($key);
+            if (isset($entity['show']) && $entity['show'] === true || isset($entity['label'])) {
+                $label = isset($entity['label']) ? $entity['label'] : '';
                 
                 $view->headerCell($label);
                 $headerCells[] = Buffer::flush(false);
@@ -88,28 +88,28 @@ class EditableModelListView {
             $sortDesc = null;
         }
         $sortBy = $parts[0];
-        $modelList = $this->modelList === null ? $this->modelManager->getList($listViewState->filter, $sortBy, $sortDesc) : $this->modelList;
+        $entityList = $this->entityList === null ? $this->entityManager->getList($listViewState->filter, $sortBy, $sortDesc) : $this->entityList;
         
         $rows = array();
-        foreach ($modelList as $model) {
+        foreach ($entityList as $entity) {
             $cells = array();
             foreach ($displayedKeys as $key) {
-                $model = $model->getFullFieldModel($key);
+                $entity = $entity->getFullFieldEntity($key);
                 
-                $value = isset($model['value']) ? $model['value'] : '';
+                $value = isset($entity['value']) ? $entity['value'] : '';
 
-                if (isset($model['input'])) {
-                    switch ($model['input']) {
+                if (isset($entity['input'])) {
+                    switch ($entity['input']) {
                         case 'select':
-                            if (isset($model['options'])) {
-                                $value = $model['options'][$value];
+                            if (isset($entity['options'])) {
+                                $value = $entity['options'][$value];
                             } 
-                            else if (isset($model['datasource'])) {
+                            else if (isset($entity['datasource'])) {
                                 $options = FormUtils::getDataForSelect(
-                                    $model['datasource']['source'],
-                                    $model['datasource']['model'],
-                                    $model['datasource']['key'],
-                                    $model['datasource']['value']);
+                                    $entity['datasource']['source'],
+                                    $entity['datasource']['entity'],
+                                    $entity['datasource']['key'],
+                                    $entity['datasource']['value']);
                                 //TODO: default value ^
                                 $value = (isset($options[$value])) ? $options[$value] : ' - ';
                             }
@@ -117,7 +117,7 @@ class EditableModelListView {
 
                         case 'radio':
                         case 'checkbox':
-                            $value = $model['options'][$value];
+                            $value = $entity['options'][$value];
                             break;
 
                         case 'file':
@@ -134,7 +134,7 @@ class EditableModelListView {
                 $cells[] = Buffer::flush(false);
             }
             
-            $view->entry($model->getId(), implode('', $cells));
+            $view->entry($entity->getId(), implode('', $cells));
             $rows[] = Buffer::flush(false);
         }
         

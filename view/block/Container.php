@@ -18,9 +18,9 @@ class Container implements IBlock {
     }
     
     public function recursiveRender() {
-        $output = new HtmlEntityList();
+        $output = new HtmlObjectList();
         foreach ($this->children as $child) {
-            $output->add($child->render());
+            $output->add($child->render($h));
         }
         if ($output->count() == 1) {
             return $output[0];
@@ -41,9 +41,9 @@ class Container implements IBlock {
     }
     
     /**
-     * @return IHtmlEntity
+     * @return IHtmlObject
      */
-    public function render() {
+    public function render(HtmlBuilder $h) {
         return $this->recursiveRender();
     }
 }

@@ -4,7 +4,7 @@ namespace qeywork;
 /**
  * @author Dexx
  */
-class ModelNullPersistenceData implements IPersistentData {
+class EntityNullPersistenceData implements IPersistentData {
     public function getNameOfPersistenceObject() {
         return null;
     }

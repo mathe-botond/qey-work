@@ -4,7 +4,7 @@ namespace qeywork;
 /**
  * @author Dexx
  */
-class NullHtml implements IHtmlEntity {
+class NullHtml implements IHtmlObject {
     const EMPTY_RESULT = '';
     
     public function __toString() {
@@ -15,7 +15,7 @@ class NullHtml implements IHtmlEntity {
         return self::EMPTY_RESULT;
     }
 
-    public function render() {
+    public function render(HtmlBuilder $h) {
         return $this;
     }
 }

@@ -2,7 +2,7 @@
 namespace qeywork;
 
 /**
- * A Field is a member of a Model.
+ * A Field is a member of a Entity.
  *
  * @author Dexx
  */
@@ -114,29 +114,29 @@ class FormField {
         $this->errors = null;
     }
     
-    public function toClientModel() {
+    public function toClientEntity() {
         $clientValidatorData = array();
         foreach ($this->validators as $validator) {
             /* @var $validator Validator */
             $clientValidatorData[$validator->getName()] = $validator->getMessage();
         }
         
-        $clientModel = array(
+        $clientEntity = array(
             'label' => $this->label,
             'readonly' => $this->isReadOnly(),
         );
         
         if ($this->class != null) {
-            $clientModel['class'] = $this->class;
+            $clientEntity['class'] = $this->class;
         }
         
-        $clientModel['validators'] = $clientValidatorData;
+        $clientEntity['validators'] = $clientValidatorData;
         
-        return $clientModel;
+        return $clientEntity;
     }
     
-    public function render() {
-        $h = new HtmlFactory();
+    public function render(HtmlBuilder $h) {
+
         return $h->input()
                 ->type('text')
                 ->cls($this->class)
@@ -146,6 +146,6 @@ class FormField {
     
     
     public function __toString() {
-        return $this->render() . '';
+        return $this->render($h) . '';
     }
 }

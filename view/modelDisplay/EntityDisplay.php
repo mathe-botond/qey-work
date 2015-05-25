@@ -4,12 +4,12 @@ namespace qeywork;
 /**
  * @author Dexx
  */
-class ModelDisplay {
-    private $model;
+class EntityDisplay {
+    private $entity;
     protected $fields;
     
-    public function __construct(Model $type) {
-        $this->model = $type;
+    public function __construct(Entity $type) {
+        $this->entity = $type;
         $this->addClassPropertiesAsFields();
     }
     
@@ -36,17 +36,17 @@ class ModelDisplay {
         $this->fields[$field->getName()] = $field;
     }
 
-    public function injectModel(Model $model) {
-        $paramType = get_class($this->model);
-        if (! $model instanceof $paramType) {
-            throw new TypeException($model, $paramType);
+    public function injectEntity(Entity $entity) {
+        $paramType = get_class($this->entity);
+        if (! $entity instanceof $paramType) {
+            throw new TypeException($entity, $paramType);
         }
         
-        $injectFields = $model->getFields();
-        foreach ($this->model->getFields() as $key => $field) {
+        $injectFields = $entity->getFields();
+        foreach ($this->entity->getFields() as $key => $field) {
             $field->setValue( $injectFields[$key]->value() );
         }
-        $this->model->setId($model->getId());
+        $this->entity->setId($entity->getId());
     }
     
     public function getFields() {

@@ -82,18 +82,18 @@ class DB
                 }
             }
             
-            if ($fetch != null && $fetch instanceof Model) {
+            if ($fetch != null && $fetch instanceof Entity) {
                 $raw = $data;
-                $data = new ModelList($fetch);
+                $data = new EntityList($fetch);
                 $type = get_class($fetch);
                 foreach ($raw as $row) {
-                    $model = new $type();
-                    /* @var $model Model */
-                    $model->setId($row['id']);
-                    foreach ($model->getFields() as $field) {
+                    $entity = new $type();
+                    /* @var $entity Entity */
+                    $entity->setId($row['id']);
+                    foreach ($entity->getFields() as $field) {
                         $field->setValue($row[$field->getName()]);
                     }
-                    $data[ $row['id'] ] = $model;
+                    $data[ $row['id'] ] = $entity;
                 }
             }
             
@@ -159,7 +159,7 @@ class DB
             throw new DbException("Database $name command failed: " . $e->getMessage());
         }
     }
-    
+
     /**
      * Filter a given table based on a set of values. This function can construct queries such as:
      *       SELECT * FROM table_name WHERE condition1 AND condition2 AND ... AND conditionN
@@ -168,23 +168,30 @@ class DB
      *       array: IN
      *       other: =
      *
-     * @param string\ModelEntity $model - name of the DbModel class to which the result is fetched and table name is extracted
-     * @param array $conditions - a list containing the conditions
-     *
      * Usage example:
      * for a desired query of: SELECT * FROM users WHERE username LIKE 'a%' AND permissions IN [0, 1, 2]
      * $db->search('MUser', array('username' => 'a', 'permissions' => array(0, 1, 2)));
+     *
+     * @param Entity $entity - name of the DbEntity class to which the result is fetched and table name is extracted
+     * @param ConditionList $conditions - a list containing the conditions
+     * @param string $order
+     * @param int $orderDir
+     * @param int $limit
+     *
+     * @throws DbException
+     * @return EntityList
      */
     public function search(
-            Model $model,
+            Entity $entity,
             ConditionList $conditions = null,
             $order = null,
             $orderDir = DB::ORDER_ASC,
             $limit = null)
     {
+
         try
         {
-            $table = $model->getPersistenceData()->getNameOfPersistenceObject();      
+            $table = $entity->getPersistenceData()->getNameOfPersistenceObject();
             $valueList = array();
             
             $query = "SELECT * FROM `$table`";
@@ -206,7 +213,7 @@ class DB
                 $valueList = array_merge($valueList, $limit);
             }
             
-            $result = $this->query($query, $valueList, $model);
+            $result = $this->query($query, $valueList, $entity);
             //var_dump($query, $result);
             return $result;
         
@@ -216,11 +223,11 @@ class DB
     }
     
     public function getUnique (
-            Model $model,
+            Entity $entity,
             ConditionList $conditions = null) {
         
-        /* @var $result ModelList */
-        $result = $this->search($model, $conditions);
+        /* @var $result EntityList */
+        $result = $this->search($entity, $conditions);
         if ($result->count() > 1) {
             throw new DbException('Conditions do not provide unique result');
         }
@@ -234,7 +241,7 @@ class DB
     
     
     /**
-     * Get id of the model inserted last
+     * Get id of the entity inserted last
      */
     public function lastId()
     {

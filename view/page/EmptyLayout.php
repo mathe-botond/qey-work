@@ -24,15 +24,15 @@ class EmptyLayout implements ILayout {
         $this->content = $content;
     }
 
-    public function render() {
-        $h = new HtmlFactory();
+    public function render(HtmlBuilder $h) {
+
         
         $layout = $h->html()->content(
             $h->head()->content(
-                $this->meta->render()
+                $this->meta->render($h)
             ),
             $h->body()->content(
-                $this->content->render()
+                $this->content->render($h)
             )
         );
         

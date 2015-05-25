@@ -7,7 +7,7 @@ jQuery(document).ready(function($) {
 
         this.beforeSubmit = function() {
             var result;
-            $('[data-input-type=model-connector] .selected-items')
+            $('[data-input-type=entity-connector] .selected-items')
                 .children().attr('selected', 'selected');
             $form.qeyValidator("submit", function(r){result = r});
             if (result) {
@@ -33,7 +33,7 @@ jQuery(document).ready(function($) {
             });
         };
 
-        this.initModelConnector = function($parent){
+        this.initEntityConnector = function($parent){
             $selected = $('.selected-items', $parent);
             $source = $('.source-items', $parent);
             $add = $('.add', $parent);
@@ -99,7 +99,7 @@ jQuery(document).ready(function($) {
             $form = $aForm;
 
             var id = $form.attr('id');
-            var descriptor = models[id];
+            var descriptor = entitys[id];
 
             $form.qeyValidator({
                 descriptor: descriptor,
@@ -112,8 +112,8 @@ jQuery(document).ready(function($) {
                 $form.submit(this.beforeSubmit);
             }
 
-            $('[data-qey-input-type=model-connector]', $form).each(function(){
-                self.initModelConnector($(this));
+            $('[data-qey-input-type=entity-connector]', $form).each(function(){
+                self.initEntityConnector($(this));
             });
             $('[data-qey-input-type=multi-input]', $form).each(function(){
                 self.initMultiInput($(this));

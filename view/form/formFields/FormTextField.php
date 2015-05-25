@@ -2,8 +2,8 @@
 namespace qeywork;
 
 class FormTextField extends FormField {
-    public function render() {
-        $h = new HtmlFactory();
+    public function render(HtmlBuilder $h) {
+
         
         return $h->textarea()
                 ->cls($this->class)

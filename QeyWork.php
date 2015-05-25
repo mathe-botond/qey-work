@@ -22,9 +22,11 @@ class QeyWork {
     protected $actions;
     
     private $layout;
+    private $appName;
 
     public function __construct(Locations $locations,
-            $indexPageClass,
+            $indexToken,
+            $appName,
             $buildLater = false) {
         
         global $qeyWorkAutoloader;
@@ -34,12 +36,13 @@ class QeyWork {
         $this->assembler = new QeyWorkAssambler();
         $this->globals = new Globals();
         
-        $this->pages = new PageRouteCollection($indexPageClass);
+        $this->pages = new PageRouteCollection($indexToken);
         $this->actions = new ActionRouteCollection();
         
         if (! $buildLater) {
             $this->build();
         }
+        $this->appName = $appName;
     }
     
     public function configureDb(DBConfig $config) {
@@ -66,7 +69,7 @@ class QeyWork {
     }
     
     public function build() {
-        $this->assembler->setupIoC($this->locations, $this->globals);
+        $this->assembler->setupIoC($this->locations, $this->globals, $this->appName);
     }
     
     public function setLayout($layoutClass) {
@@ -122,6 +125,7 @@ class QeyWork {
      * @return type
      */
     public function render() {
+        $h = new HtmlBuilder();
         $layout = $this->getLayout();
         try {
             $this->assembler->setupIocForPageCreation($this->pages);
@@ -134,17 +138,17 @@ class QeyWork {
             $page = $pageHandler->postProcess($pageClass);
 
             $layout->setContent($page);
-            $renderedLayout = $layout->render();
+            $renderedLayout = $layout->render($h);
 
             $renderedLayout = $this->postProcess($renderedLayout);
         }
         catch (RouteException $e) {
             $layout->setContent(new ErrorPage(404));
-            $renderedLayout = $layout->render();
+            $renderedLayout = $layout->render($h);
         }
         catch (\Exception $e) {
             $layout->setContent(new ErrorPage(500, $e));
-            $renderedLayout = $layout->render();
+            $renderedLayout = $layout->render($h);
         }
 
         return $renderedLayout;

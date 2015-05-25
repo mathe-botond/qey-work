@@ -216,7 +216,7 @@ class RuleBuilder {
      * @param array $params List of constructor parameters
      * @return \Dice\Rule
      */
-    public function construct(array $params) {
+    public function setConstructParams(array $params) {
         $this->rule->constructParams = $params;
         return $this;
     }

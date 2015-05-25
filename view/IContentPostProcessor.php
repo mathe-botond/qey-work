@@ -8,5 +8,5 @@
 namespace qeywork;
 
 interface IContentPostProcessor {
-    public function process(IHtmlEntity $html);
+    public function process(IHtmlObject $html);
 }

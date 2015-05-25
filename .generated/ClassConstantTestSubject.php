@@ -6,7 +6,7 @@ class AnotherClassConstantTestSubject {}
 
 class ClassConstantTestSubject {
     public function getAnotherClassName() {
-        return 'AnotherClassConstantTestSubject';
+        return '\\apptest\\AnotherClassConstantTestSubject';
     }
     
     public function getUrlClassName() {
@@ -14,6 +14,6 @@ class ClassConstantTestSubject {
     }
     
     public function getUrlShortClassName() {
-        return 'q\\Url';
+        return '\\qeywork\\Url';
     }
 }

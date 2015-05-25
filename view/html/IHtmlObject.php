@@ -4,7 +4,7 @@ namespace qeywork;
 /**
  * @author Dexx
  */
-interface IHtmlEntity extends IRenderable {
+interface IHtmlObject {
     public function __toString();
     public function toString();
 }

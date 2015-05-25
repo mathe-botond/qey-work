@@ -18,8 +18,8 @@ class JsLinkCollection extends LinkCollection
         parent::__construct();
     }
     
-    protected function createEntry($file) {
-        $h = new HtmlFactory();
+    protected function createEntry(HtmlBuilder $h, $file) {
+
         return $h->script()->type('text/javascript')->defer()->src($file);
     }
     

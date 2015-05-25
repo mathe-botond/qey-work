@@ -94,7 +94,7 @@ class Params
         return $this->args;
     }
     
-    public function getFormDataAsModel(FormData $form)
+    public function getFormDataAsEntity(FormData $form)
     {
         foreach ($form->getFields() as $field) {
             if ($field instanceof FormField) {

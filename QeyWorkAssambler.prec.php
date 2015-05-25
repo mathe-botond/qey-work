@@ -23,7 +23,7 @@ class QeyWorkAssambler {
     }
     
     protected function getForcedInstances() {
-        return array(Model::class);
+        return array(Entity::class);
     }
     
     public function setupBaseRule() {
@@ -34,7 +34,7 @@ class QeyWorkAssambler {
             ->save();
     }
     
-    public function setupIoC(Locations $locations, Globals $globals) {
+    public function setupIoC(Locations $locations, Globals $globals, $appName) {
         $ioc = $this->ioc;
         
         $ioc->assign($locations);
@@ -44,7 +44,7 @@ class QeyWorkAssambler {
         $this->setupBaseRule();
         
         $ioc->getRuleBuilder(Logger::class)
-            ->construct(array($locations->logFilePath))
+            ->setConstructParams(array($locations->logFilePath))
             ->save();
         
         $ioc->getRuleBuilder(FormRenderer::class)
@@ -57,6 +57,10 @@ class QeyWorkAssambler {
             ->addSubstitution(
                 ICssLinkCollection::class,
                 new \Dice\Instance(CssLinkCollection::class))
+            ->save();
+
+        $this->ioc->getRuleBuilder(Session::class)
+            ->setConstructParams(array($appName))
             ->save();
     }
     

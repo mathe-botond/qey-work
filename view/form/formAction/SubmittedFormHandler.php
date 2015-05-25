@@ -44,7 +44,7 @@ class SubmittedFormHandler {
             throw new ClientDataException('Form data is missing');
         }
         
-        $this->params->getFormDataAsModel($this->form);
+        $this->params->getFormDataAsEntity($this->form);
         return $this->form;
     }
     

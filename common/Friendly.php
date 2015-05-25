@@ -20,7 +20,6 @@ class Friendly {
         }
 
         // normal __get() code here
-
         
         trigger_error("Property '$class::$key' not found or private", E_USER_ERROR);
     }

@@ -4,9 +4,9 @@ namespace qeywork;
 /**
  * @author Dexx
  */
-abstract class HtmlEntity implements IHtmlEntity {
+abstract class HtmlObject implements IHtmlObject {
     public function toString() {
-        return $this->render() . '';
+        return $this->render($h) . '';
     }
 
     public function __toString() {

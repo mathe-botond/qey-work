@@ -5,10 +5,10 @@ class FormVisualUsingTable extends  FormVisualBasis{
         
     public function base(
             $formAttriubtes,
-            IHtmlEntity $hiddenInputs,
-            HtmlEntityList $rows,
-            IHtmlEntity $submit) {
-        $h = new HtmlFactory();
+            IHtmlObject $hiddenInputs,
+            HtmlObjectList $rows,
+            IHtmlObject $submit) {
+
         $form = $h->form()->attr($formAttriubtes)->content(
             $hiddenInputs,
             $h->table()->cls('form')->content(
@@ -23,8 +23,8 @@ class FormVisualUsingTable extends  FormVisualBasis{
         return $form;
     }
     
-   public function entry($id, $class, $label, IHtmlEntity $input, $comment, $message) {
-       $h = new HtmlFactory();
+   public function entry($id, $class, $label, IHtmlObject $input, $comment, $message) {
+
        return $h->tr()->id($id)->cls($class)->content(
            $h->td()->cls('label form-entry-label')->text($label),
            $h->td()->cls('input form-entry-input')->content(

@@ -26,11 +26,11 @@ abstract class PageDecorator implements IPage {
         return $this->page->isType($type);
     }
     
-    protected abstract function decorate(IHtmlEntity $renderedPage);
+    protected abstract function decorate(IHtmlObject $renderedPage);
 
-    public function render() {
-        $decoratedPage = $this->decorate($this->page->render());
-        if (! $decoratedPage instanceof IHtmlEntity) {
+    public function render(HtmlBuilder $h) {
+        $decoratedPage = $this->decorate($this->page->render($h));
+        if (! $decoratedPage instanceof IHtmlObject) {
             throw new ReturnValueException('PageDecorator::decorate', 'IHtmlEntity', $decoratedPage);
         }
         return $decoratedPage;

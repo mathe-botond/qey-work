@@ -4,7 +4,7 @@ namespace qeywork;
 /**
  * @author Dexx
  */
-class ModelListDbPersistence {
+class EntityListDbPersistence {
     /** @var DB */
     private $db;
     
@@ -14,16 +14,16 @@ class ModelListDbPersistence {
         $this->db = $db;
     }
     
-    protected function getTableName(Model $type) {
+    protected function getTableName(Entity $type) {
         return $type->getPersistenceData()->getNameOfPersistenceObject();
     }
     
-    public function insertAll(ModelList $list) {
+    public function insertAll(EntityList $list) {
         if ($list->count() == 0) {
             return ;
         }
         
-        $type = $list->getModelType();
+        $type = $list->getEntityType();
         
         foreach ($type->getFields() as $field) {               
             $key = $field->getName();
@@ -34,10 +34,10 @@ class ModelListDbPersistence {
         $params = array();
         $valueList = array();
         
-        foreach ($list as $model) {
+        foreach ($list as $entity) {
             $valueVector = array();
             
-            foreach ($model->getFields() as $field) {               
+            foreach ($entity->getFields() as $field) {
                 $value = $field->value();
                 if ($value instanceof DbExpression) {
                     $valueVector[] = $value;
@@ -56,7 +56,7 @@ class ModelListDbPersistence {
             $query = "insert into " . $this->getTableName($type) . " ($sqlFields) values $values";
             $this->db->execute($query, $params);
         } catch(Exception $e) {
-            throw new ModelException('Database insert failed: '.$e->getMessage());
+            throw new EntityException('Database insert failed: '.$e->getMessage());
         }
     }
 }

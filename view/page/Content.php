@@ -26,7 +26,7 @@ class Content extends Page {
         return $this->content->getTitle();
     }
     
-    public function render() {
-        return $this->content->render();
+    public function render(HtmlBuilder $h) {
+        return $this->content->render($h);
     }
 }

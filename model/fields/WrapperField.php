@@ -2,7 +2,7 @@
 namespace qeywork;
 
 /**
- * A Field is a member of a Model.
+ * A Field is a member of a Entity.
  *
  * @author Dexx
  */

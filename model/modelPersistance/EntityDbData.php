@@ -4,7 +4,7 @@ namespace qeywork;
 /**
  * @author Dexx
  */
-class ModelDbData implements IPersistentData {
+class EntityDbData implements IPersistentData {
     const DB_PERSISTANCE_NAME = 'db';
     protected $name;
     

@@ -18,10 +18,10 @@ class ImageDisplay extends FieldDisplay {
         $this->alt = $alt;
     }
     
-    public function render() {
+    public function render(HtmlBuilder $h) {
         $url = $this->field->url()->file($this->field->value());
         
-        $h = new HtmlFactory();
+
         $imageNode = $h->img()->cls('thumb')->src($url);
         if ($this->alt != null) {
             $imageNode->alt($this->alt);

@@ -36,11 +36,11 @@ class DB
     function query($query, $params = null, $fetch = null, $limit = -1);
     function getConstantByType($value);
     function execute($query, $params);
-    DbModel function filter($model, $conditions);
+    DbEntity function filter($entity, $conditions);
     function lastId();
 }
 
-class DbModel extends ModelEntity
+class DbEntity extends EntityEntity
 {
     function __construct($descriptor);
     function getTableName();

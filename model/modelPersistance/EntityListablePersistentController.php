@@ -6,7 +6,7 @@ namespace qeywork;
  *
  * @author Dexx
  */
-abstract class ModelListablePersistentController implements IPersistence {
+abstract class EntityListablePersistentController implements IPersistence {
     protected $id;
     
     public function save() {

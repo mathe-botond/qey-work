@@ -45,8 +45,8 @@ class MenuEntityCollection extends SmartArray implements IRenderable {
         $this->add($value);
     }
 
-    public function render() {
-        $items = new HtmlEntityList();
+    public function render(HtmlBuilder $h) {
+        $items = new HtmlObjectList();
         
         $counter = 0;
         foreach ($this as $item) {

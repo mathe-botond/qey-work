@@ -15,7 +15,7 @@ class FormData {
     /** @var SubmitButton */
     protected $submit;
     protected $valid;
-    protected $model;
+    protected $entity;
     /** @var array */
     protected $errors;
     
@@ -31,9 +31,9 @@ class FormData {
         }
     }
     
-    public function __construct(Model $model, $submitLabel = self::DEFAULT_SUBMIT_LABEL) {
+    public function __construct(Entity $entity, $submitLabel = self::DEFAULT_SUBMIT_LABEL) {
         $this->submit = new SubmitButton($submitLabel);
-        $this->model = $model;
+        $this->entity = $entity;
         $this->addClassPropertiesAsFields();
     }
     
@@ -97,14 +97,14 @@ class FormData {
         return $this->submit;
     }
     
-    public function getModel() {
-        return $this->model;
+    public function getEntity() {
+        return $this->entity;
     }
     
-    public function toClientModel() {
+    public function toClientEntity() {
         $descriptor = array();
         foreach ($this->getFields() as $field) {
-            $descriptor[$field->getName()] = $field->toClientModel();
+            $descriptor[$field->getName()] = $field->toClientEntity();
         }
         return $descriptor;
     }

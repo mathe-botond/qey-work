@@ -5,7 +5,7 @@ namespace qeywork;
  * @author Dexx
  */
 class SimpleRenderebleArray extends SmartArray implements IRenderable {
-    public function render() {
+    public function render(HtmlBuilder $h) {
         $array = $this->getArrayCopy();
         for ($i = 0; $i < sizeof($array); $i++) {
             $array[$i] .= '';

@@ -8,12 +8,12 @@ class PostFormData extends FormData {
     protected $prg;
     
     public function __construct(
-            Model $model, 
+            Entity $entity,
             PostRedirectGetUrls $prg = null, 
             $submitLabel = null) {
         
         $this->prg = $prg;
-        parent::__construct($model, $submitLabel);
+        parent::__construct($entity, $submitLabel);
     }
     
     public function setPrg(PostRedirectGetUrls $prg) {

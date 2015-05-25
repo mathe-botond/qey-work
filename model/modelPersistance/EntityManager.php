@@ -5,23 +5,23 @@ namespace qeywork;
  * Class representing a database table entry and its common operations
  * @author Tenkes Attila, modified by lil-Dexx
  */    
-class ModelDbPersistence extends ModelListablePersistentController
+class EntityManager extends EntityListablePersistentController
 {
     protected $id;
     protected $db;
-    /** @var Model $model */
-    protected $model;
+    /** @var Entity $entity */
+    protected $entity;
     protected $tableName;
     
     public function __construct(DB $db) {
         $this->db = $db;
     }
     
-    public function setModel(Model $model) {
-        $this->model = $model;
-        $this->id = $model->getId();
+    public function setEntity(Entity $entity) {
+        $this->entity = $entity;
+        $this->id = $entity->getId();
 
-        $this->tableName = $model->getPersistenceData()->getNameOfPersistenceObject();
+        $this->tableName = $entity->getPersistenceData()->getNameOfPersistenceObject();
     }
     
     /**
@@ -38,41 +38,41 @@ class ModelDbPersistence extends ModelListablePersistentController
      */
     function load($id)
     {
-        $this->model->setId($id);
+        $this->entity->setId($id);
         $params = array("id" => $id);
 
         try {
             $result = $this->db->query("select * from ". $this->getTableName()
                     . " where id = :id", $params);
             if (count($result) !== 1) {
-                throw new ModelException('DbModel load failed: $id not found in table');
+                throw new EntityException('DbEntity load failed: $id not found in table');
             }
 
             $row = $result[0];
             unset($row["id"]);
-            $fields = $this->model->getFields();
+            $fields = $this->entity->getFields();
             foreach ($row as $key => $value) {
                 if (!array_key_exists($key, $fields) || !$fields[$key] instanceof Field) {
-                    //throw new ModelException("dbLoad failed: Table returned the '$key' " .
-                    //"undefined in the model");
+                    //throw new EntityException("dbLoad failed: Table returned the '$key' " .
+                    //"undefined in the entity");
                     continue ;
                 }
                 $fields[$key]->setValue( $value );
             }
         } catch(Exception $e) {
-            throw new ModelException('Database load failed: '.$e->getMessage());
+            throw new EntityException('Database load failed: '.$e->getMessage());
         }
         
         $this->id = $id;
     }
     
     public function loadReferences() {
-        foreach ($this->model->getFields() as $field) {
+        foreach ($this->entity->getFields() as $field) {
             if ($field instanceof ReferenceField && intval($field->value()) != 0) {
                 $controller = new static($this->db);
-                $controller->setModel($field->getModelType());
+                $controller->setEntity($field->getEntityType());
                 $controller->load($field->value());
-                $field->setModel($controller->getModel());
+                $field->setEntity($controller->getEntity());
             }
         }
     }
@@ -81,7 +81,7 @@ class ModelDbPersistence extends ModelListablePersistentController
     {
         $params = array();
         
-        foreach($this->model->getFields() as $key => $field) {
+        foreach($this->entity->getFields() as $key => $field) {
             if (! $field instanceof Field ) {
                 continue;
             }
@@ -103,17 +103,17 @@ class ModelDbPersistence extends ModelListablePersistentController
             $this->db->execute("insert into " . $this->getTableName() 
                     . " ($fields) values ($values)", $params);
             $this->id = $this->db->lastId();
-            $this->model->setId($this->id);
+            $this->entity->setId($this->id);
             return $this->id;
         } catch(Exception $e) {
-            throw new ModelException('Database insert failed: '.$e->getMessage());
+            throw new EntityException('Database insert failed: '.$e->getMessage());
         }
     }
 
     public function update()
     {
         $params = array();
-        foreach($this->model as $field) {
+        foreach($this->entity as $field) {
             if ($field instanceof Field) {
                 $key = $field->getName();
                 $sts[] = '`' . $key . '` = :' . $key;
@@ -124,9 +124,9 @@ class ModelDbPersistence extends ModelListablePersistentController
         $sets = join($sts, ", ");
         try {
             $this->db->execute("update " . $this->getTableName() . " set $sets where id = " 
-                    . $this->model->getId(), $params);
+                    . $this->entity->getId(), $params);
         } catch(Exception $e) {
-            throw new ModelException('Database update failed: ' . $e->getMessage());
+            throw new EntityException('Database update failed: ' . $e->getMessage());
         }
         return $this->id;
     }
@@ -134,36 +134,36 @@ class ModelDbPersistence extends ModelListablePersistentController
     public function remove()
     {   
         try {
-            $params = array("id" => $this->model->getId());
+            $params = array("id" => $this->entity->getId());
             $this->db->execute("delete from ". $this->getTableName(). " where id = :id", $params);
-            $this->model->setId(null);
+            $this->entity->setId(null);
             $this->id = null;
         } catch (Exception $e) {
-            throw new ModelException("Database delete failed: table: " . $this->getTableName()
+            throw new EntityException("Database delete failed: table: " . $this->getTableName()
                     . " id: " . $this->Id . ";  " . $e->getMessage());
         }
     }
     
     public function getDataOrCreateTable($query) {
-        $tableName = $this->model->persistanceData->getNameOfPersistenceObject();
+        $tableName = $this->entity->persistanceData->getNameOfPersistenceObject();
         try {
-            $result = $this->db->search($this->model);
+            $result = $this->db->search($this->entity);
             return $result;
         } catch (DbException $e) {
-            $checker = new ModelDbChecker($this->db);
+            $checker = new EntityDbChecker($this->db);
 
-            $checker->check($this->model);
+            $checker->check($this->entity);
             if ($checker->isTableMissing()) {
                 $this->db->execute($query);
             } else if ($checker->isFieldMissing()) {
-                throw new ModelException("Table ($tableName) corrupted. Please remove it manually.");
+                throw new EntityException("Table ($tableName) corrupted. Please remove it manually.");
             }
             
-            return $this->db->search($this->model);
+            return $this->db->search($this->entity);
         }
     }
     
-    public function getModel() {
-        return $this->model;
+    public function getEntity() {
+        return $this->entity;
     }
 }

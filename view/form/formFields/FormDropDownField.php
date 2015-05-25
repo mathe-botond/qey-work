@@ -22,12 +22,12 @@ class FormDropDownField extends FormField {
         $this->options = $options;
     }
 
-    public function render() {
+    public function render(HtmlBuilder $h) {
         if ($this->options == null) {
             throw new \BadMethodCallException('Option list is not set');
         }
         
-        $h = new HtmlFactory();
+
         /* @var $input HtmlNode */
         $input = $h->select()->name($this->getName());
         foreach ($this->options as $id => $option) {

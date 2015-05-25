@@ -65,8 +65,8 @@ class PostFormRenderer extends FormRenderer implements IRenderable {
         return $this->formData->getPrg();
     }
     
-    public function render() {
+    public function render(HtmlBuilder $h) {
         $this->linker->link($this->id);
-        return parent::render();
+        return parent::render($h);
     }
 }

@@ -5,29 +5,36 @@ namespace qeywork;
  * TODO: make it up to date also implement IFormVisual 
  */
 class FormVisualUsingList extends FormVisualBasis {
+    private $h;
+
+    public function __construct(HtmlBuilder $h) {
+        $this->h = $h;
+        parent::__construct($h);
+    }
+
     public function base(
             $formAttriubtes,
-            IHtmlEntity $hiddenInputs,
-            HtmlEntityList $rows,
-            IHtmlEntity $submit) {
-        $h = new HtmlFactory();
-        return $h->form()->cls('form-list-visual')->attr($formAttriubtes)->content(
+            IHtmlObject $hiddenInputs,
+            HtmlObjectList $rows,
+            IHtmlObject $submit) {
+
+        return $this->h->form()->cls('form-list-visual')->attr($formAttriubtes)->content(
             $hiddenInputs,
-            $h->ul()->cls('form')->content(
+            $this->h->ul()->cls('form')->content(
                 $rows,
-                $h->li()->cls('submit-button-container')->content(
+                $this->h->li()->cls('submit-button-container')->content(
                     $submit
                 )
             )
         );
     }
     
-    public function entry($id, $class, $label, IHtmlEntity $input, $comment, $message) {
-        $h = new HtmlFactory();
-        return $h->li()->id($id)->cls($class)->content(
-            $h->label()->cls('form-entry-label')->text($label),
+    public function entry($id, $class, $label, IHtmlObject $input, $comment, $message) {
+
+        return $this->h->li()->id($id)->cls($class)->content(
+            $this->h->label()->cls('form-entry-label')->text($label),
             $input, new HtmlWrapperNode($message),
-            $h->span()->cls('form-entry-comment')->text($comment)
+            $this->h->span()->cls('form-entry-comment')->text($comment)
         );
     }
 }

@@ -4,7 +4,7 @@ namespace qeywork;
 /**
  * @author Dexx
  */
-class UserModel extends Model implements IUserModel {
+class UserEntity extends Entity implements IUserEntity {
     /** @var Field */
     public $username;
     /** @var Field */

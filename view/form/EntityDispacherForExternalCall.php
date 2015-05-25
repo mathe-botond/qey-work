@@ -2,16 +2,16 @@
 namespace qeywork;
 
 /**
- * Dispatches client model for the current form
+ * Dispatches client entity for the current form
  */
-class ModelDispacherForExternalCall implements IAction {
-    const NAME = 'model-dispacher';
+class EntityDispacherForExternalCall implements IAction {
+    const NAME = 'entity-dispacher';
     
     protected $id;
     /** @var PostFormCollection $formCollection */
     protected $formCollection;
     
-    /** @var ClientModelDispatcher $dispatcher */
+    /** @var ClientEntityDispatcher $dispatcher */
     protected $dispatcher;
     
     public function __construct(Params $params, Session $session) {
@@ -19,14 +19,14 @@ class ModelDispacherForExternalCall implements IAction {
         
         $this->formCollection = new PostFormCollection($session);
         
-        $this->dispatcher = new ClientModelDispatcher();
+        $this->dispatcher = new ClientEntityDispatcher();
     }
     
     public function execute() {
         /* @var $form PostFormRenderer */
         $form = $this->formCollection->get($this->id);
         
-        $dispatcher = new ClientModelDispatcher();
+        $dispatcher = new ClientEntityDispatcher();
         $dispatcher->addForm($form);
         echo $dispatcher->output();
     }

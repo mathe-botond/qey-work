@@ -1,20 +1,20 @@
 <?php
 namespace qeywork;
 
-abstract class ModelListViewVisualWithActions extends ModelListViewVisual {    
+abstract class EntityListViewVisualWithActions extends EntityListViewVisual {
     
-    /** @var HtmlFactory */
+    /** @var HtmlBuilder */
     private $h;
     
     public function __construct() {
-        $this->h = new HtmlFactory();
+        $this->h = new HtmlBuilder();
     }
     
     protected function getActionsLabel() {
         return 'Actions';
     }
     
-    public function header(IHtmlEntity $headerCellList) {
+    public function header(IHtmlObject $headerCellList) {
         $headerCellList->append(
             $this->headerCell($this->getActionsLabel())
         );
@@ -30,7 +30,7 @@ abstract class ModelListViewVisualWithActions extends ModelListViewVisual {
         );
     }
     
-    public function entry($id, IHtmlEntity $cells) {
+    public function entry($id, IHtmlObject $cells) {
         $cells->append(
             $this->cell($this->actions($id))
         );
@@ -44,5 +44,5 @@ abstract class ModelListViewVisualWithActions extends ModelListViewVisual {
         return $this->h->td()->content($value);
     }
     
-    protected abstract function actions(Model $model);
+    protected abstract function actions(Entity $entity);
 }

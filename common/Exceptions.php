@@ -7,12 +7,12 @@ namespace qeywork;
 class NullRefenceException extends \Exception {}
 
 /**
- * Used when malformed model was detected 
+ * Used when malformed entity was detected
  */
-class ModelException extends \Exception {}
+class EntityException extends \Exception {}
 
 /**
- * Used when malformed model was detected 
+ * Used when malformed entity was detected
  */
 class DbException extends \Exception {}
 

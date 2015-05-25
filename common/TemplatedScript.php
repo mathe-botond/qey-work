@@ -48,6 +48,6 @@ abstract class TemplatedScript implements IAction {
         }
         
         $template = file_get_contents($templateFile);
-        echo $this->processTemplates($template);
+        return $this->processTemplates($template);
     }
 }

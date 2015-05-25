@@ -5,53 +5,53 @@ namespace qeywork;
  * @author Dexx
  */
 class ReferenceField extends TypedField {
-    protected $model;
-    protected $modelType;
+    protected $entity;
+    protected $entityType;
  
-    public function __construct($name, Model $type) {
+    public function __construct($name, Entity $type) {
         parent::__construct($name, TypedField::INT_TYPE);
         
         $this->canBeNull(false);
-        $this->modelType = $type;
+        $this->entityType = $type;
     }
     
     /**
-     * Get referenced Model type as instance of that model
-     * Useful for model information without referenced model being loaded
-     * @return Model
+     * Get referenced Entity type as instance of that entity
+     * Useful for entity information without referenced entity being loaded
+     * @return Entity
      */
-    public function getModelType() {
-        return $this->modelType;
+    public function getEntityType() {
+        return $this->entityType;
     }
     
-    public function setModel(Model $model = null) {
-        $this->model = $model;
-        if ($model == null) {
+    public function setEntity(Entity $entity = null) {
+        $this->entity = $entity;
+        if ($entity == null) {
             $this->setValue(null);
         } else {
-            $this->setValue($this->model->getId());
+            $this->setValue($this->entity->getId());
         }
     }
     
     /**
-     * Get referenced model
-     * @return Model
-     * @throws ModelException when referenced model is not loaded
+     * Get referenced entity
+     * @return Entity
+     * @throws EntityException when referenced entity is not loaded
      */
-    public function getModel() {
-        if ($this->value() != null && $this->model == null ||
-                $this->model != null && $this->model->getId() != $this->value()) {
-            throw new ModelException('Referenced model not loaded');
+    public function getEntity() {
+        if ($this->value() != null && $this->entity == null ||
+                $this->entity != null && $this->entity->getId() != $this->value()) {
+            throw new EntityException('Referenced entity not loaded');
         }
         
-        return $this->model;
+        return $this->entity;
     }
     
     public function setValue($value) {
         parent::setValue($value);
         
         if ($value == null) {
-            $this->model = null;
+            $this->entity = null;
         }
     }
 }
