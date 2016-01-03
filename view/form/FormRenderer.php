@@ -45,7 +45,7 @@ class FormRenderer {
         $this->formData = $formData;
     }
     
-    protected function createHiddenData() {
+    protected function createHiddenData(HtmlBuilder $h) {
         $hidden = $this->formData->getHiddenFields();
         $rendered = new HtmlObjectList();
         foreach ($hidden as $field) {
@@ -72,7 +72,7 @@ class FormRenderer {
         }
         
         //create hidden input
-        $hiddenData = $this->createHiddenData();
+        $hiddenData = $this->createHiddenData($h);
         
         $entryList = new HtmlObjectList();
         $fields = $formData->getFields();

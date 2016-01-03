@@ -6,16 +6,24 @@ namespace qeywork;
 class Mailer
 {
     private $phpMailer;
-    
-    public function __construct() {
+    private $config;
+
+    public function __construct(MailerConfigurator $config) {
         $this->phpMailer = new PHPMailer(true);
         $this->phpMailer->PluginDir = dirname(__FILE__)."/";
         $this->phpMailer->CharSet	= "utf-8";
         $this->phpMailer->Encoding	= "base64";
+        $config->configureMailer($this->phpMailer);
+
+        $this->config = $config;
     }
     
     public function setFromAddress($address, $name = '') {
-        $this->phpMailer->SetFrom($address, $name);
+        if ($this->config->canFromAddressBeSpecified()) {
+            $this->phpMailer->SetFrom($address, $name);
+        } else {
+            $this->phpMailer->AddReplyTo($address, $name);
+        }
     }
     
     public function addToAddress($address, $name = '') {
@@ -30,11 +38,11 @@ class Mailer
         foreach ($files as $fileName => $file) {
             $this->phpMailer->AddAttachment($file, $fileName);
         }
-        
+
         $this->phpMailer->Send();
         
         $this->phpMailer->Clear();
-
+        $this->config->configureMailer($this->phpMailer);
         return true;
     }
 }

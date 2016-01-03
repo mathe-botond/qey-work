@@ -8,19 +8,20 @@
  * @license				http://www.opensource.org/licenses/bsd-license.php  BSD License 
  * @version				1.1.1
  * 
- * Edits:
- * @author Dexx
+ *      Edits:
+ *      @author Dexx
  */
 
 namespace Dice;
 
-class Dice implements IoC {
+class GraphedDice extends Dice {
     const MATCH_ALL = '*';
     
     private $verbose = false;
     private $rules = array();
     private $instances = array();
-    
+    private $tabs = 0;
+
     public function setVerbose($verbose) {
         $this->verbose = $verbose;
     }
@@ -101,11 +102,12 @@ class Dice implements IoC {
         $rule = $this->getRule($component);
         $className = (!empty($rule->instanceOf)) ? $rule->instanceOf : $component;
         
-        if ($this->verbose) {
-            echo "$className(";
-        }
+        $this->tabs++;
+        
         $share = $this->getParams($rule->shareInstances);
         $params = $this->getMethodParams($className, '__construct', $rule, array_merge($share, $args, $this->getParams($rule->constructParams)), $share);
+        
+        $this->tabs--;
         if ($this->verbose) {
             echo ") ";
         }
@@ -161,6 +163,21 @@ class Dice implements IoC {
                 }
             }
             $paramClassName = $paramClass ? strtolower($paramClass->name) : false;
+            
+            $gclassName = addslashes($className);
+            $gparamClassName = addslashes($paramClassName);
+            
+            $gclassName = str_replace("qeywork", "q", $gclassName);
+            $gparamClassName = str_replace("qeywork", "q", $gparamClassName);
+            $gclassName = str_replace("qwerty", "qt", $gclassName);
+            $gparamClassName = str_replace("qwerty", "qt", $gparamClassName);
+            $gclassName = str_replace("qeyms", "qs", $gclassName);
+            $gparamClassName = str_replace("qeyms", "qs", $gparamClassName);
+            
+            for ($i = 0; $i < $this->tabs; $i++) {
+                echo "\t";
+            }
+            echo "\"$gclassName\" -> \"$gparamClassName\";\n";
 
             if ($paramClassName && isset($rule->substitutions[$paramClassName])) {
                 $parameters[] = is_string($rule->substitutions[$paramClassName]) ? new Instance($rule->substitutions[$paramClassName]) : $rule->substitutions[$paramClassName];
@@ -177,118 +194,5 @@ class Dice implements IoC {
 
     public function getExistingInstances() {
         return $this->instances;
-    }
-}
-
-class Rule {
-    public $ioc;
-    public $key;
-    
-    public $shared = false;
-    public $constructParams = array();
-    public $substitutions = array();
-    public $newInstances = array();
-    public $instanceOf;
-    public $call = array();
-    public $inherit = true;
-    public $shareInstances = array();
-}
-
-class RuleBuilder {
-
-    /** @var Dice */
-    private $ioc;
-    private $key;
-    /** @var Rule */
-    private $rule;
-
-    public function __construct(Dice $ioc, $key) {
-        $this->ioc = $ioc;
-        $this->key = $key;
-        $this->rule = clone($ioc->getRule($key));
-    }
-    
-    /**
-     * @param bool $shared Makes this instance shared
-     * @return \Dice\RuleBuilder
-     */
-    public function setShared($shared) {
-        $this->rule->shared = $shared;
-        return $this;
-    }
-
-    /**
-     * @param array $params List of constructor parameters
-     * @return \Dice\RuleBuilder
-     */
-    public function setConstructParams(array $params) {
-        $this->rule->constructParams = $params;
-        return $this;
-    }
-    
-    /**
-     * @param array $params List of constructor parameters
-     * @return \Dice\RuleBuilder
-     */
-    public function setCall($function, array $arguments) {
-        $this->rule->call[] = array($function, $arguments);
-        return $this;
-    }
-    
-    public function addSubstitution($class, $instance) {
-        //$class = strtolower( trim($class, '\\') );
-        $class = trim($class, '\\');
-        $this->rule->substitutions[$class] = $instance;
-        return $this;
-    }
-    
-    public function addDecoratingSubstitution($class, $decorator) {
-        $class = strtolower( trim($class, '\\') );
-        if (! isset($this->rule->substitutions[$class])) {
-            throw new \qeywork\ArgumentException("$class doesn't have a substitution yet, can't decorate.");
-        }
-        $seed = $this->rule->substitutions[$class];
-        $this->addSubstitution($class, $decorator);
-        
-        $this->ioc->getRuleBuilder($decorator)
-            ->addSubstitution($class, $seed)
-            ->save();
-        return $this;
-    }
-    
-    public function addSubstitutions($substitutions) {
-        array_merge($this->rule->substitutions, $substitutions);
-        return $this;
-    }
-    
-    public function addNewInstances($instances) {
-        array_merge($this->rule->newInstances, $instances);
-        return $this;
-    }
-    
-    public function setInstanceOf($instance) {
-        $this->rule->instanceOf = $instance;
-        return $this;
-    }
-    
-    public function setShareInstances(array $sharedInstances) {
-        $this->rule->shareInstances = $sharedInstances;
-        return $this;
-    }
-    
-    public function getRule() {
-        return $this->rule;
-    }
-    
-    public function save() {
-        $this->ioc->addRule($this->key, $this->rule);
-    }
-}
-
-class Instance {
-    public $name;
-
-    public function __construct($instance) {
-        $this->name = $instance;
     }
 }

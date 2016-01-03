@@ -9,10 +9,14 @@ namespace qeywork;
 abstract class AbstractTemplatedLayout extends AbstractTemplatedBlock implements ILayout {
     /** @var QeyMeta */
     protected $meta;
+    /** @var IPage */
     protected $content;
-    
-    public function __construct(QeyMeta $meta) {
+    /** @var string */
+    private $title;
+
+    public function __construct($title, QeyMeta $meta) {
         $this->meta = $meta;
+        $this->title = $title;
     }
     
     public function getContent() {
@@ -23,10 +27,8 @@ abstract class AbstractTemplatedLayout extends AbstractTemplatedBlock implements
         return $this->meta;
     }
 
-    protected abstract function getAppName();
-
     private function setTitle() {
-        $title = $this->getAppName();
+        $title = $this->title;
         if (($subTitle = $this->content->getTitle()) != null) {
             $title .= ' - ' . $subTitle;
         }

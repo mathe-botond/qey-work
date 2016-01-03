@@ -49,7 +49,7 @@ class Url extends AbstractPath
         $query = is_string($path) && array_key_exists('query', $data) ? $data['query'] : $fields;
         if ($query !== '')
         {
-            $queryFields = split('[;&]', $data['query']);
+            $queryFields = preg_split('/[;&]/', $data['query']);
             foreach ($queryFields as $field)
             {
                 $fieldParts = explode('=', $field);

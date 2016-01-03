@@ -4,7 +4,6 @@ namespace qeywork;
 class PageRouteCollection {
     private $defaultRouter;
     private $routers = array();
-    private $indexToken;
 
     public function __construct($indexToken) {
         $this->defaultRouter = new PageRouter();
@@ -25,10 +24,6 @@ class PageRouteCollection {
      * @throws RouteException
      */
     public function getCurrentPage(Arguments $target) {
-        if (trim($target->toString()) == '') {
-            $target->forceOtherToken($this->indexToken);
-        }
-        
         $page = $this->defaultRouter->getPage($target);
         if ($page != null) {
             return $page;

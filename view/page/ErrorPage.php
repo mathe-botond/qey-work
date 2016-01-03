@@ -67,7 +67,7 @@ class ErrorPage extends Page {
 
         $e = ($this->e != null) ?
             $h->div()->cls('details')->content(
-                $h->h5()->text($this->e->getMessage()),
+                $h->h5()->text(get_class($this->e) . " - " . $this->e->getMessage()),
                 $h->p()->text($this->e->getFile() . $this->e->getLine()))
             : new NullHtml();
 

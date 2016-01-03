@@ -133,9 +133,9 @@ class Autoloader {
             foreach (self::$instances as $loader) {
                 if (self::$firstError) {
                     self::$firstError = false;
-                    echo "Can't find '$class'. Reset.</br>";
-                    $e = new \Exception();
-                    echo($e->getTraceAsString());
+                    //echo "Can't find '$class'. Reset.</br>";
+                    //$e = new \Exception();
+                    //echo($e->getTraceAsString());
                 }
                 $loader->reset();
             }

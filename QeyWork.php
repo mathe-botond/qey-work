@@ -7,8 +7,8 @@ namespace qeywork;
 class QeyWork {
     const DEFAULT_HOME_PAGE = 'home';
 
-    /** @var Locations */
-    private $locations;
+    /** @var Config */
+    private $config;
     /** @var Autoloader */
     private $autoloader;
     /** @var QeyWorkAssambler  */
@@ -24,29 +24,22 @@ class QeyWork {
     private $layout;
     private $appName;
 
-    public function __construct(Locations $locations,
-            $indexToken,
-            $appName,
-            $buildLater = false) {
+    public function __construct(Config $config, $buildLater = false) {
         
         global $qeyWorkAutoloader;
         $this->autoloader = $qeyWorkAutoloader;
-        $this->locations = $locations;
+        $this->config = $config;
         
         $this->assembler = new QeyWorkAssambler();
         $this->globals = new Globals();
-        
-        $this->pages = new PageRouteCollection($indexToken);
+
+        $this->pages = new PageRouteCollection($config->getIndex());
         $this->actions = new ActionRouteCollection();
         
         if (! $buildLater) {
             $this->build();
         }
-        $this->appName = $appName;
-    }
-    
-    public function configureDb(DBConfig $config) {
-        $this->assembler->configureDb($config);
+        $this->appName = $config;
     }
     
     public function setAssembler(QeyWorkAssambler $assembler) {
@@ -69,13 +62,13 @@ class QeyWork {
     }
     
     public function build() {
-        $this->assembler->setupIoC($this->locations, $this->globals, $this->appName);
+        $this->assembler->setupIoC($this->config, $this->globals);
     }
     
     public function setLayout($layoutClass) {
         $this->layout = $this->assembler->createLayout($layoutClass);
         if (! $this->layout instanceof ILayout) {
-            throw new TypeException($this->layoutClass, 'ILayout');
+            throw new TypeException($layoutClass, 'ILayout');
         }
     }
     

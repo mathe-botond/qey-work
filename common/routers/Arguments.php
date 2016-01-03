@@ -9,19 +9,26 @@ class Arguments {
     
     protected $token;
     protected $args;
-    
+
+    protected $frontPage;
+
     private function getRequestedTarget() {
         $target = $this->getArgument(0);
         return !empty($target) ? $target : '';
     }  
 
-    public function __construct(Params $params) {
-        $this->args = \explode('/', trim( $params->get(self::TARGET) , '/'));
+    public function __construct(IndexToken $index, Params $params) {
+        $this->args = \explode('/', trim($params->get(self::TARGET), '/'));
         $this->token = $this->getRequestedTarget();
+
+        if (trim($this->token) == '') {
+            $this->forceOtherToken($index->get());
+        }
+        $this->frontPage = $index;
     }
-    
+
     public function isFrontPage() {
-        return empty($this->token);
+        return $this->frontPage->get() == $this->token;
     }
     
     public function getArgument($number) {

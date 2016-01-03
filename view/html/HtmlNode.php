@@ -8,7 +8,7 @@ namespace qeywork;
  * @return \HtmlNode 
  */
 
-class HtmlNode implements IHtmlObject
+class HtmlNode implements IHtmlObject, IRenderable
 {
     protected $tag;
     protected $idAttr;

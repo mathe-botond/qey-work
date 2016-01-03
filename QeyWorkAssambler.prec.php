@@ -9,7 +9,7 @@ class QeyWorkAssambler {
     protected $ioc;
     
     public function __construct() {
-        $this->ioc = new \Dice\Dice();
+        $this->ioc = new \Dice\GraphedDice();
     }
     
     public function setCostumIoC(\Dice\IoC $ioc) {
@@ -34,12 +34,22 @@ class QeyWorkAssambler {
             ->save();
     }
     
-    public function setupIoC(Locations $locations, Globals $globals, $appName) {
+    public function setupIoC(Config $config, Globals $globals)
+    {
         $ioc = $this->ioc;
-        
+
+        $locations = $config->getLocations();
+
+        $ioc->assign($config);
+        $ioc->assign($config->getIndex());
+        $ioc->assign($config->getMailerConfig());
         $ioc->assign($locations);
         $ioc->assign($globals);
         $ioc->assign($ioc);
+
+        if (($dbConfig = $config->getDbConfig()) != null) {
+            $ioc->assign($dbConfig);
+        }
         
         $this->setupBaseRule();
         
@@ -60,7 +70,7 @@ class QeyWorkAssambler {
             ->save();
 
         $this->ioc->getRuleBuilder(Session::class)
-            ->setConstructParams(array($appName))
+            ->setConstructParams(array($config->getAppName()))
             ->save();
     }
     
@@ -72,6 +82,7 @@ class QeyWorkAssambler {
     }
     
     public function registerPagePostProcessor($processorClass) {
+        /** @var IPagePostProcessor $processor */
         $processor = $this->ioc->create($processorClass);
         $pageHandler = $this->getPageHandler();
         $pageHandler->setPagePostProcessor($processor);
@@ -92,13 +103,6 @@ class QeyWorkAssambler {
         return $this->ioc->create($layoutClass);
     }
     
-    /**
-     * @return \qeywork\PageFactoryCollection
-     */
-    public function createPageCollection() {
-        return $this->ioc->create(PageFactoryCollection::class);
-    }
-    
     public function createPage($className) {
         return $this->ioc->create($className);
     }
@@ -110,9 +114,4 @@ class QeyWorkAssambler {
     public function getIoC() {
         return $this->ioc;
     }
-
-    public function configureDb(DBConfig $config) {
-        $this->ioc->assign($config);
-    }
-
 }

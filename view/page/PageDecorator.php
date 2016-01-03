@@ -26,7 +26,7 @@ abstract class PageDecorator implements IPage {
         return $this->page->isType($type);
     }
     
-    protected abstract function decorate(IHtmlObject $renderedPage);
+    protected abstract function decorate(IRenderable $renderedPage);
 
     public function render(HtmlBuilder $h) {
         $decoratedPage = $this->decorate($this->page->render($h));

@@ -23,13 +23,14 @@ class PostFormRenderer extends FormRenderer implements IRenderable {
      * Constructor of this class
      * @param PostFormCollection $formCollection
      * @param PostFormLinker $linker
-     * @param IFormVisual $visual
+     * //TODO: swap for IFormVIsual
+     * @param FormVisualUsingList $visual
      */
     public function __construct(
             PostFormCollection $formCollection,
             PostFormLinker $linker,
-            IFormVisual $visual = null) {
-        
+            FormVisualUsingList $visual) {
+
         parent::__construct($visual);
         
         $this->visual = $visual;
@@ -37,9 +38,7 @@ class PostFormRenderer extends FormRenderer implements IRenderable {
         
         $this->formCollection = $formCollection;
         
-        $this->visual = ($visual === null)
-                ? new FormVisualUsingList()
-                : $visual;
+        $this->visual = $visual;
 
         $this->method = 'POST';
         $this->linker = $linker;
@@ -52,8 +51,8 @@ class PostFormRenderer extends FormRenderer implements IRenderable {
         $this->id = $this->formCollection->add($this->formData);
     }
     
-    public function createHiddenData() {
-        $hiddenData = parent::createHiddenData();
+    public function createHiddenData(HtmlBuilder $h) {
+        $hiddenData = parent::createHiddenData($h);
         $hiddenData->append($this->formVisual->hiddenSubmitData('qey-form-id', $this->id));
         return $hiddenData;
     }

@@ -66,7 +66,7 @@ Now we can implement a HelloWorld page that echoes 'Hello World'. QeyWork pages 
 use qeywork as q;
 
 class Home extends q\Page {
-    public function render() {
+    public function render(q\HtmlBuilder $h) {
         return new q\TextNode('Hello world');
     }    
 }

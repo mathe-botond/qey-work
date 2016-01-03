@@ -15,7 +15,7 @@ class QeyMeta implements IRenderable
     public $jsLinks;
     
     public function __construct(
-            ICssLinkCollection $css,
+            CssLinkCollection $css,
             JsLinkCollection $js,
             HtmlBuilder $h) {
         

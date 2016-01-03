@@ -11,7 +11,7 @@ class PageHandler {
     protected $layout;
     
     protected $pagePostProcessor;
-    
+
     public function __construct(
             Arguments $token,
             History $history) {

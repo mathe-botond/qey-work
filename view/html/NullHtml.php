@@ -4,7 +4,7 @@ namespace qeywork;
 /**
  * @author Dexx
  */
-class NullHtml implements IHtmlObject {
+class NullHtml implements IHtmlObject, IRenderable {
     const EMPTY_RESULT = '';
     
     public function __toString() {
