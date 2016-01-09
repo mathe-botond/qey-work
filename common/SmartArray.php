@@ -53,4 +53,11 @@ class SmartArray extends \ArrayObject {
         $firstItem = reset($copy);
         return $firstItem;
     }
+
+    public function appendArray($array) {
+        foreach ($array as $item) {
+            $this->append($item);
+        }
+    }
+
 }

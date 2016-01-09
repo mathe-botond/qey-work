@@ -29,7 +29,7 @@ class FormDropDownField extends FormField {
         
 
         /* @var $input HtmlNode */
-        $input = $h->select()->name($this->getName());
+        $input = $h->select()->name($this->getName())->cls($this->class);
         foreach ($this->options as $id => $option) {
             $item = $h->option()->value($id)->text($option);
             if ($this->field->value() == $id) {

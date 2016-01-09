@@ -34,4 +34,6 @@ interface IFormVisual extends IVisual {
     public function message($id, $class, $message);
     
     public function hiddenSubmitData($name, $value);
+    
+    public function fieldSet(HtmlObjectList $children, $title, $class);
 }

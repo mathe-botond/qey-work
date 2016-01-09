@@ -21,7 +21,7 @@ class PostFormData extends FormData {
     }
     
     public function transferFields(FormData $form) {
-        $this->fields = $form->getFields();
+        $this->fieldSet = $form->getFieldSet();
     }
     
     /**

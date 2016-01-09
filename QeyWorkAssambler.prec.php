@@ -9,7 +9,7 @@ class QeyWorkAssambler {
     protected $ioc;
     
     public function __construct() {
-        $this->ioc = new \Dice\GraphedDice();
+        $this->ioc = new \Dice\Dice();
     }
     
     public function setCostumIoC(\Dice\IoC $ioc) {

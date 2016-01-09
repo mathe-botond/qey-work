@@ -37,4 +37,14 @@ class FormVisualUsingList extends FormVisualBasis {
             $this->h->span()->cls('form-entry-comment')->text($comment)
         );
     }
+
+    public function fieldSet(HtmlObjectList $children, $title = null, $class = null) {
+        $titleNode = new NullHtml();
+        if ($title != null) {
+            $titleNode = $this->h->legend()->text($title);
+        }
+        return $this->h->fieldset()->cls($class)->content(
+            $titleNode, $children
+        );
+    }
 }

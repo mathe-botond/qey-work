@@ -32,4 +32,9 @@ class FormVisualUsingTable extends  FormVisualBasis{
            )
        );
     }
+
+    public function fieldSet(HtmlObjectList $children, $class) {
+        return $children;
+    }
+
 }
