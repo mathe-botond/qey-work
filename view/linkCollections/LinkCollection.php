@@ -1,5 +1,8 @@
 <?php
-namespace qeywork;
+namespace QeyWork\View\LinkCollections;
+
+use QeyWork\View\Html\HtmlBuilder;
+use QeyWork\View\Html\HtmlObjectList;
 
 abstract class LinkCollection implements ILinkCollection
 {
@@ -12,10 +15,10 @@ abstract class LinkCollection implements ILinkCollection
     protected function addSingle($file) {
         $this->files[] = $file;
     }
-    
+
     /**
      * Add file to collection
-     * @param Url $file,... File(s) to add to colelction
+     * @internal param Url $file File(s) to add to colelction
      */
     public function add()
     {

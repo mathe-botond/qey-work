@@ -6,7 +6,9 @@
 * @license				http://www.opensource.org/licenses/bsd-license.php  BSD License
 * @version				1.1.1
 */
-namespace Dice\Loader;
+namespace QeyWork\Common\ReDice\Loader;
+
+use QeyWork\Common\ReDice\Dice;
 
 class XML {
 	private function getComponent($str, $createInstance = false) {
@@ -14,7 +16,7 @@ class XML {
 		else return (strpos((string) $str, '{') === 0) ? array(new Callback($str), 'create') : (string) $str;
 	}
 
-	public function load($map, \Dice\Dice $dic) {
+	public function load($map, Dice $dic) {
 		if (!($map instanceof \SimpleXmlElement)) $map = simplexml_load_file($map);
 		foreach ($map as $key => $value) {
 			$rule = clone $dic->getRule((string) $value->name);

@@ -1,5 +1,11 @@
 <?php
-namespace qeywork;
+namespace QeyWork\View\Block;
+use QeyWork\Common\Addresses\Path;
+use QeyWork\Common\ArgumentException;
+use QeyWork\View\Html\HtmlBuilder;
+use QeyWork\View\Html\HtmlWrapperNode;
+use QeyWork\View\Html\IHtmlObject;
+use QeyWork\View\IRenderable;
 
 /**
  * @author Dexx

@@ -1,5 +1,6 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Common\Routers;
+use QeyWork\Common\IAction;
 
 /**
  * Description of PageCollection

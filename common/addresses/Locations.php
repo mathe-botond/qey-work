@@ -1,5 +1,7 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Common\Addresses;
+
+use QeyWork\Common\ResourceException;
 
 class Locations {
     const DEFAULT_LOG_FILE = 'log.txt';

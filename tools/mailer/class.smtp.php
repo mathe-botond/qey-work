@@ -1,5 +1,5 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Tools\Mailer;
 
 /*~ class.smtp.php
 .---------------------------------------------------------------------------.

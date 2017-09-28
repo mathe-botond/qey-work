@@ -1,5 +1,8 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Resources;
+
+use QeyWork\Common\Addresses\Url;
+use QeyWork\Common\Globals;
 
 class History
 {

@@ -1,5 +1,6 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Common\Routers;
+use QeyWork\View\Page\Page;
 
 /**
  * Description of PageCollection
@@ -8,6 +9,7 @@ namespace qeywork;
  */
 interface IPageRouter {
     /**
+     * @param Arguments $token
      * @return Page
      */
     public function getPage(Arguments $token);

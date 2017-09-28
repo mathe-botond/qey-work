@@ -1,23 +1,30 @@
 <?php
-namespace qeywork;
+namespace QeyWork\View\ModelView;
+
+use QeyWork\Common\ArgumentException;
+use QeyWork\Entities\Entity;
+use QeyWork\Entities\Fields\Field;
+use QeyWork\View\Html\HtmlBuilder;
+use QeyWork\View\Html\HtmlObjectList;
+use QeyWork\View\IRenderable;
 
 class EntityView implements IRenderable {
-    /**
-     * @var EntityEntity $entity
-     */
+    /** @var Entity $entity */
     protected $entity;
+
     public $visual;
-    /**
-     * @param EntityEntity $entity
-     */
+
+    /** @param Entity $entity */
     public function __construct(Entity $entity, IEntityViewVisual $visual) {
         $this->entity = $entity;
         $this->visual = $visual;
     }
-    
+
     /**
-     * @param IEntityViewVisual $viewVisual
-     * @return string 
+     * @param HtmlBuilder $h
+     * @return string
+     * @throws ArgumentException
+     * @internal param IEntityViewVisual $viewVisual
      */
     public function render(HtmlBuilder $h) {
         

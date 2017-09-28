@@ -12,7 +12,9 @@
  * @author Dexx
  */
 
-namespace Dice;
+namespace QeyWork\Common\ReDice;
+
+use QeyWork\Common\ArgumentException;
 
 class Dice implements IoC {
     const MATCH_ALL = '*';
@@ -210,7 +212,7 @@ class RuleBuilder {
     
     /**
      * @param bool $shared Makes this instance shared
-     * @return \Dice\RuleBuilder
+     * @return RuleBuilder
      */
     public function setShared($shared) {
         $this->rule->shared = $shared;
@@ -219,7 +221,7 @@ class RuleBuilder {
 
     /**
      * @param array $params List of constructor parameters
-     * @return \Dice\RuleBuilder
+     * @return RuleBuilder
      */
     public function setConstructParams(array $params) {
         $this->rule->constructParams = $params;
@@ -228,7 +230,7 @@ class RuleBuilder {
     
     /**
      * @param array $params List of constructor parameters
-     * @return \Dice\RuleBuilder
+     * @return RuleBuilder
      */
     public function setCall($function, array $arguments) {
         $this->rule->call[] = array($function, $arguments);
@@ -245,7 +247,7 @@ class RuleBuilder {
     public function addDecoratingSubstitution($class, $decorator) {
         $class = strtolower( trim($class, '\\') );
         if (! isset($this->rule->substitutions[$class])) {
-            throw new \qeywork\ArgumentException("$class doesn't have a substitution yet, can't decorate.");
+            throw new ArgumentException("$class doesn't have a substitution yet, can't decorate.");
         }
         $seed = $this->rule->substitutions[$class];
         $this->addSubstitution($class, $decorator);

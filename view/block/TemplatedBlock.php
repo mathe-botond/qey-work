@@ -1,5 +1,6 @@
 <?php
-namespace qeywork;
+namespace QeyWork\View\Block;
+use QeyWork\Common\Addresses\Path;
 
 /**
  * @author Dexx

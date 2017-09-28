@@ -1,5 +1,9 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Resources\Db;
+use QeyWork\Common\DbException;
+use QeyWork\Entities\Entity;
+use QeyWork\Entities\EntityList;
+use QeyWork\Tools\Logger;
 
 /**
  * DB handler class
@@ -44,7 +48,7 @@ class DB
             throw new DbException('Failed to connect to database: ' . $e->getMessage(), $e->getCode());
         }
     }
-    
+
     /**
      * Query the database
      * @param string $query A string containing the query (can have placeholders)
@@ -52,6 +56,8 @@ class DB
      * @param mixed $fetch If a string is given with a class name the result will be fetched
      *         into these types of objects, otherwise an associative array is returned
      * @param int $limit The number of entried to be returned at most
+     * @return array|bool|EntityList
+     * @throws DbException
      */
     public function query($query, $params = null, $fetch = null, $limit = -1)
     {
@@ -98,10 +104,9 @@ class DB
             }
             
             return $data;
-        } catch (PDOException $e) {
-            throw new DbException('Database query failed: ' . $e->getMessage() . var_export(debug_backtrace(), true));
+        } catch (\PDOException $e) {
+            throw new DbException('Database query failed: ' . $e->getMessage());
         }
-        return false;
     }
     
     /**
@@ -125,11 +130,13 @@ class DB
         //Default 
         return \PDO::PARAM_STR;
     }
-    
+
     /**
      * Execute mysql command
      * @param string $query
      * @param array $params
+     * @return bool
+     * @throws DbException
      */
     public function execute($query, $params = null)
     {        
@@ -148,7 +155,6 @@ class DB
         } catch (\PDOException $e) {
             throw new DbException('Database execute command failed: ' . $e->getMessage());
         }
-        return false;
     }
     
     public function __call($name, $arguments)
@@ -174,7 +180,7 @@ class DB
      *
      * @param Entity $entity - name of the DbEntity class to which the result is fetched and table name is extracted
      * @param ConditionList $conditions - a list containing the conditions
-     * @param string $order
+     * @param string ¦ array $order
      * @param int $orderDir
      * @param int $limit
      *

@@ -1,5 +1,5 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Common\Addresses;
 
 /**
  * A relative path usable for Url and Paths

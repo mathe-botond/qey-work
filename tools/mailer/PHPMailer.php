@@ -1,6 +1,6 @@
 <?php
 
-namespace qeywork;
+namespace QeyWork\Tools\Mailer;
 
 /* ~ class.phpmailer.php
   .---------------------------------------------------------------------------.
@@ -1663,7 +1663,7 @@ class PHPMailer {
                 }
             }
             return $file_buffer;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->SetError($e->getMessage());
             return '';
         }
@@ -2261,7 +2261,7 @@ class PHPMailer {
 
     /**
      * Gets the MIME type of the embedded or inline image
-     * @param string File extension
+     * @param $ext string File extension
      * @access public
      * @return string MIME type of ext
      * @static
@@ -2378,7 +2378,7 @@ class PHPMailer {
             } else {
                 throw new phpmailerException($this->Lang('variable_set') . $name, self::STOP_CRITICAL);
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->SetError($e->getMessage());
             if ($e->getCode() == self::STOP_CRITICAL) {
                 return false;

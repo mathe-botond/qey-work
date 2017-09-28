@@ -1,5 +1,7 @@
 <?php
-namespace qeywork;
+namespace QeyWork\View\LinkCollections;
+use QeyWork\Common\Addresses\Url;
+use QeyWork\View\IRenderable;
 
 /**
  * @author Dexx
@@ -7,7 +9,7 @@ namespace qeywork;
 interface ILinkCollection extends IRenderable {
     /**
      * Add file to collection
-     * @param Url $file,... File(s) to add to colelction
+     * @internal param Url $file File(s) to add to colelction
      */
     public function add();
 }

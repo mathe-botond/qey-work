@@ -1,5 +1,10 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Tools;
+
+use QeyWork\Common\Addresses\Path;
+use QeyWork\Common\ArgumentException;
+use QeyWork\Common\UploadExceptions;
+use QeyWork\Resources\FileGlobalsHandler;
 
 class Uploader
 {

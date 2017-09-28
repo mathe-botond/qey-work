@@ -1,5 +1,7 @@
 <?php
-namespace qeywork;
+namespace QeyWork\View\Page;
+use QeyWork\View\Block\QeyMeta;
+use QeyWork\View\Html\HtmlBuilder;
 
 /**
  * @author Dexx

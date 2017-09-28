@@ -1,17 +1,36 @@
 <?php
-namespace qeywork;
+namespace QeyWork;
+use QeyWork\Common\ActionsHandler;
+use QeyWork\Common\ArgumentException;
+use QeyWork\Common\Config;
+use QeyWork\Common\Globals;
+use QeyWork\Common\IRenderer;
+use QeyWork\Common\IRunner;
+use QeyWork\Common\IWebsiteBuilder;
+use QeyWork\Common\ReDice\Dice;
+use QeyWork\Common\RouteException;
+use QeyWork\Common\Routers\ActionRouteCollection;
+use QeyWork\Common\Routers\IActionRouter;
+use QeyWork\Common\Routers\IPageRouter;
+use QeyWork\Common\Routers\PageRouteCollection;
+use QeyWork\Common\Routers\QeyActionRouter;
+use QeyWork\Common\TypeException;
+use QeyWork\View\Html\HtmlBuilder;
+use QeyWork\View\IContentPostProcessor;
+use QeyWork\View\Page\ErrorPage;
+use QeyWork\View\Page\ILayout;
 
 /**
  * @author Dexx
  */
-class QeyWork {
+class QeyWork implements IRenderer, IRunner {
     const DEFAULT_HOME_PAGE = 'home';
 
     /** @var Config */
     private $config;
     /** @var Autoloader */
     private $autoloader;
-    /** @var QeyWorkAssambler  */
+    /** @var QeyWorkAssembler  */
     protected $assembler;
     /** @var Globals  */
     private $globals;
@@ -30,7 +49,7 @@ class QeyWork {
         $this->autoloader = $qeyWorkAutoloader;
         $this->config = $config;
         
-        $this->assembler = new QeyWorkAssambler();
+        $this->assembler = new QeyWorkAssembler();
         $this->globals = new Globals();
 
         $this->pages = new PageRouteCollection($config->getIndex());
@@ -41,13 +60,13 @@ class QeyWork {
         }
         $this->appName = $config;
     }
-    
-    public function setAssembler(QeyWorkAssambler $assembler) {
+
+    public function setAssembler(QeyWorkAssembler $assembler) {
         $this->assembler = $assembler;
     }
     
     /**
-     * @return QeyWorkAssambler
+     * @return QeyWorkAssembler
      */
     public function getAssembler() {
         return $this->assembler;
@@ -114,8 +133,8 @@ class QeyWork {
 
     /**
      * Creates a page based on the URL
-     * @param string $defaultPage the page used if no URL parameter is defined
      * @return type
+     * @internal param string $defaultPage the page used if no URL parameter is defined
      */
     public function render() {
         $h = new HtmlBuilder();
@@ -156,5 +175,19 @@ class QeyWork {
         $actionClass = $actionHandler->getRequestedAction($this->actions);
         $action = $this->assembler->createAction($actionClass);
         return $action->execute();
+    }
+
+    /**
+     * @param string $class
+     * @return IWebsiteBuilder
+     * @throws ArgumentException
+     */
+    public static function createWebsite($class) {
+        $dice = new Dice();
+        $website =  $dice->create($class);
+        if (! $website instanceof IWebsiteBuilder) {
+            throw new ArgumentException("$class must be an IWebsite");
+        }
+        return $website;
     }
 }

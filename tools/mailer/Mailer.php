@@ -1,5 +1,5 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Tools\Mailer;
 
 //require_once(dirname(__FILE__)."/class.phpmailer.php");
 

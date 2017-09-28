@@ -1,5 +1,5 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Entities;
 
 /**
  * All entity types should implement this interface.

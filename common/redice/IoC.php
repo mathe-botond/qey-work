@@ -1,5 +1,5 @@
 <?php
-namespace Dice;
+namespace QeyWork\Common\ReDice;
 
 /**
  * @author Dexx

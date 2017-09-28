@@ -1,5 +1,5 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Tools;
 
 
 /* Author    : Kenneth Katzgrau < katzgrau@gmail.com >

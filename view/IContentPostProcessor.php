@@ -5,7 +5,9 @@
  * Time: 12:19 PM
  */
 
-namespace qeywork;
+namespace QeyWork\View;
+
+use QeyWork\View\Html\IHtmlObject;
 
 interface IContentPostProcessor {
     public function process(IHtmlObject $html);

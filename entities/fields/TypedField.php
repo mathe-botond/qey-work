@@ -1,5 +1,5 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Entities\Fields;
 
 class TypedField extends Field {
     const INT_TYPE = 'int';

@@ -6,7 +6,7 @@
  * Time: 10:17 PM
  */
 
-namespace qeywork;
+namespace QeyWork\Common\Routers;
 
 class IndexToken {
     /** @var string */

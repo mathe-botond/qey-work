@@ -1,5 +1,7 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Resources;
+
+use QeyWork\Common\ArgumentException;
 
 class Session
 {

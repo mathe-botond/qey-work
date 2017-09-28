@@ -1,5 +1,9 @@
 <?php
-namespace qeywork;
+namespace QeyWork\View\ModelListView\Visuals;
+
+use QeyWork\View\Html\HtmlBuilder;
+use QeyWork\View\Html\IHtmlObject;
+use QeyWork\View\ModelListView\IEntityListViewVisual;
 
 class EntityListViewVisual implements IEntityListViewVisual{
 

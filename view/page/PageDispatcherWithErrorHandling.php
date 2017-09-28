@@ -1,5 +1,5 @@
 <?php
-namespace qeywork;
+namespace QeyWork\View\Page;
 
 /**
  * Proxies the content dispatcherc class and displays error pages on errors 

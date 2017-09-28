@@ -7,7 +7,9 @@
 * @version				1.1.1
 */
 
-namespace Dice\Loader;
+namespace QeyWork\Common\ReDice\Loader;
+
+use QeyWork\Common\ReDice\Dice;
 
 class Callback {
 	private $str;
@@ -16,7 +18,7 @@ class Callback {
 		$this->str = $str;
 	}
 
-	public function create(\Dice\Dice $dic) {
+	public function create(Dice $dic) {
 		$parts = explode('::', trim($this->str, '{}'));
 		$object = $dic->create(array_shift($parts));
 		while ($var = array_shift($parts)) {

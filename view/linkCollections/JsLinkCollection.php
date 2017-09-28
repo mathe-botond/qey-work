@@ -1,5 +1,8 @@
 <?php
-namespace qeywork;
+namespace QeyWork\View\LinkCollections;
+use QeyWork\Common\Addresses\Locations;
+use QeyWork\Common\Addresses\Url;
+use QeyWork\View\Html\HtmlBuilder;
 
 /**
  * List of js links used in HTML header

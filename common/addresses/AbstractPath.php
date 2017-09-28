@@ -1,5 +1,7 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Common\Addresses;
+use QeyWork\View\Html\HtmlBuilder;
+use QeyWork\View\IRenderable;
 
 /**
  * Pathbasis is used as a basis for Paths and Urls implementation
@@ -17,7 +19,7 @@ abstract class AbstractPath implements IRenderable {
     
     /**
      * Creates a new instance to the parent directory of this
-     * @return type
+     * @return AbstractPath
      */
     public function parentDir()
     {
@@ -102,8 +104,8 @@ abstract class AbstractPath implements IRenderable {
     
     /**
      * Creates a new instance with the provided relative path appended to this
-     * @param q\RelativePath $path
-     * @return q\AbstractPath
+     * @param RelativePath $path
+     * @return AbstractPath
      */
     public function appendRelativePath(RelativePath $path) {
         $copy = $this->getCopy();

@@ -1,5 +1,5 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Common;
 
 /**
  * @author Dexx
@@ -20,7 +20,7 @@ class Friendly {
         }
 
         // normal __get() code here
-        
+
         trigger_error("Property '$class::$key' not found or private", E_USER_ERROR);
     }
 
@@ -31,8 +31,6 @@ class Friendly {
             return $this->$key = $value;
         }
 
-        // normal __set() code here
-
-        trigger_error('Cannot access private property ' . __CLASS__ . '::$' . $key, E_USER_ERROR);
+        trigger_error("Property '" . __CLASS__ . "::$key' not found or private", E_USER_ERROR);
     }
 }

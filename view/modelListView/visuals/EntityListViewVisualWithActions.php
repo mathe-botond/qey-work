@@ -1,5 +1,10 @@
 <?php
-namespace qeywork;
+namespace QeyWork\View\ModelListView\Visuals;
+
+use QeyWork\Entities\Entity;
+use QeyWork\View\Html\HtmlBuilder;
+use QeyWork\View\Html\IHtmlObject;
+use QeyWork\View\Html\TextNode;
 
 abstract class EntityListViewVisualWithActions extends EntityListViewVisual {
     

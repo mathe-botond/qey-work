@@ -1,5 +1,5 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Tools;
 
 /**
  * Translates a number to a short alhanumeric version

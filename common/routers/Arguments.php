@@ -1,5 +1,6 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Common\Routers;
+use QeyWork\Resources\Request;
 
 /**
  * @author Dexx
@@ -7,7 +8,7 @@ namespace qeywork;
 class Arguments {
     const TARGET = '_target';
     
-    protected $token;
+    protected $token = "";
     protected $args;
 
     protected $frontPage;
@@ -17,7 +18,7 @@ class Arguments {
         return !empty($target) ? $target : '';
     }  
 
-    public function __construct(IndexToken $index, Params $params) {
+    public function __construct(IndexToken $index, Request $params) {
         $this->args = \explode('/', trim($params->get(self::TARGET), '/'));
         $this->token = $this->getRequestedTarget();
 

@@ -6,7 +6,7 @@
  * Time: 1:08 PM
  */
 
-namespace qeywork;
+namespace QeyWork\Tools\Mailer;
 
 
 class MailerConfigurator {

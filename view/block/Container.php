@@ -1,5 +1,9 @@
 <?php
-namespace qeywork;
+namespace QeyWork\View\Block;
+use QeyWork\View\Html\HtmlBuilder;
+use QeyWork\View\Html\HtmlObjectList;
+use QeyWork\View\Html\IHtmlObject;
+use QeyWork\View\IRenderable;
 
 /**
  * @author Dexx

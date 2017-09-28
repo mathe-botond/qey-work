@@ -1,5 +1,7 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Entities;
+use QeyWork\Common\SmartArray;
+use QeyWork\Common\TypeException;
 
 /**
  * HtmlContainer is an array object for containing Html elements, also provides

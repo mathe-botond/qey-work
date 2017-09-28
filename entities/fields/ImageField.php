@@ -1,5 +1,7 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Entities\Fields;
+
+use QeyWork\Common\Addresses\Url;
 
 class ImageField extends Field {
     protected $url;

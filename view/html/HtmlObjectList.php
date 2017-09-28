@@ -1,5 +1,8 @@
 <?php
-namespace qeywork;
+namespace QeyWork\View\Html;
+use QeyWork\Common\SmartArray;
+use QeyWork\Common\TypeException;
+use QeyWork\View\IRenderable;
 
 /**
  * HtmlContainer is an array object for containing Html elements, also provides
@@ -12,6 +15,7 @@ class HtmlObjectList extends SmartArray implements IHtmlObject, IRenderable {
      * @param mixed $index
      * @param IHtmlObject $newval
      * @return IHtmlObject
+     * @throws TypeException
      */
     public function offsetSet($index, $newval) {
         if (! $newval instanceof IHtmlObject) {
@@ -19,11 +23,12 @@ class HtmlObjectList extends SmartArray implements IHtmlObject, IRenderable {
         }
         return parent::offsetSet($index, $newval);
     }
-    
+
     /**
-     * @param type $index
+     * @param string $index
      * @param IHtmlObject $newval
      * @return IHtmlObject
+     * @throws TypeException
      */
     public function __set($index, $newval) {
         if (! $newval instanceof IHtmlObject) {

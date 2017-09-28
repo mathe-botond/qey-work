@@ -1,5 +1,8 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Entities\Fields;
+use QeyWork\Entities\IEntityType;
+use QeyWork\View\Html\HtmlBuilder;
+use QeyWork\View\Html\IHtmlObject;
 
 /**
  * A Field is a member of a Entity.

@@ -26,7 +26,7 @@ This can easily lead to stringly typed projects, full of strings containing clas
 
 A Page is a class that returns a graphical interface, a content wrapped inside a layout. An Action processes submitted data, returns a raw response or redirects to another page address. For example an AJAX would call for an Action, a menu item would contain links to Pages.
 
-By default, the difference between a Page URL and an Action URL would be a \q\ URL parameter, handled by the .htaccess rewrite engine. Thus to call for a page named `hello` the URL will look something like:
+By default, the difference between a Page URL and an Action URL would be a \ URL parameter, handled by the .htaccess rewrite engine. Thus to call for a page named `hello` the URL will look something like:
 ```
 http://mydomain.com/mysite/hello/
 ```
@@ -49,7 +49,7 @@ To get started you need to create an instance of the QeyWork class. This class h
 ```
 //website.php
 use qeywork as q;
-$website = new q\QeyWork(new Locations(), HelloWorld::class);
+$website = new QeyWork(new Locations(), HelloWorld::class);
 ```
 
 `QeyWork::render()` function renders the current page:
@@ -65,9 +65,9 @@ Now we can implement a HelloWorld page that echoes 'Hello World'. QeyWork pages 
 //HelloWorld.php
 use qeywork as q;
 
-class Home extends q\Page {
-    public function render(q\HtmlBuilder $h) {
-        return new q\TextNode('Hello world');
+class Home extends Page {
+    public function render(HtmlBuilder $h) {
+        return new TextNode('Hello world');
     }    
 }
 ```

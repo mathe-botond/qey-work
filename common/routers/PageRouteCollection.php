@@ -1,5 +1,7 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Common\Routers;
+
+use QeyWork\Common\RouteException;
 
 class PageRouteCollection {
     private $defaultRouter;

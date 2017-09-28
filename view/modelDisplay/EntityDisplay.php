@@ -1,5 +1,10 @@
 <?php
-namespace qeywork;
+namespace QeyWork\View\ModelDisplay;
+use QeyWork\Common\ArgumentException;
+use QeyWork\Common\SmartArray;
+use QeyWork\Common\TypeException;
+use QeyWork\Entities\Entity;
+use QeyWork\View\ModelDisplay\Fields\FieldDisplay;
 
 /**
  * @author Dexx

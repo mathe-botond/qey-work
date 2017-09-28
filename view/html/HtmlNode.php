@@ -1,11 +1,13 @@
 <?php
-namespace qeywork;
+namespace QeyWork\View\Html;
+use QeyWork\Common\ArgumentException;
+use QeyWork\View\IRenderable;
 
 /**
  * Create a html node with the given tag name
- * @param srting $tag
+ * @param string $tag
  * @param mixed $content
- * @return \HtmlNode 
+ * @return HtmlNode
  */
 
 class HtmlNode implements IHtmlObject, IRenderable
@@ -68,7 +70,7 @@ class HtmlNode implements IHtmlObject, IRenderable
     
     /**
      * Same as calling attr('value', $val)
-     * @param type $val
+     * @param string $val
      * @return HtmlNode 
      */    
     public function val($val)
@@ -101,9 +103,10 @@ class HtmlNode implements IHtmlObject, IRenderable
         $this->content(new TextNode(htmlspecialchars($text)));
         return $this;
     }
-    
+
     /**
      * @param IHtmlObject $child,... list childrens
+     * @return $this
      */
     public function content() {
         $this->clean();
@@ -131,7 +134,7 @@ class HtmlNode implements IHtmlObject, IRenderable
         } else if ($item instanceof IHtmlObject) {
             $this->children[] = $item;
         } else {
-            throw new ArgumentException('$mixed must be an IHtmlEntity, ' . gettype($item) . ' given: ' . var_export($item)); 
+            throw new ArgumentException('$mixed must be an IHtmlEntity, ' . gettype($item) . ' given: ' . var_export($item));
         }
             
         return $this;

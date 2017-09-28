@@ -1,5 +1,8 @@
 <?php
-namespace qeywork;
+namespace QeyWork\View\ModelView\Visuals;
+
+use QeyWork\View\Html\HtmlBuilder;
+use QeyWork\View\ModelView\IEntityViewVisual;
 
 class EntityViewVisualUsingTable implements IEntityViewVisual{
     protected $h;

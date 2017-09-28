@@ -1,5 +1,5 @@
 <?php
-namespace qeywork;
+namespace QeyWork\View\Html;
 
 /**
  * Class used for text contents within html. Has no opening or closing tags.

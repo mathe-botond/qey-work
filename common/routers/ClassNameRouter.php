@@ -1,9 +1,11 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Common\Routers;
+use QeyWork\Tools\StringHelpers\CaseConverter;
+
 /**
  * @author Dexx
  */
-class ClassNameRouter implements IPageRouter, IActionRouter {
+class ClassNameRouter implements IContentRouter, IActionRouter {
     protected $namespace;
     
     public function __construct($namespace) {

@@ -1,5 +1,13 @@
 <?php
-namespace qeywork;
+namespace QeyWork\View\ModelListView;
+
+use QeyWork\Common\ArgumentException;
+use QeyWork\Common\TypeException;
+use QeyWork\Entities\Entity;
+use QeyWork\Entities\EntityList;
+use QeyWork\View\Html\HtmlBuilder;
+use QeyWork\View\Html\HtmlObjectList;
+use QeyWork\View\ModelDisplay\EntityDisplay;
 
 class EntityListView {
     protected $entityList;

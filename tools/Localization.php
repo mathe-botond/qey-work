@@ -1,7 +1,9 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Tools;
 
-class Localization extends Cacheble
+use QeyWork\Resources\SessionCacheble;
+
+class Localization extends SessionCacheble
 {
     protected $language = null;
     protected $available = null;
@@ -121,6 +123,11 @@ class Localization extends Cacheble
             $this->mustReload = true;
             throw new LocalizationException("Couldn't translate $name into language ".$this->language);
         }
+    }
+
+    protected function getSessionKey()
+    {
+        // TODO: Implement getSessionKey() method.
     }
 }
 ?>

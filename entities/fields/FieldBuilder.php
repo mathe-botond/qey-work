@@ -1,5 +1,5 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Entities\Fields;
 
 /**
  * @author Dexx

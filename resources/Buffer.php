@@ -1,5 +1,7 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Resources;
+use BadMethodCallException;
+use OutOfRangeException;
 
 /**
  * Buffer wrapper

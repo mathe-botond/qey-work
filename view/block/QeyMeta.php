@@ -1,5 +1,13 @@
 <?php
-namespace qeywork;
+namespace QeyWork\View\Block;
+
+use QeyWork\View\Html\HtmlBuilder;
+use QeyWork\View\Html\HtmlNode;
+use QeyWork\View\Html\HtmlObjectList;
+use QeyWork\View\IRenderable;
+use QeyWork\View\LinkCollections\CssLinkCollection;
+use QeyWork\View\LinkCollections\ILinkCollection;
+use QeyWork\View\LinkCollections\JsLinkCollection;
 
 class QeyMeta implements IRenderable
 {

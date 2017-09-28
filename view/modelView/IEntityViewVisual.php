@@ -1,5 +1,7 @@
 <?php
-namespace qeywork;
+namespace QeyWork\View\ModelView;
+
+use QeyWork\View\IVisual;
 
 interface IEntityViewVisual extends IVisual {
     /**

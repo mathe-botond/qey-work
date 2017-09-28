@@ -6,7 +6,7 @@
  * Time: 11:55 AM
  */
 
-namespace qeywork;
+namespace QeyWork\View;
 
 
 class Template {

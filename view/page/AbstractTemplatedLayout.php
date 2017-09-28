@@ -1,5 +1,9 @@
 <?php
-namespace qeywork;
+namespace QeyWork\View\Page;
+use QeyWork\View\Block\AbstractTemplatedBlock;
+use QeyWork\View\Block\QeyMeta;
+use QeyWork\View\Html\HtmlBuilder;
+
 
 /**
  * Description of TemplatedLayout

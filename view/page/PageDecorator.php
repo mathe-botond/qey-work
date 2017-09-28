@@ -1,5 +1,10 @@
 <?php
-namespace qeywork;
+namespace QeyWork\View\Page;
+use QeyWork\Common\ReturnValueException;
+use QeyWork\View\Html\HtmlBuilder;
+use QeyWork\View\Html\IHtmlObject;
+use QeyWork\View\IRenderable;
+
 /**
  * @author Dexx
  */

@@ -1,5 +1,6 @@
 <?php
-namespace qeywork;
+namespace QeyWork\View\Page;
+use QeyWork\View\Block\IBlock;
 
 /**
  * @author Dexx

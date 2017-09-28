@@ -1,5 +1,5 @@
 <?php
-namespace qeywork;
+namespace QeyWork\View\Page;
 
 /**
  * Default implementation of the IBasicPage interface

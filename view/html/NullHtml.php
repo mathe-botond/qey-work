@@ -1,5 +1,6 @@
 <?php
-namespace qeywork;
+namespace QeyWork\View\Html;
+use QeyWork\View\IRenderable;
 
 /**
  * @author Dexx

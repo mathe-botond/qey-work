@@ -1,5 +1,7 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Entities\Fields;
+use QeyWork\Common\EntityException;
+use QeyWork\Entities\Entity;
 
 /**
  * @author Dexx

@@ -1,5 +1,5 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Common;
 
 /**
  * Descriptor is a JSON representation of an object: e.g. a menu or a entity.
@@ -19,7 +19,6 @@ class Descriptor extends SmartArray {
             if ($descriptor == null)
             {
                 throw new EntityException('Entity descriptor malformed, json_decode error: ' . getJsonLastErrorString());
-                return ;
             }
         } 
         
@@ -52,7 +51,7 @@ class Descriptor extends SmartArray {
     }
     
     private function _arrayUnsetLeafsRecursive(&$array, &$leafs) {
-        $target = new Descriptor($this->getArray());
+        $target = new Descriptor($array);
         foreach ($leafs as $key => &$value) {
             if ($value instanceof Descriptor
                     && isset($target[$key]) && $target[$key] instanceof Descriptor) {

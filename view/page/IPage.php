@@ -1,5 +1,7 @@
 <?php
-namespace qeywork;
+namespace QeyWork\View\Page;
+
+use QeyWork\View\Block\IBlock;
 
 interface IPage extends IBlock {
     const NO_SPECIAL_TYPE = 0;

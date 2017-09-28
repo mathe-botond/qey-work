@@ -1,5 +1,10 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Entities;
+use QeyWork\Common\Friendly;
+use QeyWork\Common\SmartArray;
+use QeyWork\Entities\Fields\Field;
+use QeyWork\Entities\Persistence\IPersistentData;
+use QeyWork\Tools\StringHelpers\CaseConverter;
 
 /**
  * @author Dexx
@@ -43,10 +48,8 @@ class Entity extends Friendly {
         $this->idField = new Field(self::ID_FIELD_NAME);
         
         $this->persistenceData = $persistenceData;
-        
-        $this->addClassPropertiesAsFields();
     }
-    
+
     public function add(Field $field) {
         $this->fields[ $field->getName() ] = $field;
     }

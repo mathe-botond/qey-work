@@ -1,12 +1,15 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Common;
+use QeyWork\Common\Routers\ActionRouteCollection;
+use QeyWork\Common\Routers\Arguments;
+use QeyWork\resources\Request;
 
 /**
  * @author Dexx
  */
 class ActionsHandler {
 
-    /** @var Params */
+    /** @var Request */
     private $token;
 
     public function __construct(Arguments $token) {

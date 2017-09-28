@@ -1,5 +1,5 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Common\Routers;
 
 /**
  * @author Dexx

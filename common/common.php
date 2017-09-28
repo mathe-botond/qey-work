@@ -1,5 +1,6 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Common;
+use Exception;
 
 /**
  * Raplace a single HTML template (e.g. "context {template-name} more context") in the target

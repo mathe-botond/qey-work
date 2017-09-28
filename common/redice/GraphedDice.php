@@ -12,7 +12,7 @@
  *      @author Dexx
  */
 
-namespace Dice;
+namespace QeyWork\Common\ReDice;
 
 class GraphedDice extends Dice {
     const MATCH_ALL = '*';

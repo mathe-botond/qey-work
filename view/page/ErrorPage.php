@@ -1,12 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dell
- * Date: 3/6/2015
- * Time: 8:56 PM
- */
+namespace QeyWork\View\Page;
 
-namespace qeywork;
+use QeyWork\View\Html\HtmlBuilder;
+use QeyWork\View\Html\NullHtml;
 
 class ErrorPage extends Page {
     protected $code;

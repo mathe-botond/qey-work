@@ -1,5 +1,8 @@
 <?php
-namespace qeywork;
+namespace QeyWork\View\ModelListView;
+
+use QeyWork\View\Html\IHtmlObject;
+use QeyWork\View\IVisual;
 
 interface IEntityListViewVisual extends IVisual {
     /**
@@ -10,10 +13,11 @@ interface IEntityListViewVisual extends IVisual {
      * @param string $rows The list of rows of the table
      */
     public function base(IHtmlObject $header, IHtmlObject $rows);
-    
+
     /**
      * Header of the entityListView
-     * @param string $headerCellList
+     * @param IHtmlObject|string $headerCellList
+     * @return
      */
     public function header(IHtmlObject $headerCellList);
     
@@ -22,11 +26,12 @@ interface IEntityListViewVisual extends IVisual {
      * @param string $label of header
      */
     public function headerCell($label);
-    
+
     /**
      * A line in the entityListView
      * @param mixed $id of entry
-     * @param string $cells
+     * @param IHtmlObject|string $cells
+     * @return
      */
     public function entry($id, IHtmlObject $cells);
     

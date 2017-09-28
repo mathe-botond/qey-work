@@ -1,5 +1,7 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Resources\Db;
+use QeyWork\Entities\Fields\Field;
+use QeyWork\Entities\Persistence\DbExpression;
 
 /**
  * @author Dexx

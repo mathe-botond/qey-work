@@ -1,5 +1,6 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Common;
+use QeyWork\Common\Addresses\Path;
 
 /**
  * Create a script using a template system

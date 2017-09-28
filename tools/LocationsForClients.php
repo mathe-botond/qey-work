@@ -1,5 +1,8 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Tools;
+use QeyWork\Common\Addresses\Locations;
+use QeyWork\Common\Addresses\Url;
+use QeyWork\Common\IAction;
 
 /**
  * @author Dexx

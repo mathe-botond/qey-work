@@ -1,5 +1,5 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Common;
 
 /**
  * Use when testing reference against null 

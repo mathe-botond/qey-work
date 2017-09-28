@@ -6,24 +6,29 @@
  * Time: 10:44 PM
  */
 
-namespace qeywork;
+namespace QeyWork\Common;
 
 
-class Config {
+use QeyWork\Common\Addresses\Locations;
+use QeyWork\Common\Routers\IndexToken;
+use qeywork\DBConfig;
+use QeyWork\Tools\Mailer\MailerConfigurator;
+
+abstract class Config {
     /** @var Locations */
     private $loc;
     private $index;
     private $dbConfig;
     private $mailConfig;
     private $title;
-    private $appName;
 
-    public function __construct(Locations $loc, $appName, IndexToken $index) {
+    public function __construct(Locations $loc, IndexToken $index) {
         $this->loc = $loc;
         $this->index = $index;
         $this->mailConfig = new MailerConfigurator();
-        $this->appName = $appName;
     }
+
+    public abstract function getAppName();
 
     public function setDbConfig(DBConfig $dbConfig) {
         $this->dbConfig = $dbConfig;
@@ -55,9 +60,5 @@ class Config {
 
     public function getIndex() {
         return $this->index;
-    }
-
-    public function getAppName() {
-        return $this->appName;
     }
 }

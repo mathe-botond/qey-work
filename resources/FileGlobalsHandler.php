@@ -1,5 +1,6 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Resources;
+use QeyWork\Common\UploadExceptions;
 
 /**
  * @property-read string $name File name

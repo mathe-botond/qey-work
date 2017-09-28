@@ -6,7 +6,9 @@
 * @license				http://www.opensource.org/licenses/bsd-license.php  BSD License
 * @version				1.1.1
 */
-namespace Dice\Loader;
+namespace QeyWork\Common\ReDice\Loader;
+
+use QeyWork\Common\ReDice\Dice;
 
 class Json {
 	private function getComponent($str, $createInstance = false) {
@@ -14,7 +16,7 @@ class Json {
 		else return (strpos((string) $str, '{') === 0) ? array(new Callback($str), 'create') : (string) $str;
 	}
 
-	public function load($json, \Dice\Dice $dic) {
+	public function load($json, Dice $dic) {
 		$map = json_decode($json);
 		if (!is_object($map)) throw new \Exception('Could not decode josn: ' . json_last_error_msg());
 		$rules = array();

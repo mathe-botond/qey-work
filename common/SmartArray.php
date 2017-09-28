@@ -1,5 +1,5 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Common;
 
 /**
  * class SmartArray
@@ -47,11 +47,15 @@ class SmartArray extends \ArrayObject {
     public function exists($key) {
         return isset($this[$key]);
     }
-    
+
+    public function isEmpty() {
+        return $this->count() == 0;
+    }
+
     public function first() {
         $copy = $this->getArrayCopy();
         $firstItem = reset($copy);
-        return $firstItem;
+        return $firstItem !== false ? $firstItem : null;
     }
 
     public function appendArray($array) {

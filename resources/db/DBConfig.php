@@ -1,5 +1,5 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Resources\Db;
 
 /**
  * @author Dexx

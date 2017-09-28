@@ -1,5 +1,10 @@
 <?php
-namespace qeywork;
+namespace QeyWork\View\Page;
+
+use QeyWork\Common\ReturnValueException;
+use QeyWork\Common\Routers\Arguments;
+use QeyWork\Common\Routers\PageRouteCollection;
+use QeyWork\Resources\History;
 
 class PageHandler {
     /** @var History */

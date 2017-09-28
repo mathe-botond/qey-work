@@ -1,5 +1,5 @@
 <?php
-namespace qeywork;
+namespace QeyWork\View\Page;
 
 /**
  * An interface describing a page processor, that can modify 

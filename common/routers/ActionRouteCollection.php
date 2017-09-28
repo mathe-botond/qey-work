@@ -1,7 +1,10 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Common\Routers;
 
-class ActionRouteCollection {    
+use QeyWork\Common\IAction;
+use QeyWork\Common\RouteException;
+
+class ActionRouteCollection {
     private $defaultRouter;
     private $routers = array();
 

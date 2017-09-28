@@ -1,5 +1,5 @@
 <?php
-namespace qeywork;
+namespace QeyWork\Tools\StringHelpers;
 
 /**
  * Description of CaseConverter
