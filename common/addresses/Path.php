@@ -12,7 +12,7 @@ class Path extends AbstractPath
 {    
     /**
      * Constructor of this class
-     * @param array $dirs
+     * @param array|string $dirs
      * @param string $file
      */
     public function __construct($dirs, $file = "")

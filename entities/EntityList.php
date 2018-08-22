@@ -38,4 +38,14 @@ class EntityList extends SmartArray implements IEntityType {
     public function getEntityType() {
         return $this->type;
     }
+
+    public function toArray() {
+        $array = $this->getArray();
+        $result = [];
+        foreach ($array as $key => $item) {
+            /** @var $item Entity */
+            $result[] = $item->toArray();
+        }
+        return $result;
+    }
 }

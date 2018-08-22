@@ -7,7 +7,10 @@ use QeyWork\Entities\Entity;
  * @author Dexx
  */
 class ReferenceField extends TypedField {
+    /** @var Entity */
     protected $entity;
+
+    /** @var Entity */
     protected $entityType;
  
     public function __construct($name, Entity $type) {
@@ -34,26 +37,34 @@ class ReferenceField extends TypedField {
             $this->setValue($this->entity->getId());
         }
     }
-    
+
     /**
      * Get referenced entity
+     * @param bool $unsecure
      * @return Entity
      * @throws EntityException when referenced entity is not loaded
      */
-    public function getEntity() {
-        if ($this->value() != null && $this->entity == null ||
-                $this->entity != null && $this->entity->getId() != $this->value()) {
+    public function getEntity($unsecure = false) {
+        if (! $unsecure && ! $this->isEntityLoaded()) {
             throw new EntityException('Referenced entity not loaded');
         }
         
         return $this->entity;
     }
+
+    public function isEntityLoaded() {
+        return $this->value() != null && $this->entity != null && $this->entity->getId() == $this->value();
+    }
     
     public function setValue($value) {
         parent::setValue($value);
         
-        if ($value == null) {
+        if ($value == null && $this->entity->getId() != null) {
             $this->entity = null;
         }
+    }
+
+    public function loadLinkedId() {
+        $this->value = $this->entity->getIdField()->value();
     }
 }

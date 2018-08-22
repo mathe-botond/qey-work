@@ -80,6 +80,11 @@ class NotImplementedException extends \Exception {}
 class TemplateException extends \Exception {}
 
 /**
+ * Json parsing related exception
+ */
+class JsonException extends \Exception {}
+
+/**
  * Template related exception
  */
 class TypeException extends \Exception {

@@ -12,11 +12,14 @@ class Url extends AbstractPath
     public $domain;
     public $fields;
     public $hash;
-    
+
     /**
      * Constructor of this class
-     * @param array $dirs
-     * @param string $filename
+     * @param null $path
+     * @param string $page
+     * @param string $fields
+     * @internal param array $dirs
+     * @internal param string $filename
      */
     public function __construct($path = null, $page = '', $fields = '')
     {
@@ -66,6 +69,10 @@ class Url extends AbstractPath
             return "http://" . $serverVar["SERVER_NAME"];
         }
     }
+
+    public static function getDomainUrl(array $serverVar) {
+        return new Url(self::getCurrentDomain($serverVar));
+    }
     
     protected function getCopy() {        
         $retVal = new Url();
@@ -105,6 +112,13 @@ class Url extends AbstractPath
     public function field($name, $value) {
         $copy = $this->getCopy();
         $copy->fields[$name] = $value;
+        return $copy;
+    }
+
+    public function addFields($fields) {
+        $copy = $this->getCopy();
+        $copy->fields = $copy->fields ? $copy->fields : [];
+        $copy->fields = array_merge($copy->fields, $fields);
         return $copy;
     }
     

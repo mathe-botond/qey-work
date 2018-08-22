@@ -4,6 +4,7 @@ use QeyWork\Common\ActionsHandler;
 use QeyWork\Common\ArgumentException;
 use QeyWork\Common\Config;
 use QeyWork\Common\Globals;
+use QeyWork\Common\IErrorHandler;
 use QeyWork\Common\IRenderer;
 use QeyWork\Common\IRunner;
 use QeyWork\Common\IWebsiteBuilder;
@@ -28,8 +29,6 @@ class QeyWork implements IRenderer, IRunner {
 
     /** @var Config */
     private $config;
-    /** @var Autoloader */
-    private $autoloader;
     /** @var QeyWorkAssembler  */
     protected $assembler;
     /** @var Globals  */
@@ -43,10 +42,10 @@ class QeyWork implements IRenderer, IRunner {
     private $layout;
     private $appName;
 
+    /** @var IErrorHandler */
+    private $errorHandler;
+
     public function __construct(Config $config, $buildLater = false) {
-        
-        global $qeyWorkAutoloader;
-        $this->autoloader = $qeyWorkAutoloader;
         $this->config = $config;
         
         $this->assembler = new QeyWorkAssembler();
@@ -167,14 +166,22 @@ class QeyWork implements IRenderer, IRunner {
     }
     
     public function run() {
-        $this->actions->addRouter(new QeyActionRouter());
-        
-        /* @var $actionHandler ActionsHandler */
-        $actionHandler = $this->assembler->getActionHandler();
-        
-        $actionClass = $actionHandler->getRequestedAction($this->actions);
-        $action = $this->assembler->createAction($actionClass);
-        return $action->execute();
+        try {
+            $this->actions->addRouter(new QeyActionRouter());
+
+            /* @var $actionHandler ActionsHandler */
+            $actionHandler = $this->assembler->getActionHandler();
+
+            $actionClass = $actionHandler->getRequestedAction($this->actions);
+            $action = $this->assembler->createAction($actionClass);
+            return $action->execute();
+        } catch (\Exception $e) {
+            if ($this->errorHandler != null) {
+                $this->errorHandler->handle($e);
+            } else {
+                throw $e;
+            }
+        }
     }
 
     /**
@@ -189,5 +196,12 @@ class QeyWork implements IRenderer, IRunner {
             throw new ArgumentException("$class must be an IWebsite");
         }
         return $website;
+    }
+
+    public function registerActionErrorHandler($handler) {
+        if (is_string($handler)) {
+            $handler = $this->assembler->getIoC()->create($handler);
+        }
+        $this->errorHandler = $handler;
     }
 }

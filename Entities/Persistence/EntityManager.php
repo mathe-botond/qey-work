@@ -33,6 +33,7 @@ class EntityManager implements IEntityManager
      * Load entry from database
      * @param int $id ID of the entry
      * @param string|Entity $type
+     * @return Entity
      * @throws EntityException
      */
     function load($id, $type)
@@ -43,7 +44,7 @@ class EntityManager implements IEntityManager
         $params = array("id" => $id);
 
         try {
-            $result = $this->db->query("select * from ". $this->getTableName()
+            $result = $this->db->query("select * from ". $this->getTableName($entity)
                     . " where id = :id", $params);
             if (count($result) !== 1) {
                 throw new EntityException('DbEntity load failed: $id not found in table');
@@ -60,17 +61,17 @@ class EntityManager implements IEntityManager
                 }
                 $fields[$key]->setValue( $value );
             }
+
+            return $entity;
         } catch(\Exception $e) {
             throw new EntityException('Database load failed: '.$e->getMessage());
         }
-        
-        $this->id = $id;
     }
     
     public function loadReferences(Entity $entity) {
         foreach ($entity->getFields() as $field) {
             if ($field instanceof ReferenceField && intval($field->value()) != 0) {
-                $referencedEntity = $this->getEntity($field->getEntity());
+                $referencedEntity = $this->getEntity($field->getEntityType());
                 $this->load($field->value(), $referencedEntity);
                 $field->setEntity($referencedEntity);
             }
@@ -79,45 +80,46 @@ class EntityManager implements IEntityManager
 
     /**
      * @param Entity $entity
-     * @return int Id of inserted entity
      * @throws EntityException
      */
     public function insert(Entity $entity)
     {
         $params = array();
-        
+        $fieldCollection = [];
+        $valueCollection = [];
+
         foreach($entity->getFields() as $key => $field) {
             if (! $field instanceof Field ) {
                 continue;
             }
             
-            $flds[] = "`" . $field->getName() . "`";
+            $fieldCollection[] = "`" . $field->getName() . "`";
             $value = $field->value();
             if ($value instanceof DbExpression) {
-                $vls[] = $value;
+                $valueCollection[] = $value;
             } else {
-                $vls[] = ':' . $field->getName();
+                $valueCollection[] = ':' . $field->getName();
                 $params[$key] = $value;
             }
         }
 
-        $fields = join($flds, ", ");
-        $values = join($vls, ", ");
+        $fields = join($fieldCollection, ", ");
+        $values = join($valueCollection, ", ");
 
         try {
-            $this->db->execute("insert into " . $this->getTableName() 
+            $this->db->execute("insert into " . $this->getTableName($entity)
                     . " ($fields) values ($values)", $params);
 
-            $entity->setId($this->id);
-            return $this->id;
+            $entity->setId($this->db->lastId());
         } catch(\Exception $e) {
-            throw new EntityException('Database insert failed: '.$e->getMessage());
+            throw new EntityException('Database insert failed: ' . $e->getMessage());
         }
+
+        return $this->db->lastId();
     }
 
     /**
      * @param Entity $entity
-     * @return int Id of updated entity
      * @throws EntityException
      */
     public function update(Entity $entity)
@@ -134,11 +136,12 @@ class EntityManager implements IEntityManager
 		
         $queryAssignments = join($queryAssignmentList, ", ");
         try {
-            $this->db->execute("update " . $this->getTableName($entity) . " set $queryAssignments where id = "
-                    . $entity->getId(), $params);
+            $params["id"] = $entity->getId();
+            $this->db->execute("update " . $this->getTableName($entity) . " set $queryAssignments where id = :id", $params);
         } catch(\Exception $e) {
             throw new EntityException('Database update failed: ' . $e->getMessage());
         }
+
         return $entity->getId();
     }
     

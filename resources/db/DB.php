@@ -201,8 +201,8 @@ class DB
             $valueList = array();
             
             $query = "SELECT * FROM `$table`";
-            if ($conditions != null) {
-                $query .= $conditions->toString();
+            if ($conditions != null && ! $conditions->isConditionListEmpty()) {
+                $query .= ' WHERE ' . $conditions->toString();
                 $valueList = $conditions->getValues();
             }
             

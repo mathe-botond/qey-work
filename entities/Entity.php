@@ -3,8 +3,10 @@ namespace QeyWork\Entities;
 use QeyWork\Common\Friendly;
 use QeyWork\Common\SmartArray;
 use QeyWork\Entities\Fields\Field;
+use QeyWork\Entities\Fields\ReferenceField;
 use QeyWork\Entities\Persistence\IPersistentData;
 use QeyWork\Tools\StringHelpers\CaseConverter;
+use stdClass;
 
 /**
  * @author Dexx
@@ -53,9 +55,9 @@ class Entity extends Friendly {
     public function add(Field $field) {
         $this->fields[ $field->getName() ] = $field;
     }
-    
+
     public function getId() {
-        return $this->id;
+        return $this->getIdField()->value();
     }
     
     public function getIdField() {
@@ -85,5 +87,22 @@ class Entity extends Friendly {
     
     public function getPersistenceData() {
         return $this->persistenceData;
+    }
+
+    public function toArray()
+    {
+        $result = [$this->getIdField()->getName() => $this->getIdField()->value()];
+        foreach ($this as $key => $field) {
+            if ($field instanceof ReferenceField) {
+                if ($field->isEntityLoaded()) {
+                    $result[$key] = $field->getEntity()->toArray();
+                } else {
+                    $result[$key] = new stdClass();
+                }
+            } else if ($field instanceof Field) {
+                $result[$key] = $field->value();
+            }
+        }
+        return $result;
     }
 }

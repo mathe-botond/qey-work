@@ -17,7 +17,6 @@ interface IEntityManager {
 
     /**
      * @param Entity $entity
-     * @return int Id of inserted entity
      * @throws EntityException
      */
     public function insert(Entity $entity);
@@ -25,7 +24,6 @@ interface IEntityManager {
 
     /**
      * @param Entity $entity
-     * @return int Id of updated entity
      * @throws EntityException
      */
     public function update(Entity $entity);
